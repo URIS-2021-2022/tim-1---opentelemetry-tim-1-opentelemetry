@@ -1,0 +1,85 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <RepoRoot>$([System.IO.Directory]::GetParent($(MSBuildThisFileDirectory)).Parent.FullName)</RepoRoot>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)debug.snk</AssemblyOriginatorKeyFile>
+    <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package versions used in this repository">
+    <!--
+      Please sort alphabetically.
+      Refer to https://docs.microsoft.com/nuget/concepts/package-versioning for semver syntax.
+    -->
+    <MinVerPkgVer>[2.3.0,3.0)</MinVerPkgVer>
+    <GoogleProtobufPkgVer>[3.15.5,4.0)</GoogleProtobufPkgVer>
+    <GrpcPkgVer>[2.23.0,3.0)</GrpcPkgVer>
+    <GrpcNetClientPkgVer>[2.32.0,3.0)</GrpcNetClientPkgVer>
+    <GrpcToolsPkgVer>[2.25.0,3.0)</GrpcToolsPkgVer>
+    <MicrosoftAspNetCoreHttpAbstractionsPkgVer>[2.1.1,6.0)</MicrosoftAspNetCoreHttpAbstractionsPkgVer>
+    <MicrosoftAspNetCoreHttpFeaturesPkgVer>[2.1.1,6.0)</MicrosoftAspNetCoreHttpFeaturesPkgVer>
+    <MicrosoftCodeAnalysisAnalyzersPkgVer>[3.3.1]</MicrosoftCodeAnalysisAnalyzersPkgVer>
+    <MicrosoftCodeCoveragePkgVer>[16.10.0]</MicrosoftCodeCoveragePkgVer>
+    <MicrosoftExtensionsHostingAbstractionsPkgVer>[2.1.0,)</MicrosoftExtensionsHostingAbstractionsPkgVer>
+    <MicrosoftExtensionsLoggingPkgVer>[2.1.0,)</MicrosoftExtensionsLoggingPkgVer>
+    <MicrosoftExtensionsLoggingConfigurationPkgVer>[2.1.0,)</MicrosoftExtensionsLoggingConfigurationPkgVer>
+    <MicrosoftExtensionsOptionsPkgVer>[2.1.0,)</MicrosoftExtensionsOptionsPkgVer>
+    <MicrosoftNETFrameworkReferenceAssembliesPkgVer>[1.0.0,2.0)</MicrosoftNETFrameworkReferenceAssembliesPkgVer>
+    <MicrosoftSourceLinkGitHubPkgVer>[1.0.0,2.0)</MicrosoftSourceLinkGitHubPkgVer>
+    <OpenTracingPkgVer>[0.12.1,0.13)</OpenTracingPkgVer>
+    <OTelPreviousStableVer>1.1.0</OTelPreviousStableVer>
+    <StackExchangeRedisPkgVer>[2.1.58,3.0)</StackExchangeRedisPkgVer>
+    <StyleCopAnalyzersPkgVer>[1.1.118,2.0)</StyleCopAnalyzersPkgVer>
+    <SystemCollectionsImmutablePkgVer>1.4.0</SystemCollectionsImmutablePkgVer>
+    <SystemDiagnosticSourcePkgVer>6.0.0-preview.6.21352.12</SystemDiagnosticSourcePkgVer>
+    <SystemReflectionEmitLightweightPkgVer>4.7.0</SystemReflectionEmitLightweightPkgVer>
+    <SystemTextJsonPkgVer>4.7.0</SystemTextJsonPkgVer>
+    <SystemThreadingTasksExtensionsPkgVer>4.5.3</SystemThreadingTasksExtensionsPkgVer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="$(MicrosoftNETFrameworkReferenceAssembliesPkgVer)" PrivateAssets="All" />
+    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersPkgVer)" Condition="'$(SkipAnalysis)'!='true'">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeCoverage" Version="$(MicrosoftCodeCoveragePkgVer)" PrivateAssets="All" Condition="'$(Configuration)'=='Release'" />
+    <!--<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(MicrosoftCodeAnalysisAnalyzersPkgVer)" Condition="'$(SkipAnalysis)'!='true'">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>-->
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IncludeDiagnosticSourceInstrumentationHelpers)'=='true'">
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry\Internal\ActivityInstrumentationHelper.cs" Link="Includes\ActivityInstrumentationHelper.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry\DiagnosticSourceInstrumentation\DiagnosticSourceListener.cs" Link="Includes\DiagnosticSourceListener.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry\DiagnosticSourceInstrumentation\DiagnosticSourceSubscriber.cs" Link="Includes\DiagnosticSourceSubscriber.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry\DiagnosticSourceInstrumentation\InstrumentationEventSource.cs" Link="Includes\InstrumentationEventSource.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry\DiagnosticSourceInstrumentation\ListenerHandler.cs" Link="Includes\ListenerHandler.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry\DiagnosticSourceInstrumentation\PropertyFetcher.cs" Link="Includes\PropertyFetcher.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IncludeInstrumentationHelpers)'=='true' Or '$(IncludeDiagnosticSourceInstrumentationHelpers)'=='true'">
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\ActivityHelperExtensions.cs" Link="Includes\ActivityHelperExtensions.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\EnumerationHelper.cs" Link="Includes\EnumerationHelper.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\ExceptionExtensions.cs" Link="Includes\ExceptionExtensions.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\IActivityEnumerator.cs" Link="Includes\IActivityEnumerator.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\SemanticConventions.cs" Link="Includes\SemanticConventions.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\SpanAttributeConstants.cs" Link="Includes\SpanAttributeConstants.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\SpanHelper.cs" Link="Includes\SpanHelper.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\StatusHelper.cs" Link="Includes\StatusHelper.cs" />
+  </ItemGroup>
+
+</Project>
