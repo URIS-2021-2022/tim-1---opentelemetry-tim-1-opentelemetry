@@ -1,0 +1,44 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "src/**.csproj"
+          ],
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**",
+            "_site/**"
+          ]
+        }
+      ],
+      "dest": "_api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**.md",
+          "toc.yml"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          ".editorconfig",
+          "**.cs"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": true,
+    "disableGitFeatures": true
+  }
+}

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <Description>OpenTelemetry .NET API</Description>
+    <RootNamespace>OpenTelemetry</RootNamespace>
+
+    <NoWarn>$(NoWarn),CS0618</NoWarn>
+    <MinVerTagPrefix>core-</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <!--Do not run ApiCompat for net461 as this is newly added. There is no existing contract for net461 against which we could compare the implementation.
+  Remove this property once we have released a stable net461 version.-->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+    <RunApiCompat>false</RunApiCompat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="$(SystemDiagnosticSourcePkgVer)" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="$(SystemReflectionEmitLightweightPkgVer)" />
+  </ItemGroup>
+</Project>

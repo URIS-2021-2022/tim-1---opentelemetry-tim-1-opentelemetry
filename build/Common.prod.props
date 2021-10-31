@@ -1,0 +1,86 @@
+<Project>
+  <Import Project=".\Common.props" />
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="$(MinVerPkgVer)" Condition="'$(IntegrationBuild)' != 'true'">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Temporarily disable public API check till metrics get close to Release
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="$(MicrosoftCodeAnalysisAnalyzersPkgVer)" Condition=" $(OS) == 'Windows_NT'">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    -->
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(MinVerTagPrefix)' == 'core-' AND '$(CheckAPICompatibility)' == 'true'">
+    <PackageReference Include="Microsoft.DotNet.ApiCompat" Version="6.0.0-beta.21308.1" PrivateAssets="All" />
+    <ResolvedMatchingContract Include="..\LastMajorVersionBinaries\$(AssemblyName)\$(OTelPreviousStableVer)\lib\$(TargetFramework)\$(AssemblyName).dll" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(MinVerTagPrefix)' == 'core-' AND '$(CheckAPICompatibility)' == 'true'">
+    <Exec Command="powershell -ExecutionPolicy Unrestricted -File &quot;$(RepoRoot)\build\PreBuild.ps1&quot; -package $(AssemblyName) -version &quot;$(OTelPreviousStableVer)&quot;" />
+  </Target>
+
+  <Target Name="FindContractDependencyPaths" BeforeTargets="ValidateApiCompatForSrc" AfterTargets="ResolveAssemblyReferences" Condition="'$(MinVerTagPrefix)' == 'core-' AND '$(CheckAPICompatibility)' == 'true'">
+    <ItemGroup>
+      <_ReferencePathDirectories Include="@(ReferencePath -> '%(RootDir)%(Directory)')" />
+    </ItemGroup>
+    <PropertyGroup>
+      <ContractDependencyPaths>@(_ReferencePathDirectories->Distinct())</ContractDependencyPaths>
+    </PropertyGroup>
+  </Target>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/OpenTelemetry.prod.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>$(NoWarn),1573,1712</NoWarn>
+    <PackageOutputPath Condition="$(Build_ArtifactStagingDirectory) != ''">$(Build_ArtifactStagingDirectory)</PackageOutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--<MinVerVerbosity>detailed</MinVerVerbosity>-->
+  </PropertyGroup>
+
+  <Target Name="AssemblyVersionTarget" AfterTargets="MinVer" Condition="'$(MinVerVersion)'!='' AND '$(BuildNumber)' != ''">
+    <PropertyGroup>
+      <FileVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch).$(BuildNumber)</FileVersion>
+    </PropertyGroup>
+  </Target>
+
+  <PropertyGroup>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/open-telemetry/opentelemetry-dotnet</RepositoryUrl>
+    <PackageTags>Observability;OpenTelemetry;Monitoring;Telemetry;Tracing</PackageTags>
+    <PackageIcon>opentelemetry-icon-color.png</PackageIcon>
+    <PackageProjectUrl>https://opentelemetry.io</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Authors>OpenTelemetry Authors</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)opentelemetry-icon-color.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <PropertyGroup Label="SourceLink">
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Deterministic)'=='true'">
+    <SourceRoot Include="$(MSBuildThisFileDirectory)/" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Deterministic)'=='true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!--PublicApi Analyzer-->
+  <ItemGroup>
+    <AdditionalFiles Include=".publicApi\$(TargetFramework)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include=".publicApi\$(TargetFramework)\PublicAPI.Unshipped.txt" />
+    <None Include=".publicApi\*\PublicAPI.Shipped.txt" />
+    <None Include=".publicApi\*\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+
+</Project>

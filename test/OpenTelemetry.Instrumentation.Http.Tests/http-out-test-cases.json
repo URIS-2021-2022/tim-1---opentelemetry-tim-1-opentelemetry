@@ -1,0 +1,302 @@
+﻿[
+  {
+    "name": "Successful GET call to localhost",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Successfully POST call to localhost",
+    "method": "POST",
+    "url": "http://{host}:{port}/",
+    "spanName": "HTTP POST",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "POST",
+      "http.host": "{host}:{port}",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Name is populated as a path",
+    "method": "GET",
+    "url": "http://{host}:{port}/path/to/resource/",
+    "responseCode": 200,
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/path/to/resource/"
+    }
+  },
+  {
+    "name": "URL with fragment",
+    "method": "GET",
+    "url": "http://{host}:{port}/path/to/resource#fragment",
+    "responseCode": 200,
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/path/to/resource#fragment"
+    }
+  },
+  {
+    "name": "http.url must not contain username nor password",
+    "method": "GET",
+    "url": "http://username:password@{host}:{port}/path/to/resource#fragment",
+    "responseCode": 200,
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/path/to/resource#fragment"
+    }
+  },
+  {
+    "name": "Call that cannot resolve DNS will be reported as error span",
+    "method": "GET",
+    "url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/",
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "spanStatusHasDescription": true,
+    "responseExpected": false,
+    "recordException": false,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com",
+      "http.url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/"
+    }
+  },
+  {
+    "name": "Call that cannot resolve DNS will be reported as error span. And Records exception",
+    "method": "GET",
+    "url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/",
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "spanStatusHasDescription": true,
+    "responseExpected": false,
+    "recordException": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com",
+      "http.url": "https://sdlfaldfjalkdfjlkajdflkajlsdjf.sdlkjafsdjfalfadslkf.com/"
+    }
+  },
+  {
+    "name": "Response code: 199. This test case is not possible to implement on some platforms as they don't allow to return this status code. Keeping this test case for visibility, but it actually simply a fallback into 200 test case",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 200,
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 200",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 200,
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 399",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 399,
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "399",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 400",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 400,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "400",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 401",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 401,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "401",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 403",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 403,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "403",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 404",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 404,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "404",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 429",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 429,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "429",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 501",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 501,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "501",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 503",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 503,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "503",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 504",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 504,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "504",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Response code: 600",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 600,
+    "spanName": "HTTP GET",
+    "spanStatus": "ERROR",
+    "responseExpected": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.status_code": "600",
+      "http.url": "http://{host}:{port}/"
+    }
+  },
+  {
+    "name": "Http version attribute populated",
+    "method": "GET",
+    "url": "http://{host}:{port}/",
+    "responseCode": 200,
+    "spanName": "HTTP GET",
+    "spanStatus": "UNSET",
+    "responseExpected": true,
+    "setHttpFlavor": true,
+    "spanAttributes": {
+      "http.method": "GET",
+      "http.host": "{host}:{port}",
+      "http.flavor": "2.0",
+      "http.status_code": 200,
+      "http.url": "http://{host}:{port}/"
+    }
+  }
+]

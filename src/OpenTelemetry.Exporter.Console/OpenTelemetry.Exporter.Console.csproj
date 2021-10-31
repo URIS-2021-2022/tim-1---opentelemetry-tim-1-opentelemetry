@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <Description>Console exporter for OpenTelemetry .NET</Description>
+    <PackageTags>$(PackageTags);Console;distributed-tracing</PackageTags>
+    <MinVerTagPrefix>core-</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn),1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoRoot)\src\OpenTelemetry\OpenTelemetry.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry\Internal\ServiceProviderExtensions.cs" Link="Includes\ServiceProviderExtensions.cs" />
+    <Compile Include="$(RepoRoot)\src\OpenTelemetry.Api\Internal\Guard.cs" Link="Includes\Guard.cs" />
+  </ItemGroup>
+
+</Project>

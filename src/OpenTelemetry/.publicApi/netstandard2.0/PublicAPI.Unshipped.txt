@@ -1,0 +1,8 @@
+OpenTelemetry.BaseExporter<T>.ForceFlush(int timeoutMilliseconds = -1) -> bool
+OpenTelemetry.Batch<T>.Batch(T[] items, int count) -> void
+OpenTelemetry.Batch<T>.Count.get -> long
+OpenTelemetry.Trace.BatchExportActivityProcessorOptions
+OpenTelemetry.Trace.BatchExportActivityProcessorOptions.BatchExportActivityProcessorOptions() -> void
+override OpenTelemetry.BaseExportProcessor<T>.OnForceFlush(int timeoutMilliseconds) -> bool
+override OpenTelemetry.BatchExportProcessor<T>.Dispose(bool disposing) -> void
+virtual OpenTelemetry.BaseExporter<T>.OnForceFlush(int timeoutMilliseconds) -> bool
