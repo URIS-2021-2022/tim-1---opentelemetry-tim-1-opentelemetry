@@ -98,7 +98,7 @@ namespace OpenTelemetry.Context.Propagation
 
             using var e = context.Baggage.GetEnumerator();
 
-            if (e.MoveNext() == true)
+            if (e.MoveNext())
             {
                 int itemCount = 0;
                 StringBuilder baggage = new StringBuilder();
