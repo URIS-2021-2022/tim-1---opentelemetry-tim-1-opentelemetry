@@ -80,7 +80,8 @@ namespace OpenTelemetry.Exporter
         /// Must be a valid Uri with scheme (http or https) and host, and
         /// may contain a port and path. The default value is http://localhost:4317.
         /// </summary>
-        public Uri Endpoint { get; set; } = new Uri("http://localhost:4317");
+        private const string uri = "http://localhost:4317";
+        public Uri Endpoint { get; set; } = new Uri(uri);
 
         /// <summary>
         /// Gets or sets optional headers for the connection. Refer to the <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md#specifying-headers-via-environment-variables">

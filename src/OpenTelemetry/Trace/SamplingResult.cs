@@ -97,6 +97,12 @@ namespace OpenTelemetry.Trace
         }
 
         /// <inheritdoc/>
+        public bool Equals(SamplingResult other)
+        {
+            return this.Decision == other.Decision && this.Attributes.SequenceEqual(other.Attributes);
+        }
+
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             var result = 1;
@@ -105,10 +111,5 @@ namespace OpenTelemetry.Trace
             return result;
         }
 
-        /// <inheritdoc/>
-        public bool Equals(SamplingResult other)
-        {
-            return this.Decision == other.Decision && this.Attributes.SequenceEqual(other.Attributes);
-        }
     }
 }
