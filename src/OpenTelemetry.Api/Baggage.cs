@@ -308,9 +308,12 @@ namespace OpenTelemetry
         /// </summary>
         /// <param name="name">Baggage item name.</param>
         /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
+        ///izmena
+        private var baggage;
+
         public Baggage RemoveBaggage(string name)
         {
-            var baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
             baggage.Remove(name);
 
             return new Baggage(baggage);
