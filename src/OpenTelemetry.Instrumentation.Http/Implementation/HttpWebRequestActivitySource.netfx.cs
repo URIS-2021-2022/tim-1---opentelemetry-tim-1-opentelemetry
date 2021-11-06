@@ -686,9 +686,9 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
                 return this.table.ContainsKey(key);
             }
 
-            public override bool ContainsValue(object key)
+            public override bool ContainsValue(object value)
             {
-                return this.table.ContainsValue(key);
+                return this.table.ContainsValue(value);
             }
 
             public override void CopyTo(Array array, int arrayIndex)
