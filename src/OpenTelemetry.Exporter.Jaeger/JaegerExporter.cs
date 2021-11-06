@@ -65,7 +65,7 @@ namespace OpenTelemetry.Exporter
         internal Batch Batch { get; private set; }
 
         /// <inheritdoc/>
-        public override ExportResult Export(in Batch<Activity> activityBatch)
+        public override ExportResult Export(in Batch<Activity> batch)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace OpenTelemetry.Exporter
                     this.SetResourceAndInitializeBatch(this.ParentProvider.GetResource());
                 }
 
-                foreach (var activity in activityBatch)
+                foreach (var activity in batch)
                 {
                     this.AppendSpan(activity.ToJaegerSpan());
                 }

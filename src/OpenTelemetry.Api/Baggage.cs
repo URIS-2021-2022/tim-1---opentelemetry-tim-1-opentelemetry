@@ -350,14 +350,14 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            var baggage = this.baggage ?? EmptyBaggage;
+            var baggage2 = this.baggage ?? EmptyBaggage;
 
             unchecked
             {
                 int res = 17;
-                foreach (var item in baggage)
+                foreach (var item in baggage2)
                 {
-                    res = (res * 23) + baggage.Comparer.GetHashCode(item.Key);
+                    res = (res * 23) + baggage2.Comparer.GetHashCode(item.Key);
                     res = (res * 23) + item.Value.GetHashCode();
                 }
 

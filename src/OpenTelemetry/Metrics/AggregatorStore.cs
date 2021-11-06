@@ -55,7 +55,7 @@ namespace OpenTelemetry.Metrics
             this.metricPoints = new MetricPoint[MaxMetricPoints];
             this.aggType = aggType;
             this.temporality = temporality;
-            this.outputDelta = temporality == AggregationTemporality.Delta ? true : false;
+            this.outputDelta = (temporality == AggregationTemporality.Delta);
             this.histogramBounds = histogramBounds;
             this.startTimeExclusive = DateTimeOffset.UtcNow;
             if (tagKeysInteresting == null)
