@@ -57,16 +57,8 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                 field.ID = 2;
 
                 oprot.WriteFieldBegin(field);
-                {
-                    oprot.WriteListBegin(new TList(TType.Struct, this.Fields.Count));
 
-                    for (int i = 0; i < this.Fields.Count; i++)
-                    {
-                        this.Fields[i].Write(oprot);
-                    }
-
-                    oprot.WriteListEnd();
-                }
+                this.WriteList(oprot);
 
                 oprot.WriteFieldEnd();
                 oprot.WriteFieldStop();
@@ -76,6 +68,18 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             {
                 oprot.DecrementRecursionDepth();
             }
+        }
+
+        private void WriteList(TProtocol oprot)
+        {
+            oprot.WriteListBegin(new TList(TType.Struct, this.Fields.Count));
+
+            for (int i = 0; i < this.Fields.Count; i++)
+            {
+                this.Fields[i].Write(oprot);
+            }
+
+            oprot.WriteListEnd();
         }
 
         public override string ToString()
