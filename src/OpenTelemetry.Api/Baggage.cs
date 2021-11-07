@@ -33,7 +33,7 @@ namespace OpenTelemetry
         private static readonly RuntimeContextSlot<BaggageHolder> RuntimeContextSlot = RuntimeContext.RegisterSlot<BaggageHolder>("otel.baggage");
         private static readonly Dictionary<string, string> EmptyBaggage = new Dictionary<string, string>();
 
-        private readonly Dictionary<string, string> baggage;
+        private static readonly Dictionary<string, string> baggage1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Baggage"/> struct.
@@ -311,12 +311,14 @@ namespace OpenTelemetry
         ///izmena
         private var baggage;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public Baggage RemoveBaggage(string name)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
-            baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
-            baggage.Remove(name);
+            this.baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            this.baggage.Remove(name);
 
-            return new Baggage(baggage);
+            return new Baggage(this.baggage);
         }
 
         /// <summary>
@@ -336,9 +338,9 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public bool Equals(Baggage other)
         {
-            bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0;
+            bool baggageIsNullOrEmpty = (this.baggage == null || this.baggage.Count) <= 0;
 
-            if (baggageIsNullOrEmpty != (other.baggage == null || other.baggage.Count <= 0))
+            if (baggageIsNullOrEmpty != (other.baggage == null || other.baggage.Count) <= 0)
             {
                 return false;
             }
