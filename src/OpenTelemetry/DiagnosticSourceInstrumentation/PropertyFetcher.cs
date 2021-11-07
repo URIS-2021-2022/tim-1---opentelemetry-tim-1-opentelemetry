@@ -87,7 +87,7 @@ namespace OpenTelemetry.Instrumentation
         }
 
         // see https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/System/Diagnostics/DiagnosticSourceEventSource.cs
-        private class PropertyFetch
+        private sealed class PropertyFetch
         {
             /// <summary>
             /// Create a property fetcher from a .NET Reflection PropertyInfo class that
