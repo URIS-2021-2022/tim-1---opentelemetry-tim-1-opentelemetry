@@ -44,6 +44,7 @@ namespace OpenTelemetry
         /// <inheritdoc />
         public sealed override void OnStart(T data)
         {
+            throw new NotSupportedException();
         }
 
         public override void OnEnd(T data)

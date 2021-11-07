@@ -845,9 +845,9 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
                 this.list.CopyTo(array);
             }
 
-            public override void CopyTo(Array array, int index)
+            public override void CopyTo(Array array, int arrayIndex)
             {
-                this.list.CopyTo(array, index);
+                this.list.CopyTo(array, arrayIndex);
             }
 
             public override void CopyTo(int index, Array array, int arrayIndex, int count)

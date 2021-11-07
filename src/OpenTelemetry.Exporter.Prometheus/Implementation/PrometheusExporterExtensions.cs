@@ -344,7 +344,7 @@ namespace OpenTelemetry.Exporter.Prometheus
             {
                 WriteToBuffer(OpeningBraceUtf8, buffer, ref bufferPosition);
                 int i = 0;
-                while (i < keys.Length)
+                while (i < (keys?.Length ?? 0))
                 {
                     WriteKeyValuePair(buffer, ref bufferPosition, metricInfo.GetKeyUtf8(keys[i]), metricInfo.GetValueUtf8(values[i]), i > 0);
                     i++;
