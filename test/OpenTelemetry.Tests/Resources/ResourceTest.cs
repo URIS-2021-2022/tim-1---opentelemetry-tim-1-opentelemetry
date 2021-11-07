@@ -89,7 +89,7 @@ namespace OpenTelemetry.Resources.Tests
         public void CreateResource_EmptyArray()
         {
             // Arrange
-            var attributes = new Dictionary<string, object> { { "EmptyArray", new string[0] } };
+            var attributes = new Dictionary<string, object> { { "EmptyArray", System.Array.Empty<string>() } };
 
             // does not throw
             var resource = new Resource(attributes);
