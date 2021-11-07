@@ -118,9 +118,12 @@ namespace OpenTelemetry.Metrics
                 var tag = tags[n];
                 if (tagKeysInteresting.Contains(tag.Key))
                 {
-                    tagKeys[i] = tag.Key;
-                    tagValues[i] = tag.Value;
-                    i++;
+                    if (tagKeys[i] != null)
+                    {
+                        tagKeys[i] = tag.Key;
+                        tagValues[i] = tag.Value;
+                        i++;
+                    }
                 }
             }
         }
