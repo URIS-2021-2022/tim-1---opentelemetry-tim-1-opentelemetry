@@ -188,7 +188,7 @@ namespace Benchmarks.Trace
         }
 
         [Benchmark]
-        public void LegacyActivity_ExactMatchMode()
+        public static void LegacyActivity_ExactMatchMode()
         {
             using (var activity = new Activity("ExactMatch.OperationName1").Start())
             {
