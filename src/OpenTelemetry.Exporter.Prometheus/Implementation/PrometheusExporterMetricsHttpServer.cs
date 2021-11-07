@@ -178,8 +178,9 @@ namespace OpenTelemetry.Exporter.Prometheus
                 {
                     context.Response.Close();
                 }
-                catch
+                catch (Exception exc)
                 {
+                    PrometheusExporterEventSource.Log.FailedExport(exc);
                 }
 
                 this.exporter.ReleaseSemaphore();

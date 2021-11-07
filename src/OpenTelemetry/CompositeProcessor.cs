@@ -153,7 +153,7 @@ namespace OpenTelemetry
             base.Dispose(disposing);
         }
 
-        private class DoublyLinkedListNode
+        private sealed class DoublyLinkedListNode
         {
             public readonly BaseProcessor<T> Value;
 
