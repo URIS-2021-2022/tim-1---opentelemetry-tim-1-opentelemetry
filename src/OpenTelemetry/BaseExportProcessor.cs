@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
+// Test 20:41
 
 using System;
 using OpenTelemetry.Internal;
@@ -43,6 +44,7 @@ namespace OpenTelemetry
         /// <inheritdoc />
         public sealed override void OnStart(T data)
         {
+            throw new NotSupportedException();
         }
 
         public override void OnEnd(T data)

@@ -248,7 +248,7 @@ namespace OpenTelemetry.Trace
             }
         }
 
-        private static class ActivityTagsEnumeratorFactory<TState>
+        private sealed class ActivityTagsEnumeratorFactory<TState>
             where TState : struct, IActivityEnumerator<KeyValuePair<string, object>>
         {
             private static readonly object EmptyActivityTagObjects = typeof(Activity).GetField("s_emptyTagObjects", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);

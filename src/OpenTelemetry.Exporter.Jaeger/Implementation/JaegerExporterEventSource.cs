@@ -26,7 +26,8 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
     [EventSource(Name = "OpenTelemetry-Exporter-Jaeger")]
     internal class JaegerExporterEventSource : EventSource
     {
-        public static JaegerExporterEventSource Log = new JaegerExporterEventSource();
+        public const JaegerExporterEventSource Log = new JaegerExporterEventSource();
+
 
         [NonEvent]
         public void FailedExport(Exception ex)

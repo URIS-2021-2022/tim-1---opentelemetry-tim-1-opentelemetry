@@ -38,13 +38,13 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 
         public long SpanId { get; }
 
-        public void Write(TProtocol oprot)
+        public void Write(TProtocol tProtocol)
         {
-            oprot.IncrementRecursionDepth();
+            tProtocol.IncrementRecursionDepth();
             try
             {
                 var struc = new TStruct("SpanRef");
-                oprot.WriteStructBegin(struc);
+                tProtocol.WriteStructBegin(struc);
 
                 var field = new TField
                 {
@@ -53,39 +53,39 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     ID = 1,
                 };
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI32((int)this.RefType);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI32((int)this.RefType);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "traceIdLow";
                 field.Type = TType.I64;
                 field.ID = 2;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.TraceIdLow);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.TraceIdLow);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "traceIdHigh";
                 field.Type = TType.I64;
                 field.ID = 3;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.TraceIdHigh);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.TraceIdHigh);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "spanId";
                 field.Type = TType.I64;
                 field.ID = 4;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.SpanId);
-                oprot.WriteFieldEnd();
-                oprot.WriteFieldStop();
-                oprot.WriteStructEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.SpanId);
+                tProtocol.WriteFieldEnd();
+                tProtocol.WriteFieldStop();
+                tProtocol.WriteStructEnd();
             }
             finally
             {
-                oprot.DecrementRecursionDepth();
+                tProtocol.DecrementRecursionDepth();
             }
         }
 

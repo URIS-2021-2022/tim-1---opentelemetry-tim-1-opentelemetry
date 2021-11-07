@@ -125,13 +125,11 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis.Implementation
                     }
                     else if (command.Command != null)
                     {
-                        // Example: "db.statement": SET;
                         activity.SetTag(SemanticConventions.AttributeDbStatement, command.Command);
                     }
                 }
                 else if (command.Command != null)
                 {
-                    // Example: "db.statement": SET;
                     activity.SetTag(SemanticConventions.AttributeDbStatement, command.Command);
                 }
 

@@ -209,6 +209,7 @@ namespace OpenTelemetry.Trace.Tests
                 .Build();
             var current = Tracer.CurrentSpan;
             current.End();
+            Assert.False(Tracer.CurrentSpan.Context.IsValid);
         }
 
         [Fact]

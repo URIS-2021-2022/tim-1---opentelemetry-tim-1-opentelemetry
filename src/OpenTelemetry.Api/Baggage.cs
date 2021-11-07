@@ -33,7 +33,7 @@ namespace OpenTelemetry
         private static readonly RuntimeContextSlot<BaggageHolder> RuntimeContextSlot = RuntimeContext.RegisterSlot<BaggageHolder>("otel.baggage");
         private static readonly Dictionary<string, string> EmptyBaggage = new Dictionary<string, string>();
 
-        private readonly Dictionary<string, string> baggage;
+        private static readonly Dictionary<string, string> baggage1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Baggage"/> struct.
@@ -130,7 +130,7 @@ namespace OpenTelemetry
         /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
         /// <returns>Baggage key/value pairs.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "This was agreed on to be the friendliest API surface")]
-        public static IReadOnlyDictionary<string, string> GetBaggage(Baggage baggage = default)
+        public static IReadOnlyDictionary<string, string> GetBaggage(Baggage baggage)
             => baggage == default ? Current.GetBaggage() : baggage.GetBaggage();
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace OpenTelemetry
         /// </summary>
         /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
         /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
-        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage = default)
+        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage)
             => baggage == default ? Current.GetEnumerator() : baggage.GetEnumerator();
 
         /// <summary>
@@ -308,12 +308,17 @@ namespace OpenTelemetry
         /// </summary>
         /// <param name="name">Baggage item name.</param>
         /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
-        public Baggage RemoveBaggage(string name)
-        {
-            var baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
-            baggage.Remove(name);
+        ///izmena
+        private var baggage;
 
-            return new Baggage(baggage);
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        public Baggage RemoveBaggage(string name)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+        {
+            this.baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            this.baggage.Remove(name);
+
+            return new Baggage(this.baggage);
         }
 
         /// <summary>
@@ -333,9 +338,9 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public bool Equals(Baggage other)
         {
-            bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0;
+            bool baggageIsNullOrEmpty = (this.baggage == null || this.baggage.Count) <= 0;
 
-            if (baggageIsNullOrEmpty != (other.baggage == null || other.baggage.Count <= 0))
+            if (baggageIsNullOrEmpty != (other.baggage == null || other.baggage.Count) <= 0)
             {
                 return false;
             }
@@ -350,14 +355,14 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            var baggage = this.baggage ?? EmptyBaggage;
+            var baggage2 = this.baggage ?? EmptyBaggage;
 
             unchecked
             {
                 int res = 17;
-                foreach (var item in baggage)
+                foreach (var item in baggage2)
                 {
-                    res = (res * 23) + baggage.Comparer.GetHashCode(item.Key);
+                    res = (res * 23) + baggage2.Comparer.GetHashCode(item.Key);
                     res = (res * 23) + item.Value.GetHashCode();
                 }
 
@@ -377,7 +382,7 @@ namespace OpenTelemetry
             return baggageHolder;
         }
 
-        private class BaggageHolder
+        private sealed class BaggageHolder
         {
             public Baggage Baggage;
         }
