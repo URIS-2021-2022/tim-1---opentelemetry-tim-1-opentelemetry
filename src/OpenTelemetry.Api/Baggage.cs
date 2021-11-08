@@ -130,7 +130,7 @@ namespace OpenTelemetry
         /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
         /// <returns>Baggage key/value pairs.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "This was agreed on to be the friendliest API surface")]
-        public static IReadOnlyDictionary<string, string> GetBaggage(Baggage baggage)
+        public static IReadOnlyDictionary<string, string> GetBaggage(Baggage baggage = default)
             => baggage == default ? Current.GetBaggage() : baggage.GetBaggage();
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace OpenTelemetry
         /// </summary>
         /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
         /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
-        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage)
+        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage = default)
             => baggage == default ? Current.GetEnumerator() : baggage.GetEnumerator();
 
         /// <summary>

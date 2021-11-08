@@ -38,7 +38,7 @@ namespace OpenTelemetry.Metrics
             this.Unit = instrument.Unit;
             this.Meter = instrument.Meter;
             AggregationType aggType = default;
-            if (instrument is ObservableCounter<long>)
+            if (instrument is ObservableCounter<long>
                 || instrument.GetType() == typeof(ObservableCounter<int>)
                 || instrument.GetType() == typeof(ObservableCounter<short>)
                 || instrument.GetType() == typeof(ObservableCounter<byte>))
