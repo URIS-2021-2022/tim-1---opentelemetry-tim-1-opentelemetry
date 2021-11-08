@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -340,12 +342,12 @@ namespace OpenTelemetry
         {
             bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0; 
 
-            if (baggageIsNullOrEmpty != (other.baggage == null || other.baggage.Count <= 0))
+            if (baggageIsNullOrEmpty == (other.baggage == null || other.baggage.Count <= 0))
             {
-                return false;
+                return baggageIsNullOrEmpty || this.baggage.SequenceEqual(other.baggage);
             }
 
-            return baggageIsNullOrEmpty || this.baggage.SequenceEqual(other.baggage);
+            return false;
         }
 
         /// <inheritdoc/>
