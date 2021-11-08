@@ -33,7 +33,7 @@ namespace OpenTelemetry
         private static readonly RuntimeContextSlot<BaggageHolder> RuntimeContextSlot = RuntimeContext.RegisterSlot<BaggageHolder>("otel.baggage");
         private static readonly Dictionary<string, string> EmptyBaggage = new Dictionary<string, string>();
 
-        private static readonly Dictionary<string, string> baggage1;
+        private readonly Dictionary<string, string> baggage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Baggage"/> struct.
@@ -309,16 +309,16 @@ namespace OpenTelemetry
         /// <param name="name">Baggage item name.</param>
         /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
         ///izmena
-        private var baggage;
+        //private var baggage;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public Baggage RemoveBaggage(string name)
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
-            this.baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
-            this.baggage.Remove(name);
+            var baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            baggage.Remove(name);
 
-            return new Baggage(this.baggage);
+            return new Baggage(baggage);
         }
 
         /// <summary>
@@ -338,9 +338,9 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public bool Equals(Baggage other)
         {
-            bool baggageIsNullOrEmpty = (this.baggage == null || this.baggage.Count) <= 0;
+            bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0; 
 
-            if (baggageIsNullOrEmpty != (other.baggage == null || other.baggage.Count) <= 0)
+            if (baggageIsNullOrEmpty != (other.baggage == null || other.baggage.Count <= 0))
             {
                 return false;
             }
