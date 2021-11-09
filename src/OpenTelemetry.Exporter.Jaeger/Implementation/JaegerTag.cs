@@ -55,13 +55,13 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 
         public byte[] VBinary { get; }
 
-        public void Write(TProtocol oprot)
+        public void Write(TProtocol tProtocol)
         {
-            oprot.IncrementRecursionDepth();
+            tProtocol.IncrementRecursionDepth();
             try
             {
                 var struc = new TStruct("Tag");
-                oprot.WriteStructBegin(struc);
+                tProtocol.WriteStructBegin(struc);
 
                 var field = new TField
                 {
@@ -70,26 +70,26 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     ID = 1,
                 };
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteString(this.Key);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteString(this.Key);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "vType";
                 field.Type = TType.I32;
                 field.ID = 2;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI32((int)this.VType);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI32((int)this.VType);
+                tProtocol.WriteFieldEnd();
 
                 if (this.VStr != null)
                 {
                     field.Name = "vStr";
                     field.Type = TType.String;
                     field.ID = 3;
-                    oprot.WriteFieldBegin(field);
-                    oprot.WriteString(this.VStr);
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldBegin(field);
+                    tProtocol.WriteString(this.VStr);
+                    tProtocol.WriteFieldEnd();
                 }
 
                 if (this.VDouble.HasValue)
@@ -97,9 +97,9 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Name = "vDouble";
                     field.Type = TType.Double;
                     field.ID = 4;
-                    oprot.WriteFieldBegin(field);
-                    oprot.WriteDouble(this.VDouble.Value);
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldBegin(field);
+                    tProtocol.WriteDouble(this.VDouble.Value);
+                    tProtocol.WriteFieldEnd();
                 }
 
                 if (this.VBool.HasValue)
@@ -107,9 +107,9 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Name = "vBool";
                     field.Type = TType.Bool;
                     field.ID = 5;
-                    oprot.WriteFieldBegin(field);
-                    oprot.WriteBool(this.VBool.Value);
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldBegin(field);
+                    tProtocol.WriteBool(this.VBool.Value);
+                    tProtocol.WriteFieldEnd();
                 }
 
                 if (this.VLong.HasValue)
@@ -117,9 +117,9 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Name = "vLong";
                     field.Type = TType.I64;
                     field.ID = 6;
-                    oprot.WriteFieldBegin(field);
-                    oprot.WriteI64(this.VLong.Value);
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldBegin(field);
+                    tProtocol.WriteI64(this.VLong.Value);
+                    tProtocol.WriteFieldEnd();
                 }
 
                 if (this.VBinary != null)
@@ -127,17 +127,17 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Name = "vBinary";
                     field.Type = TType.String;
                     field.ID = 7;
-                    oprot.WriteFieldBegin(field);
-                    oprot.WriteBinary(this.VBinary, 0, this.VBinary.Length);
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldBegin(field);
+                    tProtocol.WriteBinary(this.VBinary, 0, this.VBinary.Length);
+                    tProtocol.WriteFieldEnd();
                 }
 
-                oprot.WriteFieldStop();
-                oprot.WriteStructEnd();
+                tProtocol.WriteFieldStop();
+                tProtocol.WriteStructEnd();
             }
             finally
             {
-                oprot.DecrementRecursionDepth();
+                tProtocol.DecrementRecursionDepth();
             }
         }
 

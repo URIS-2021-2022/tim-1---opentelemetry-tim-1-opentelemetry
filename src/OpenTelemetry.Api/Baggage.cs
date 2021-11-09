@@ -35,7 +35,7 @@ namespace OpenTelemetry
         private static readonly RuntimeContextSlot<BaggageHolder> RuntimeContextSlot = RuntimeContext.RegisterSlot<BaggageHolder>("otel.baggage");
         private static readonly Dictionary<string, string> EmptyBaggage = new Dictionary<string, string>();
 
-        private readonly Dictionary<string, string> baggage;
+        public readonly Dictionary<string, string> baggage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Baggage"/> struct.
@@ -310,16 +310,16 @@ namespace OpenTelemetry
         /// </summary>
         /// <param name="name">Baggage item name.</param>
         /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
-        /// proba
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
         public Baggage RemoveBaggage(string name)
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
-            var baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
-            baggage.Remove(name);
+            var bagg = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            bagg.Remove(name);
 
-            return new Baggage(baggage);
+            return new Baggage(bagg);
         }
 
         /// <summary>

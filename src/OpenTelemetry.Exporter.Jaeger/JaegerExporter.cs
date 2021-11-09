@@ -55,8 +55,7 @@ namespace OpenTelemetry.Exporter
             this.memoryTransport = new InMemoryTransport(16000);
             this.memoryProtocol = this.protocolFactory.GetProtocol(this.memoryTransport);
 
-            string serviceName = (string)this.ParentProvider.GetDefaultResource().Attributes.Where(
-                    pair => pair.Key == ResourceSemanticConventions.AttributeServiceName).FirstOrDefault().Value;
+            string serviceName = (string)this.ParentProvider.GetDefaultResource().Attributes.FirstOrDefault(pair => pair.Key == ResourceSemanticConventions.AttributeServiceName).Value;
             this.Process = new Process(serviceName);
         }
 

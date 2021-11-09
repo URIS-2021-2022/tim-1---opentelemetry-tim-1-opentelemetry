@@ -39,14 +39,14 @@ namespace OpenTelemetry.Exporter
                 this.resource = this.ParentProvider.GetResource();
                 if (this.resource != Resource.Empty)
                 {
-                    foreach (var resourceAttribute in this.resource.Attributes)
+                    var resAttributes = this.resource.Attributes;
+                    foreach (var resourceAttribute in resAttributes)
                     {
                         if (resourceAttribute.Key.Equals("service.name"))
                         {
                             Console.WriteLine("Service.Name" + resourceAttribute.Value);
                         }
                     }
-
                 }
             }
 
