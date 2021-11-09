@@ -132,7 +132,7 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Type = TType.List;
                     field.ID = 6;
                     oprot.WriteFieldBegin(field);
-                    WriteList(oprot);
+                    this.WriteList(oprot);
 
                     oprot.WriteFieldEnd();
                 }

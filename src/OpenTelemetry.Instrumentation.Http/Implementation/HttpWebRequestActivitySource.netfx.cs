@@ -454,9 +454,9 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
             ServicePointHashtable newTable = new ServicePointHashtable(originalTable ?? new Hashtable());
 
            foreach (DictionaryEntry existingServicePoint in originalTable)
-            {
+           {
                 HookServicePoint(existingServicePoint.Value);
-            }
+           }
 
             servicePointTableField.SetValue(null, newTable);
         }

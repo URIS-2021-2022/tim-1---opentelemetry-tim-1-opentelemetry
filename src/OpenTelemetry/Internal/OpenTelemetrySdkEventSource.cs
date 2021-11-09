@@ -145,6 +145,12 @@ namespace OpenTelemetry.Internal
             }
         }
 
+        [Event(30, Message = "Missing permissions to read environment variable: '{0}'", Level = EventLevel.Warning)]
+        public void MissingPermissionsToReadEnvironmentVariable(string exception)
+        {
+            this.WriteEvent(30, exception);
+        }
+
         [NonEvent]
         public void DroppedExportProcessorItems(string exportProcessorName, string exporterName, long droppedCount)
         {
@@ -324,12 +330,6 @@ namespace OpenTelemetry.Internal
         public void FailedToParseEnvironmentVariable(string name, string value)
         {
             this.WriteEvent(29, name, value);
-        }
-
-        [Event(30, Message = "Missing permissions to read environment variable: '{0}'", Level = EventLevel.Warning)]
-        public void MissingPermissionsToReadEnvironmentVariable(string exception)
-        {
-            this.WriteEvent(30, exception);
         }
 
         [Event(31, Message = "'{0}' exporting to '{1}' dropped '0' items.", Level = EventLevel.Informational)]

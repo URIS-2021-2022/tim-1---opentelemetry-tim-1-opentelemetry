@@ -40,6 +40,7 @@ namespace OpenTelemetry.Exporter
 
         internal const string TracesExportPath = "v1/traces";
         internal const string MetricsExportPath = "v1/metrics";
+        private const string UriConst = "http://localhost:4317";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OtlpExporterOptions"/> class.
@@ -80,8 +81,7 @@ namespace OpenTelemetry.Exporter
         /// Must be a valid Uri with scheme (http or https) and host, and
         /// may contain a port and path. The default value is http://localhost:4317.
         /// </summary>
-        private const string uri = "http://localhost:4317";
-        public Uri Endpoint { get; set; } = new Uri(uri);
+        public Uri Endpoint { get; set; } = new Uri(UriConst);
 
         /// <summary>
         /// Gets or sets optional headers for the connection. Refer to the <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md#specifying-headers-via-environment-variables">
