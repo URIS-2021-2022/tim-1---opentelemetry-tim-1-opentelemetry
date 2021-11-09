@@ -78,9 +78,9 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                 return new BufferWriterMemory(this.bufferWriter, 0, 0);
             }
 
-            var buffer = this.buffer.Value;
+            var buffer3 = this.buffer.Value;
             this.buffer = null;
-            return buffer;
+            return buffer3;
         }
 
         public void Reset()
