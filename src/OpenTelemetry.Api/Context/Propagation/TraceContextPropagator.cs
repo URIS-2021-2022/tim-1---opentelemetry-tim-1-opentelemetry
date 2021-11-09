@@ -183,7 +183,6 @@ namespace OpenTelemetry.Context.Propagation
                 return false;
             }
 
-
             if (traceparent[VersionAndTraceIdAndSpanIdLength - 1] != '-')
             {
                 return false;

@@ -47,7 +47,7 @@ namespace OpenTelemetry.Exporter.Prometheus
         }
 
         [NonEvent]
-        public void CanceledExport(Exception ex)
+        public void CanceledExportNonEvent(Exception ex)
         {
             if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
             {
