@@ -22,7 +22,7 @@ using OpenTelemetry.Metrics;
 namespace OpenTelemetry.Exporter
 {
     /// <summary>
-    /// Exporter of OpenTelemetry metrics to Prometheus.
+    /// Exporter of OpenTelemetry batch to Prometheus.
     /// </summary>
     [AggregationTemporality(AggregationTemporality.Cumulative)]
     [ExportModes(ExportModes.Pull)]
@@ -60,9 +60,9 @@ namespace OpenTelemetry.Exporter
 
         public Func<int, bool> Collect { get; set; }
 
-        public override ExportResult Export(in Batch<Metric> metrics)
+        public override ExportResult Export(in Batch<Metric> batch)
         {
-            this.Metrics = metrics;
+            this.Metrics = batch;
             return ExportResult.Success;
         }
 
