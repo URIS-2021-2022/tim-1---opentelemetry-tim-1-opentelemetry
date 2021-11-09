@@ -21,6 +21,10 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 {
     internal class EmitBatchArgs
     {
+        protected EmitBatchArgs()
+        {
+        }
+
         public static void Send(int seqId, Batch batch, TProtocol oprot)
         {
             oprot.WriteMessageBegin(new TMessage("emitBatch", TMessageType.Oneway, seqId));

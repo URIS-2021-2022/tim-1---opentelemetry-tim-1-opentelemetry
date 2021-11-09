@@ -243,30 +243,27 @@ namespace OpenTelemetry.Instrumentation.AspNetCore.Implementation
 
         public override void OnCustom(string name, Activity activity, object payload)
         {
-            if (name == "Microsoft.AspNetCore.Mvc.BeforeAction")
+            if (name == "Microsoft.AspNetCore.Mvc.BeforeAction" && activity.IsAllDataRequested)
             {
-                if (activity.IsAllDataRequested)
+                // See https://github.com/aspnet/Mvc/blob/2414db256f32a047770326d14d8b0e2afd49ba49/src/Microsoft.AspNetCore.Mvc.Core/MvcCoreDiagnosticSourceExtensions.cs#L36-L44
+                // Reflection accessing: ActionDescriptor.AttributeRouteInfo.Template
+                // The reason to use reflection is to avoid a reference on MVC package.
+                // This package can be used with non-MVC apps and this logic simply wouldn't run.
+                // Taking reference on MVC will increase size of deployment for non-MVC apps.
+                _ = this.beforeActionActionDescriptorFetcher.TryFetch(payload, out var actionDescriptor);
+                _ = this.beforeActionAttributeRouteInfoFetcher.TryFetch(actionDescriptor, out var attributeRouteInfo);
+                _ = this.beforeActionTemplateFetcher.TryFetch(attributeRouteInfo, out var template);
+
+                if (!string.IsNullOrEmpty(template))
                 {
-                    // See https://github.com/aspnet/Mvc/blob/2414db256f32a047770326d14d8b0e2afd49ba49/src/Microsoft.AspNetCore.Mvc.Core/MvcCoreDiagnosticSourceExtensions.cs#L36-L44
-                    // Reflection accessing: ActionDescriptor.AttributeRouteInfo.Template
-                    // The reason to use reflection is to avoid a reference on MVC package.
-                    // This package can be used with non-MVC apps and this logic simply wouldn't run.
-                    // Taking reference on MVC will increase size of deployment for non-MVC apps.
-                    _ = this.beforeActionActionDescriptorFetcher.TryFetch(payload, out var actionDescriptor);
-                    _ = this.beforeActionAttributeRouteInfoFetcher.TryFetch(actionDescriptor, out var attributeRouteInfo);
-                    _ = this.beforeActionTemplateFetcher.TryFetch(attributeRouteInfo, out var template);
-
-                    if (!string.IsNullOrEmpty(template))
-                    {
-                        // override the span name that was previously set to the path part of URL.
-                        activity.DisplayName = template;
-                        activity.SetTag(SemanticConventions.AttributeHttpRoute, template);
-                    }
-
-                    // TODO: Should we get values from RouteData?
-                    // private readonly PropertyFetcher beforActionRouteDataFetcher = new PropertyFetcher("routeData");
-                    // var routeData = this.beforActionRouteDataFetcher.Fetch(payload) as RouteData;
+                    // override the span name that was previously set to the path part of URL.
+                    activity.DisplayName = template;
+                    activity.SetTag(SemanticConventions.AttributeHttpRoute, template);
                 }
+
+                // TODO: Should we get values from RouteData?
+                // private readonly PropertyFetcher beforActionRouteDataFetcher = new PropertyFetcher("routeData");
+                // var routeData = this.beforActionRouteDataFetcher.Fetch(payload) as RouteData;
             }
         }
 

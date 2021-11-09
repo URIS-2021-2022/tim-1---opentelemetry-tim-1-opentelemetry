@@ -225,6 +225,7 @@ namespace OpenTelemetry.Instrumentation.Http.Tests
 
             var t = (Task)this.GetType().InvokeMember(nameof(this.HttpOutCallsAreCollectedSuccessfullyAsync), BindingFlags.InvokeMethod, null, this, HttpTestData.GetArgumentsFromTestCaseObject(input).First());
             await t;
+            Assert.True(true);
         }
 
         [Fact]

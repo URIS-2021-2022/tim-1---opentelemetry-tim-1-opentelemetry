@@ -32,7 +32,7 @@ namespace OpenTelemetry
         private static readonly RuntimeContextSlot<BaggageHolder> RuntimeContextSlot = RuntimeContext.RegisterSlot<BaggageHolder>("otel.baggage");
         private static readonly Dictionary<string, string> EmptyBaggage = new Dictionary<string, string>();
 
-        private readonly Dictionary<string, string> baggage;
+        public readonly Dictionary<string, string> baggage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Baggage"/> struct.
@@ -306,13 +306,17 @@ namespace OpenTelemetry
         /// Returns a new <see cref="Baggage"/> with the key/value pair removed.
         /// </summary>
         /// <param name="name">Baggage item name.</param>
-        /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
-        public Baggage RemoveBaggage(string name)
-        {
-            var baggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
-            baggage.Remove(name);
+        /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns
+        
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-            return new Baggage(baggage);
+        public Baggage RemoveBaggage(string name)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+        {
+            var bagg = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            bagg.Remove(name);
+
+            return new Baggage(bagg);
         }
 
         /// <summary>
@@ -349,14 +353,14 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            var baggage = this.baggage ?? EmptyBaggage;
+            var baggage2 = this.baggage ?? EmptyBaggage;
 
             unchecked
             {
                 int res = 17;
-                foreach (var item in baggage)
+                foreach (var item in baggage2)
                 {
-                    res = (res * 23) + baggage.Comparer.GetHashCode(item.Key);
+                    res = (res * 23) + baggage2.Comparer.GetHashCode(item.Key);
                     res = (res * 23) + item.Value.GetHashCode();
                 }
 

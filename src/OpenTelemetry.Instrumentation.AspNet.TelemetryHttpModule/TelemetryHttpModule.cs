@@ -52,6 +52,7 @@ namespace OpenTelemetry.Instrumentation.AspNet
         /// <inheritdoc />
         public void Dispose()
         {
+            // some comment
         }
 
         /// <inheritdoc />

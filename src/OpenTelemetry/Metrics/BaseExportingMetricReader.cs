@@ -109,15 +109,15 @@ namespace OpenTelemetry.Metrics
 
             if (timeoutMilliseconds == Timeout.Infinite)
             {
-                result = this.Collect(Timeout.Infinite) && result;
-                result = this.exporter.Shutdown(Timeout.Infinite) && result;
+                result = this.Collect(Timeout.Infinite);
+                result = this.exporter.Shutdown(Timeout.Infinite);
             }
             else
             {
                 var sw = Stopwatch.StartNew();
-                result = this.Collect(timeoutMilliseconds) && result;
+                result = this.Collect(timeoutMilliseconds);
                 var timeout = timeoutMilliseconds - sw.ElapsedMilliseconds;
-                result = this.exporter.Shutdown((int)Math.Max(timeout, 0)) && result;
+                result = this.exporter.Shutdown((int)Math.Max(timeout, 0));
             }
 
             return result;

@@ -453,10 +453,10 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
             Hashtable originalTable = servicePointTableField.GetValue(null) as Hashtable;
             ServicePointHashtable newTable = new ServicePointHashtable(originalTable ?? new Hashtable());
 
-            foreach (DictionaryEntry existingServicePoint in originalTable)
-            {
+           foreach (DictionaryEntry existingServicePoint in originalTable)
+           {
                 HookServicePoint(existingServicePoint.Value);
-            }
+           }
 
             servicePointTableField.SetValue(null, newTable);
         }
@@ -686,9 +686,9 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
                 return this.table.ContainsKey(key);
             }
 
-            public override bool ContainsValue(object key)
+            public override bool ContainsValue(object value)
             {
-                return this.table.ContainsValue(key);
+                return this.table.ContainsValue(value);
             }
 
             public override void CopyTo(Array array, int arrayIndex)
@@ -845,9 +845,9 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
                 this.list.CopyTo(array);
             }
 
-            public override void CopyTo(Array array, int index)
+            public override void CopyTo(Array array, int arrayIndex)
             {
-                this.list.CopyTo(array, index);
+                this.list.CopyTo(array, arrayIndex);
             }
 
             public override void CopyTo(int index, Array array, int arrayIndex, int count)

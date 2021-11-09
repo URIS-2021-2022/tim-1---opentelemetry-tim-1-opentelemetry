@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
+// test
 
 using System;
 using System.Collections.Generic;
@@ -55,8 +56,7 @@ namespace OpenTelemetry.Exporter
             this.memoryTransport = new InMemoryTransport(16000);
             this.memoryProtocol = this.protocolFactory.GetProtocol(this.memoryTransport);
 
-            string serviceName = (string)this.ParentProvider.GetDefaultResource().Attributes.Where(
-                    pair => pair.Key == ResourceSemanticConventions.AttributeServiceName).FirstOrDefault().Value;
+            string serviceName = (string)this.ParentProvider.GetDefaultResource().Attributes.FirstOrDefault(pair => pair.Key == ResourceSemanticConventions.AttributeServiceName).Value;
             this.Process = new Process(serviceName);
         }
 
@@ -65,7 +65,7 @@ namespace OpenTelemetry.Exporter
         internal Batch Batch { get; private set; }
 
         /// <inheritdoc/>
-        public override ExportResult Export(in Batch<Activity> activityBatch)
+        public override ExportResult Export(in Batch<Activity> batch)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace OpenTelemetry.Exporter
                     this.SetResourceAndInitializeBatch(this.ParentProvider.GetResource());
                 }
 
-                foreach (var activity in activityBatch)
+                foreach (var activity in batch)
                 {
                     this.AppendSpan(activity.ToJaegerSpan());
                 }

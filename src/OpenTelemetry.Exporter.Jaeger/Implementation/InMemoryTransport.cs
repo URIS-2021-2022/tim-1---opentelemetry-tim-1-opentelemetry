@@ -66,9 +66,9 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                 return Array.Empty<byte>();
             }
 
-            var buffer = this.buffer.Value.ToArray();
+            var buffer2 = this.buffer.Value.ToArray();
             this.buffer = null;
-            return buffer;
+            return buffer2;
         }
 
         public BufferWriterMemory ToBuffer()

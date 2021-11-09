@@ -72,41 +72,19 @@ namespace OpenTelemetry.Context
             return contextSlot;
         }
 
-        /*
-        public static void Apply(IDictionary<string, object> snapshot)
-        {
-            foreach (var entry in snapshot)
-            {
-                // TODO: revisit this part if we want Snapshot() to be used on critical paths
-                dynamic value = entry.Value;
-                SetValue(entry.Key, value);
-            }
-        }
-
-        public static IDictionary<string, object> Snapshot()
-        {
-            var retval = new Dictionary<string, object>();
-            foreach (var entry in Slots)
-            {
-                // TODO: revisit this part if we want Snapshot() to be used on critical paths
-                dynamic slot = entry.Value;
-                retval[entry.Key] = slot.Get();
-            }
-            return retval;
-        }
-        */
-
         /// <summary>
         /// Sets the value to a registered slot.
         /// </summary>
         /// <param name="slotName">The name of the context slot.</param>
         /// <param name="value">The value to be set.</param>
         /// <typeparam name="T">The type of the value.</typeparam>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void SetValue<T>(string slotName, T value)
+
+        /* [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+         private static void SetValue<T>(string slotName, T value)
         {
             GetSlot<T>(slotName).Set(value);
-        }
+        }*/
 
         /// <summary>
         /// Gets the value from a registered slot.

@@ -119,8 +119,7 @@ namespace OpenTelemetry.Exporter
 
             if (string.IsNullOrEmpty(serviceName))
             {
-                serviceName = (string)this.ParentProvider.GetDefaultResource().Attributes.Where(
-                    pair => pair.Key == ResourceSemanticConventions.AttributeServiceName).FirstOrDefault().Value;
+                serviceName = (string)this.ParentProvider.GetDefaultResource().Attributes.FirstOrDefault(pair => pair.Key == ResourceSemanticConventions.AttributeServiceName).Value;
             }
 
             this.LocalEndpoint = new ZipkinEndpoint(

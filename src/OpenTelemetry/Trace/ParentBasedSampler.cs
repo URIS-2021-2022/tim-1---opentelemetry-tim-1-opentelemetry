@@ -81,7 +81,7 @@ namespace OpenTelemetry.Trace
         /// </param>
         public ParentBasedSampler(
             Sampler rootSampler,
-            Sampler remoteParentSampled = null,
+            Sampler remoteParentSampled,
             Sampler remoteParentNotSampled = null,
             Sampler localParentSampled = null,
             Sampler localParentNotSampled = null)

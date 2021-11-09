@@ -33,13 +33,13 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 
         public PooledList<JaegerTag> Fields { get; }
 
-        public void Write(TProtocol oprot)
+        public void Write(TProtocol tProtocol)
         {
-            oprot.IncrementRecursionDepth();
+            tProtocol.IncrementRecursionDepth();
             try
             {
                 var struc = new TStruct("Log");
-                oprot.WriteStructBegin(struc);
+                tProtocol.WriteStructBegin(struc);
 
                 var field = new TField
                 {
@@ -48,35 +48,30 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     ID = 1,
                 };
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.Timestamp);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.Timestamp);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "fields";
                 field.Type = TType.List;
                 field.ID = 2;
 
-                oprot.WriteFieldBegin(field);
-                {
-                    oprot.WriteListBegin(new TList(TType.Struct, this.Fields.Count));
+                tProtocol.WriteFieldBegin(field);
 
-                    for (int i = 0; i < this.Fields.Count; i++)
-                    {
-                        this.Fields[i].Write(oprot);
-                    }
+                this.WriteList(tProtocol);
 
-                    oprot.WriteListEnd();
-                }
-
-                oprot.WriteFieldEnd();
-                oprot.WriteFieldStop();
-                oprot.WriteStructEnd();
+                tProtocol.WriteFieldEnd();
+                tProtocol.WriteFieldStop();
+                tProtocol.WriteStructEnd();
             }
             finally
             {
-                oprot.DecrementRecursionDepth();
+                tProtocol.DecrementRecursionDepth();
             }
         }
+
+
+        private void WriteList(TProtocol tProtocol)
 
         public override string ToString()
         {
@@ -87,6 +82,19 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             sb.Append(this.Fields);
             sb.Append(')');
             return sb.ToString();
+        }
+
+        private void WriteList(TProtocol oprot)
+
+        {
+            tProtocol.WriteListBegin(new TList(TType.Struct, this.Fields.Count));
+
+            for (int i = 0; i < this.Fields.Count; i++)
+            {
+                this.Fields[i].Write(tProtocol);
+            }
+
+            tProtocol.WriteListEnd();
         }
     }
 }

@@ -35,7 +35,6 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
             OtlpResource.Resource processResource,
             in Batch<LogRecord> logRecordBatch)
         {
-            Dictionary<string, OtlpLogs.InstrumentationLibraryLogs> logRecordsByLibrary = new Dictionary<string, OtlpLogs.InstrumentationLibraryLogs>();
             OtlpLogs.ResourceLogs resourceLogs = new OtlpLogs.ResourceLogs
             {
                 Resource = processResource,
@@ -68,7 +67,6 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
                 TimeUnixNano = (ulong)logRecord.Timestamp.ToUnixTimeNanoseconds(),
                 Name = logRecord.CategoryName,
 
-                // TODO: Devise mapping of LogLevel to SeverityNumber
                 // See: https://github.com/open-telemetry/opentelemetry-proto/blob/bacfe08d84e21fb2a779e302d12e8dfeb67e7b86/opentelemetry/proto/logs/v1/logs.proto#L100-L102
                 SeverityText = logRecord.LogLevel.ToString(),
             };

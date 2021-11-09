@@ -183,15 +183,6 @@ namespace OpenTelemetry.Context.Propagation
                 return false;
             }
 
-            try
-            {
-                traceId = ActivityTraceId.CreateFromString(traceparent.AsSpan().Slice(VersionPrefixIdLength, TraceIdLength));
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                // it's ok to still parse tracestate
-                return false;
-            }
 
             if (traceparent[VersionAndTraceIdAndSpanIdLength - 1] != '-')
             {
@@ -201,6 +192,7 @@ namespace OpenTelemetry.Context.Propagation
             byte options1;
             try
             {
+                traceId = ActivityTraceId.CreateFromString(traceparent.AsSpan().Slice(VersionPrefixIdLength, TraceIdLength));
                 spanId = ActivitySpanId.CreateFromString(traceparent.AsSpan().Slice(VersionAndTraceIdLength, SpanIdLength));
                 options1 = HexCharToByte(traceparent[VersionAndTraceIdAndSpanIdLength + 1]);
             }
@@ -220,12 +212,9 @@ namespace OpenTelemetry.Context.Propagation
                 return false;
             }
 
-            if (bestAttempt)
+            if (bestAttempt && (traceparent.Length > TraceparentLengthV0) && (traceparent[TraceparentLengthV0] != '-'))
             {
-                if ((traceparent.Length > TraceparentLengthV0) && (traceparent[TraceparentLengthV0] != '-'))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;

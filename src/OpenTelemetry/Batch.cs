@@ -98,12 +98,19 @@ namespace OpenTelemetry
         /// <returns><see cref="Enumerator"/>.</returns>
         public Enumerator GetEnumerator()
         {
-            return this.circularBuffer != null
-                ? new Enumerator(this.circularBuffer, this.targetCount)
-                : this.item != null
-                    ? new Enumerator(this.item)
-                    /* In the event someone uses default/new Batch() to create Batch we fallback to empty items mode. */
-                    : new Enumerator(this.items ?? Array.Empty<T>(), this.targetCount);
+            if (this.circularBuffer != null)
+            {
+                return new Enumerator(this.circularBuffer, this.targetCount);
+            }
+            else if (this.item != null)
+            {
+                return new Enumerator(this.item);
+            }
+            else
+            {
+                /* In the event someone uses default/new Batch() to create Batch we fallback to empty items mode. */
+                return new Enumerator(this.items ?? Array.Empty<T>(), this.targetCount);
+            }
         }
 
         /// <summary>

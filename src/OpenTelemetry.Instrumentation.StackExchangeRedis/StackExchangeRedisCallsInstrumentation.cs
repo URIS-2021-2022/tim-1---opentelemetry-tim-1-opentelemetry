@@ -114,6 +114,7 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis
             this.Flush();
 
             this.stopHandle.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         internal void Flush()

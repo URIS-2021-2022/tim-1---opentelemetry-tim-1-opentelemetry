@@ -23,7 +23,7 @@ namespace OpenTelemetry.Context.Propagation
     {
         private static readonly PropagationContext DefaultPropagationContext = default;
 
-        public override ISet<string> Fields => null;
+        public override ISet<string> Fields => new HashSet<string>();
 
         public override PropagationContext Extract<T>(PropagationContext context, T carrier, Func<T, string, IEnumerable<string>> getter)
         {
