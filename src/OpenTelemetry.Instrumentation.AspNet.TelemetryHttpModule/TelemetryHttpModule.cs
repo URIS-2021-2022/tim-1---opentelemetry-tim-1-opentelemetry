@@ -52,7 +52,7 @@ namespace OpenTelemetry.Instrumentation.AspNet
         /// <inheritdoc />
         public void Dispose()
         {
-            throw new NotSupportedException();
+            // some comment
         }
 
         /// <inheritdoc />

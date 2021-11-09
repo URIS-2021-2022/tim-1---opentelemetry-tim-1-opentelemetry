@@ -212,12 +212,10 @@ namespace OpenTelemetry.Context.Propagation
                 return false;
             }
 
-
             if (bestAttempt && (traceparent.Length > TraceparentLengthV0) && (traceparent[TraceparentLengthV0] != '-'))
             {
                 return false;
             }
-
 
             return true;
         }
