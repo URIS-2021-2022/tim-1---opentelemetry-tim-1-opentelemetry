@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
-// Test 20:41
+// Test Milica
 
 using System;
 using OpenTelemetry.Internal;

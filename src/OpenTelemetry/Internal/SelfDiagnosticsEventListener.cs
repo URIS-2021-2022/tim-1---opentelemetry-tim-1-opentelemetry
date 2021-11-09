@@ -325,7 +325,6 @@ namespace OpenTelemetry.Internal
             this.WriteEvent(eventData.Message, eventData.Payload);
         }
 
-
         protected virtual void Dispose(bool disposing)
         {
             if (this.disposedValue)
@@ -339,6 +338,7 @@ namespace OpenTelemetry.Internal
             }
 
             this.disposedValue = true;
+            GC.SuppressFinalize(this);
         }
     }
 }

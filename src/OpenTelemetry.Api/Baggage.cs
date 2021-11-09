@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // </copyright>
+// proba 1
 
 
 
@@ -309,8 +310,8 @@ namespace OpenTelemetry
         /// Returns a new <see cref="Baggage"/> with the key/value pair removed.
         /// </summary>
         /// <param name="name">Baggage item name.</param>
-        /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
-
+        /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns
+        
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
         public Baggage RemoveBaggage(string name)
@@ -339,7 +340,7 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public bool Equals(Baggage other)
         {
-            bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0; 
+            bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0;
 
             if (baggageIsNullOrEmpty == (other.baggage == null || other.baggage.Count <= 0))
             {

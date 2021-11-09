@@ -109,7 +109,7 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
             {
                 try
                 {
-                    if (this.options.EventFilter(activity.OperationName, request) == false)
+                    if (!this.options.EventFilter(activity.OperationName, request))
                     {
                         HttpInstrumentationEventSource.Log.RequestIsFilteredOut(activity.OperationName);
                         activity.IsAllDataRequested = false;

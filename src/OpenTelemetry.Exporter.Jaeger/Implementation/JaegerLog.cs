@@ -70,17 +70,8 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             }
         }
 
+
         private void WriteList(TProtocol tProtocol)
-        {
-            tProtocol.WriteListBegin(new TList(TType.Struct, this.Fields.Count));
-
-            for (int i = 0; i < this.Fields.Count; i++)
-            {
-                this.Fields[i].Write(tProtocol);
-            }
-
-            tProtocol.WriteListEnd();
-        }
 
         public override string ToString()
         {
@@ -91,6 +82,19 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             sb.Append(this.Fields);
             sb.Append(')');
             return sb.ToString();
+        }
+
+        private void WriteList(TProtocol oprot)
+
+        {
+            tProtocol.WriteListBegin(new TList(TType.Struct, this.Fields.Count));
+
+            for (int i = 0; i < this.Fields.Count; i++)
+            {
+                this.Fields[i].Write(tProtocol);
+            }
+
+            tProtocol.WriteListEnd();
         }
     }
 }

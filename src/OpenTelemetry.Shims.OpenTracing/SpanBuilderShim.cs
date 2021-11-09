@@ -294,7 +294,7 @@ namespace OpenTelemetry.Shims.OpenTracing
                 return this.WithTag(tag.Key, result);
             }
 
-            return this.WithTag(tag.Key, value);
+            return this.WithTag(tag?.Key, value);
         }
 
         /// <inheritdoc/>

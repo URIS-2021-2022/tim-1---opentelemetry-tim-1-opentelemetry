@@ -30,7 +30,7 @@ namespace OpenTelemetry.Trace
         internal int ShutdownCount;
 
         private readonly List<object> instrumentations = new List<object>();
-        private readonly ActivityListener _listener;
+        private readonly ActivityListener listener2;
         private readonly Sampler sampler;
         private readonly Action<Activity> getRequestedDataAction;
         private readonly bool supportLegacyActivity;
@@ -268,7 +268,7 @@ namespace OpenTelemetry.Trace
             }
 
             ActivitySource.AddActivityListener(listener);
-            this._listener = listener;
+            this.listener2 = listener;
 
             Regex GetWildcardRegex(IEnumerable<string> collection)
             {
@@ -347,7 +347,7 @@ namespace OpenTelemetry.Trace
             }
 
             result = this.processor?.Shutdown(timeoutMilliseconds);
-            this._listener?.Dispose();
+            this.listener2?.Dispose();
             return result ?? true;
         }
 
@@ -376,7 +376,7 @@ namespace OpenTelemetry.Trace
                     // Shutdown the listener last so that anything created while instrumentation cleans up will still be processed.
                     // Redis instrumentation, for example, flushes during dispose which creates Activity objects for any profiling
                     // sessions that were open.
-                    this._listener?.Dispose();
+                    this.listener2?.Dispose();
                 }
 
                 this.disposed = true;

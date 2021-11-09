@@ -27,7 +27,7 @@ namespace OpenTelemetry.Instrumentation.AspNetCore.Implementation
         private readonly PropertyFetcher<HttpContext> stopContextFetcher = new PropertyFetcher<HttpContext>("HttpContext");
         private readonly Meter meter;
 
-        private Histogram<double> httpServerDuration;
+        private readonly Histogram<double> httpServerDuration;
 
         public HttpInMetricsListener(string name, Meter meter)
             : base(name)
