@@ -56,7 +56,7 @@ namespace OpenTelemetry.Metrics
         /// <summary>
         /// Enumerates the elements of a <see cref="Batch{T}"/>.
         /// </summary>
-        public struct Enumerator : IEnumerator
+        public struct Enumerator : IEnumerator, IDisposable
         {
             private readonly MetricPoint[] metricsPoints;
             private readonly DateTimeOffset start;

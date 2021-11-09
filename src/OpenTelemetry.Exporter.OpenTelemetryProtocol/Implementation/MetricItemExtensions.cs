@@ -303,7 +303,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
                 // TODO: Determine how we want to handle exceptions here.
                 // Do we want to just skip this exemplar and move on?
                 // Should we skip recording the whole metric?
-                throw new ArgumentException();
+                throw new ArgumentException("Exception message");
             }
 
             otlpExemplar.TimeUnixNano = (ulong)exemplar.Timestamp.ToUnixTimeNanoseconds();
