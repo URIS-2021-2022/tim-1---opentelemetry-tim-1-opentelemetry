@@ -78,11 +78,13 @@ namespace OpenTelemetry.Context
         /// <param name="slotName">The name of the context slot.</param>
         /// <param name="value">The value to be set.</param>
         /// <typeparam name="T">The type of the value.</typeparam>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void SetValue<T>(string slotName, T value)
+
+        /* [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+         private static void SetValue<T>(string slotName, T value)
         {
             GetSlot<T>(slotName).Set(value);
-        }
+        }*/
 
         /// <summary>
         /// Gets the value from a registered slot.

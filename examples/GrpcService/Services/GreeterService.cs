@@ -22,7 +22,7 @@ namespace Examples.GrpcService
 {
     public class GreeterService : Greeter.GreeterBase
     {
-        private readonly ILogger<GreeterService> logger;
+        public readonly ILogger<GreeterService> logger;
 
         public GreeterService(ILogger<GreeterService> logger)
         {
