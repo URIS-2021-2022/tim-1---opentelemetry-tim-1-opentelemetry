@@ -310,8 +310,7 @@ namespace OpenTelemetry
         /// </summary>
         /// <param name="name">Baggage item name.</param>
         /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
-        ///izmena
-        //private var baggage;
+        /// proba
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public Baggage RemoveBaggage(string name)
