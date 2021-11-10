@@ -107,12 +107,9 @@ namespace OpenTelemetry.Metrics
                 metricPoint.TakeSnapShot(this.outputDelta);
             }
 
-            if (this.temporality == AggregationTemporality.Delta)
+            if (this.temporality == AggregationTemporality.Delta && this.endTimeInclusive != default)
             {
-                if (this.endTimeInclusive != default)
-                {
-                    this.startTimeExclusive = this.endTimeInclusive;
-                }
+                this.startTimeExclusive = this.endTimeInclusive;
             }
 
             DateTimeOffset dt = DateTimeOffset.UtcNow;
