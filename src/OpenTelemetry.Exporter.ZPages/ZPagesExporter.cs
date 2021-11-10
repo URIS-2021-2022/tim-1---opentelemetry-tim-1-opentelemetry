@@ -28,8 +28,8 @@ namespace OpenTelemetry.Exporter.ZPages
     public class ZPagesExporter : BaseExporter<Activity>
     {
         internal readonly ZPagesExporterOptions Options;
-        private readonly Timer minuteTimer;
-        private readonly Timer hourTimer;
+        // private readonly Timer minuteTimer;
+        // private readonly Timer hourTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ZPagesExporter"/> class.
@@ -44,14 +44,14 @@ namespace OpenTelemetry.Exporter.ZPages
             this.Options = options;
 
             // Create a timer with one minute interval
-            this.minuteTimer = new Timer(60000);
-            this.minuteTimer.Elapsed += new ElapsedEventHandler(ZPagesActivityTracker.PurgeCurrentMinuteData);
-            this.minuteTimer.Enabled = true;
+            Timer minuteTimer = new Timer(60000);
+            minuteTimer.Elapsed += new ElapsedEventHandler(ZPagesActivityTracker.PurgeCurrentMinuteData);
+            minuteTimer.Enabled = true;
 
             // Create a timer with one hour interval
-            this.hourTimer = new Timer(3600000);
-            this.hourTimer.Elapsed += new ElapsedEventHandler(ZPagesActivityTracker.PurgeCurrentHourData);
-            this.hourTimer.Enabled = true;
+            Timer hourTimer = new Timer(3600000);
+            hourTimer.Elapsed += new ElapsedEventHandler(ZPagesActivityTracker.PurgeCurrentHourData);
+            hourTimer.Enabled = true;
         }
 
         /// <inheritdoc />

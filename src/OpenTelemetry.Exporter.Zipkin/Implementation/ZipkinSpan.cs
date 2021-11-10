@@ -93,46 +93,7 @@ namespace OpenTelemetry.Exporter.Zipkin.Implementation
 
         public void Write(Utf8JsonWriter writer)
         {
-            writer.WriteStartObject();
-
-            writer.WriteString(ZipkinSpanJsonHelper.TraceIdPropertyName, this.TraceId);
-
-            if (this.Name != null)
-            {
-                writer.WriteString(ZipkinSpanJsonHelper.NamePropertyName, this.Name);
-            }
-
-            if (this.ParentId != null)
-            {
-                writer.WriteString(ZipkinSpanJsonHelper.ParentIdPropertyName, this.ParentId);
-            }
-
-            writer.WriteString(ZipkinSpanJsonHelper.IdPropertyName, this.Id);
-
-            if (this.Kind != null)
-            {
-                writer.WriteString(ZipkinSpanJsonHelper.KindPropertyName, this.Kind);
-            }
-
-            if (this.Timestamp.HasValue)
-            {
-                writer.WriteNumber(ZipkinSpanJsonHelper.TimestampPropertyName, this.Timestamp.Value);
-            }
-
-            if (this.Duration.HasValue)
-            {
-                writer.WriteNumber(ZipkinSpanJsonHelper.DurationPropertyName, this.Duration.Value);
-            }
-
-            if (this.Debug.HasValue)
-            {
-                writer.WriteBoolean(ZipkinSpanJsonHelper.DebugPropertyName, this.Debug.Value);
-            }
-
-            if (this.Shared.HasValue)
-            {
-                writer.WriteBoolean(ZipkinSpanJsonHelper.SharedPropertyName, this.Shared.Value);
-            }
+            this.HelpWrite(writer);
 
             if (this.LocalEndpoint != null)
             {
@@ -195,6 +156,49 @@ namespace OpenTelemetry.Exporter.Zipkin.Implementation
             }
 
             writer.WriteEndObject();
+        }
+
+        public void HelpWrite(Utf8JsonWriter writer)
+        {
+            writer.WriteStartObject();
+            writer.WriteString(ZipkinSpanJsonHelper.TraceIdPropertyName, this.TraceId);
+
+            if (this.Name != null)
+            {
+                writer.WriteString(ZipkinSpanJsonHelper.NamePropertyName, this.Name);
+            }
+
+            if (this.ParentId != null)
+            {
+                writer.WriteString(ZipkinSpanJsonHelper.ParentIdPropertyName, this.ParentId);
+            }
+
+            writer.WriteString(ZipkinSpanJsonHelper.IdPropertyName, this.Id);
+
+            if (this.Kind != null)
+            {
+                writer.WriteString(ZipkinSpanJsonHelper.KindPropertyName, this.Kind);
+            }
+
+            if (this.Timestamp.HasValue)
+            {
+                writer.WriteNumber(ZipkinSpanJsonHelper.TimestampPropertyName, this.Timestamp.Value);
+            }
+
+            if (this.Duration.HasValue)
+            {
+                writer.WriteNumber(ZipkinSpanJsonHelper.DurationPropertyName, this.Duration.Value);
+            }
+
+            if (this.Debug.HasValue)
+            {
+                writer.WriteBoolean(ZipkinSpanJsonHelper.DebugPropertyName, this.Debug.Value);
+            }
+
+            if (this.Shared.HasValue)
+            {
+                writer.WriteBoolean(ZipkinSpanJsonHelper.SharedPropertyName, this.Shared.Value);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
