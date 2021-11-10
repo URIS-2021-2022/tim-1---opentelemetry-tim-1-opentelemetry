@@ -16,7 +16,7 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("OpenTelemetry.Tests" + AssemblyInfo.PublicKey)]
-[assembly: InternalsVisibleTo("OpenTelemetry.Extensions.Hosting.Tests" + AssemblyInfo.PublicKey)]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2" + AssemblyInfo.MoqPublicKey)]
-[assembly: InternalsVisibleTo("Benchmarks" + AssemblyInfo.PublicKey)]
+[assembly: InternalsVisibleTo("OpenTelemetry.Tests" + InfoAssemblyN.AssemblyInfo.PublicKey)]
+[assembly: InternalsVisibleTo("OpenTelemetry.Extensions.Hosting.Tests" + InfoAssemblyN.AssemblyInfo.PublicKey)]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2" + InfoAssemblyN.AssemblyInfo.MoqPublicKey)]
+[assembly: InternalsVisibleTo("Benchmarks" + InfoAssemblyN.AssemblyInfo.PublicKey)]
