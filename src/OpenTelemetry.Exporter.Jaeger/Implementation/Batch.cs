@@ -75,14 +75,7 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 
                 oprot.WriteFieldBegin(field);
                 {
-                    oprot.WriteListBegin(new TList(TType.Struct, this.spanMessages.Count));
-
-                    foreach (var s in this.spanMessages)
-                    {
-                        oprot.Transport.Write(s.BufferWriter.Buffer, s.Offset, s.Count);
-                    }
-
-                    oprot.WriteListEnd();
+                    this.WriteField(oprot);
                 }
 
                 oprot.WriteFieldEnd();
@@ -93,6 +86,18 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             {
                 oprot.DecrementRecursionDepth();
             }
+        }
+
+        internal void WriteField(TProtocol tProtocol)
+        {
+            tProtocol.WriteListBegin(new TList(TType.Struct, this.spanMessages.Count));
+
+            foreach (var s in this.spanMessages)
+            {
+                tProtocol.Transport.Write(s.BufferWriter.Buffer, s.Offset, s.Count);
+            }
+
+            tProtocol.WriteListEnd();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
