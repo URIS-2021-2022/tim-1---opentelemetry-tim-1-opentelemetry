@@ -55,6 +55,12 @@ namespace OpenTelemetry.Exporter.ZPages.Implementation
             }
         }
 
+        [Event(3, Message = "Failed to process activity: '{0}'", Level = EventLevel.Error)]
+        public void FailedProcess(string exception)
+        {
+            this.WriteEvent(3, exception);
+        }
+
         [Event(1, Message = "Failed to export activities: '{0}'", Level = EventLevel.Error)]
         public void FailedExport(string exception)
         {
@@ -65,12 +71,6 @@ namespace OpenTelemetry.Exporter.ZPages.Implementation
         public void CanceledExport(string exception)
         {
             this.WriteEvent(2, exception);
-        }
-
-        [Event(3, Message = "Failed to process activity: '{0}'", Level = EventLevel.Error)]
-        public void FailedProcess(string exception)
-        {
-            this.WriteEvent(3, exception);
         }
     }
 }
