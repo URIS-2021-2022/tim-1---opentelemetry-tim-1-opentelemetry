@@ -78,6 +78,7 @@ namespace OpenTelemetry.Instrumentation
 
         public void OnCompleted()
         {
+            throw new NotSupportedException();
         }
 
         public void OnError(Exception error)
