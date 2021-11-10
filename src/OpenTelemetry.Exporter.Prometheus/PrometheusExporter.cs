@@ -33,7 +33,6 @@ namespace OpenTelemetry.Exporter
         internal Batch<Metric> Metrics;
         private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
         private readonly PrometheusExporterMetricsHttpServer metricsHttpServer;
-        private Func<int, bool> funcCollect;
         private bool disposed;
 
         /// <summary>

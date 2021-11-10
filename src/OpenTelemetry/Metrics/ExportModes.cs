@@ -23,7 +23,6 @@ namespace OpenTelemetry.Metrics
     {
         /*
         0 0 0 0 0 0 0 0
-        | | | | | | | |
         | | | | | | | +--- Push
         | | | | | | +----- Pull
         | | | | | +------- (reserved)

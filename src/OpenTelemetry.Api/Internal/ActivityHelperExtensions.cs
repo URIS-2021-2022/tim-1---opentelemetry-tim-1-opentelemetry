@@ -316,7 +316,7 @@ namespace OpenTelemetry.Trace
                 => state.ForEach(item);
         }
 
-        private static class ActivityLinksEnumeratorFactory<TState>
+        private sealed class ActivityLinksEnumeratorFactory<TState>
             where TState : struct, IActivityEnumerator<ActivityLink>
         {
             private static readonly object EmptyActivityLinks = typeof(Activity).GetField("s_emptyLinks", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
