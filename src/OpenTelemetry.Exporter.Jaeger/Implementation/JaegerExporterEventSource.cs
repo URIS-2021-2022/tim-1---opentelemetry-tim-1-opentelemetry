@@ -28,7 +28,6 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
     {
         public static JaegerExporterEventSource Log = new JaegerExporterEventSource();
 
-
         [NonEvent]
         public void FailedExport(Exception ex)
         {
