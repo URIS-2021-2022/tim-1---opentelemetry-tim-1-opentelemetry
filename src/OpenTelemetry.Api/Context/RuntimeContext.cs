@@ -78,7 +78,6 @@ namespace OpenTelemetry.Context
         /// <param name="slotName">The name of the context slot.</param>
         /// <param name="value">The value to be set.</param>
         /// <typeparam name="T">The type of the value.</typeparam>
-        /// <returns>The value retrieved from the context slot.</returns>
 
         /* [MethodImpl(MethodImplOptions.AggressiveInlining)]
 
