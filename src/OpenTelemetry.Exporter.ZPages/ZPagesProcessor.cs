@@ -26,15 +26,12 @@ namespace OpenTelemetry.Exporter.ZPages
     /// </summary>
     public class ZPagesProcessor : BaseProcessor<Activity>
     {
-        private readonly ZPagesExporter exporter;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ZPagesProcessor"/> class.
         /// </summary>
         /// <param name="exporter">Zpage Span processor instance.</param>
         public ZPagesProcessor(ZPagesExporter exporter)
         {
-            this.exporter = exporter;
         }
 
         /// <inheritdoc />

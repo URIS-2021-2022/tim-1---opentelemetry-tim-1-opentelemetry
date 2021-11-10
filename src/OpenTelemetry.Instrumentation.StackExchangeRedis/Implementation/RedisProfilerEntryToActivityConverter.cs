@@ -71,7 +71,7 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis.Implementation
 
         public static Activity ProfilerCommandToActivity(Activity parentActivity, IProfiledCommand command, StackExchangeRedisCallsInstrumentationOptions options)
         {
-            var name = command.Command; // Example: SET;
+            var name = command.Command;
             if (string.IsNullOrEmpty(name))
             {
                 name = StackExchangeRedisCallsInstrumentation.ActivityName;
@@ -91,7 +91,7 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis.Implementation
 
             activity.SetEndTime(command.CommandCreated + command.ElapsedTime);
 
-            if (activity.IsAllDataRequested == true)
+            if (activity.IsAllDataRequested)
             {
                 // see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/database.md
 

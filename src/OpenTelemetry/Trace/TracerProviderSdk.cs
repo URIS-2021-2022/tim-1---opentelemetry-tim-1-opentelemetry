@@ -220,13 +220,10 @@ namespace OpenTelemetry.Trace
                 var wildcardMode = false;
 
                 // Validation of source name is already done in builder.
-                foreach (var name in sources)
+                foreach (var name in sources.Where(x => x.Contains('*')))
                 {
-                    if (name.Contains('*'))
-                    {
-                        wildcardMode = true;
-                        break;
-                    }
+                    wildcardMode = true;
+                    break;
                 }
 
                 if (wildcardMode)

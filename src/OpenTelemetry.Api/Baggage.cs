@@ -29,10 +29,13 @@ namespace OpenTelemetry
     /// </remarks>
     public readonly struct Baggage : IEquatable<Baggage>
     {
+        /// <summary>
+        /// Baggagee comment for sonarCloud - zeljana.
+        /// </summary>
+        public readonly Dictionary<string, string> Baggagee;
+
         private static readonly RuntimeContextSlot<BaggageHolder> RuntimeContextSlot = RuntimeContext.RegisterSlot<BaggageHolder>("otel.baggage");
         private static readonly Dictionary<string, string> EmptyBaggage = new Dictionary<string, string>();
-
-        public readonly Dictionary<string, string> baggage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Baggage"/> struct.
@@ -40,7 +43,7 @@ namespace OpenTelemetry
         /// <param name="baggage">Baggage key/value pairs.</param>
         internal Baggage(Dictionary<string, string> baggage)
         {
-            this.baggage = baggage;
+            this.Baggagee = baggage;
         }
 
         /// <summary>
@@ -80,7 +83,7 @@ namespace OpenTelemetry
         /// <summary>
         /// Gets the number of key/value pairs in the baggage.
         /// </summary>
-        public int Count => this.baggage?.Count ?? 0;
+        public int Count => this.Baggagee?.Count ?? 0;
 
         /// <summary>
         /// Compare two entries of <see cref="Baggage"/> for equality.
@@ -133,22 +136,23 @@ namespace OpenTelemetry
             => baggage == default ? Current.GetBaggage() : baggage.GetBaggage();
 
         /// <summary>
-        /// Returns an enumerator that iterates through the <see cref="Baggage"/>.
-        /// </summary>
-        /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
-        /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
-        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage = default)
-            => baggage == default ? Current.GetEnumerator() : baggage.GetEnumerator();
-
-        /// <summary>
         /// Returns the value associated with the given name, or <see langword="null"/> if the given name is not present.
         /// </summary>
         /// <param name="name">Baggage item name.</param>
         /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
         /// <returns>Baggage item or <see langword="null"/> if nothing was found.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "This was agreed on to be the friendliest API surface")]
+
         public static string GetBaggage(string name, Baggage baggage = default)
-            => baggage == default ? Current.GetBaggage(name) : baggage.GetBaggage(name);
+          => baggage == default ? Current.GetBaggage(name) : baggage.GetBaggage(name);
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the <see cref="Baggage"/>.
+        /// </summary>
+        /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
+        /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
+        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage = default)
+            => baggage == default ? Current.GetEnumerator() : baggage.GetEnumerator();
 
         /// <summary>
         /// Returns a new <see cref="Baggage"/> which contains the new key/value pair.
@@ -159,6 +163,7 @@ namespace OpenTelemetry
         /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
         /// <remarks>Note: The <see cref="Baggage"/> returned will be set as the new <see cref="Current"/> instance.</remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "This was agreed on to be the friendliest API surface")]
+
         public static Baggage SetBaggage(string name, string value, Baggage baggage = default)
         {
             var baggageHolder = EnsureBaggageHolder();
@@ -229,7 +234,7 @@ namespace OpenTelemetry
         /// </summary>
         /// <returns>Baggage key/value pairs.</returns>
         public IReadOnlyDictionary<string, string> GetBaggage()
-            => this.baggage ?? EmptyBaggage;
+            => this.Baggagee ?? EmptyBaggage;
 
         /// <summary>
         /// Returns the value associated with the given name, or <see langword="null"/> if the given name is not present.
@@ -240,7 +245,7 @@ namespace OpenTelemetry
         {
             Guard.NullOrEmpty(name, nameof(name));
 
-            return this.baggage != null && this.baggage.TryGetValue(name, out string value)
+            return this.Baggagee != null && this.Baggagee.TryGetValue(name, out string value)
                 ? value
                 : null;
         }
@@ -259,7 +264,7 @@ namespace OpenTelemetry
             }
 
             return new Baggage(
-                new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase)
+                new Dictionary<string, string>(this.Baggagee ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase)
                 {
                     [name] = value,
                 });
@@ -285,7 +290,7 @@ namespace OpenTelemetry
                 return this;
             }
 
-            var newBaggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            var newBaggage = new Dictionary<string, string>(this.Baggagee ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
 
             foreach (var item in baggageItems)
             {
@@ -306,14 +311,13 @@ namespace OpenTelemetry
         /// Returns a new <see cref="Baggage"/> with the key/value pair removed.
         /// </summary>
         /// <param name="name">Baggage item name.</param>
-        /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns
-        
+        /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
         public Baggage RemoveBaggage(string name)
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
-            var bagg = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            var bagg = new Dictionary<string, string>(this.Baggagee ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
             bagg.Remove(name);
 
             return new Baggage(bagg);
@@ -331,16 +335,16 @@ namespace OpenTelemetry
         /// </summary>
         /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
         public Dictionary<string, string>.Enumerator GetEnumerator()
-            => (this.baggage ?? EmptyBaggage).GetEnumerator();
+            => (this.Baggagee ?? EmptyBaggage).GetEnumerator();
 
         /// <inheritdoc/>
         public bool Equals(Baggage other)
         {
-            bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0;
+            bool baggageIsNullOrEmpty = this.Baggagee == null || this.Baggagee.Count <= 0;
 
-            if (baggageIsNullOrEmpty == (other.baggage == null || other.baggage.Count <= 0))
+            if (baggageIsNullOrEmpty == (other.Baggagee == null || other.Baggagee.Count <= 0))
             {
-                return baggageIsNullOrEmpty || this.baggage.SequenceEqual(other.baggage);
+                return baggageIsNullOrEmpty || this.Baggagee.SequenceEqual(other.Baggagee);
             }
 
             return false;
@@ -353,7 +357,7 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            var baggage2 = this.baggage ?? EmptyBaggage;
+            var baggage2 = this.Baggagee ?? EmptyBaggage;
 
             unchecked
             {

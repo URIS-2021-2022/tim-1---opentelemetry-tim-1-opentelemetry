@@ -92,16 +92,7 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.ID = 2;
 
                     oprot.WriteFieldBegin(field);
-                    {
-                        oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
-
-                        foreach (var jt in this.Tags)
-                        {
-                            jt.Value.Write(oprot);
-                        }
-
-                        oprot.WriteListEnd();
-                    }
+                    this.NewMethod(oprot);
 
                     oprot.WriteFieldEnd();
                 }
@@ -113,6 +104,18 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             {
                 oprot.DecrementRecursionDepth();
             }
+        }
+
+        private void NewMethod(TProtocol oprot)
+        {
+            oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
+
+            foreach (var jt in this.Tags)
+            {
+                jt.Value.Write(oprot);
+            }
+
+            oprot.WriteListEnd();
         }
     }
 }

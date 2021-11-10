@@ -19,11 +19,12 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 {
 #pragma warning disable CA1032 // Implement standard exception constructors
 #pragma warning disable CA1064 // Exceptions should be public
+    [Serializable]
     public sealed class JaegerExporterException : Exception
 #pragma warning restore CA1064 // Exceptions should be public
 #pragma warning restore CA1032 // Implement standard exception constructors
     {
-        public JaegerExporterException(string message, Exception originalException)
+        private JaegerExporterException(string message, Exception originalException)
             : base(message, originalException)
         {
         }
