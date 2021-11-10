@@ -24,12 +24,10 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class SendMessageController : ControllerBase
     {
-        private readonly ILogger<SendMessageController> logger;
         private readonly MessageSender messageSender;
 
         public SendMessageController(ILogger<SendMessageController> logger, MessageSender messageSender)
         {
-            this.logger = logger;
             this.messageSender = messageSender;
         }
 

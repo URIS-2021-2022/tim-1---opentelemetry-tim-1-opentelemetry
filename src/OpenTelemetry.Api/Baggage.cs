@@ -136,22 +136,23 @@ namespace OpenTelemetry
             => baggage == default ? Current.GetBaggage() : baggage.GetBaggage();
 
         /// <summary>
-        /// Returns an enumerator that iterates through the <see cref="Baggage"/>.
-        /// </summary>
-        /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
-        /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
-        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage = default)
-            => baggage == default ? Current.GetEnumerator() : baggage.GetEnumerator();
-
-        /// <summary>
         /// Returns the value associated with the given name, or <see langword="null"/> if the given name is not present.
         /// </summary>
         /// <param name="name">Baggage item name.</param>
         /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
         /// <returns>Baggage item or <see langword="null"/> if nothing was found.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "This was agreed on to be the friendliest API surface")]
+
         public static string GetBaggage(string name, Baggage baggage = default)
-            => baggage == default ? Current.GetBaggage(name) : baggage.GetBaggage(name);
+          => baggage == default ? Current.GetBaggage(name) : baggage.GetBaggage(name);
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the <see cref="Baggage"/>.
+        /// </summary>
+        /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
+        /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
+        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage = default)
+            => baggage == default ? Current.GetEnumerator() : baggage.GetEnumerator();
 
         /// <summary>
         /// Returns a new <see cref="Baggage"/> which contains the new key/value pair.
@@ -162,6 +163,7 @@ namespace OpenTelemetry
         /// <returns>New <see cref="Baggage"/> containing the key/value pair.</returns>
         /// <remarks>Note: The <see cref="Baggage"/> returned will be set as the new <see cref="Current"/> instance.</remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "This was agreed on to be the friendliest API surface")]
+
         public static Baggage SetBaggage(string name, string value, Baggage baggage = default)
         {
             var baggageHolder = EnsureBaggageHolder();

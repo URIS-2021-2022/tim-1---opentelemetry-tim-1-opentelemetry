@@ -453,10 +453,17 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
             Hashtable originalTable = servicePointTableField.GetValue(null) as Hashtable;
             ServicePointHashtable newTable = new ServicePointHashtable(originalTable ?? new Hashtable());
 
-           foreach (DictionaryEntry existingServicePoint in originalTable)
-           {
-                HookServicePoint(existingServicePoint.Value);
-           }
+            if (originalTable != null)
+            {
+                foreach (DictionaryEntry existingServicePoint in originalTable)
+                {
+                    HookServicePoint(existingServicePoint.Value);
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException("exception message");
+            }
 
             servicePointTableField.SetValue(null, newTable);
         }
@@ -905,9 +912,9 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
                 return this.list.LastIndexOf(value, startIndex, count);
             }
 
-            public override void Remove(object value)
+            public override void Remove(object obj)
             {
-                this.list.Remove(value);
+                this.list.Remove(obj);
             }
 
             public override void RemoveAt(int index)
