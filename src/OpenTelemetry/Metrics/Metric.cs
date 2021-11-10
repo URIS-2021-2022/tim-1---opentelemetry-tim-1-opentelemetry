@@ -85,7 +85,7 @@ namespace OpenTelemetry.Metrics
                 || instrument.GetType() == typeof(Histogram<short>)
                 || instrument.GetType() == typeof(Histogram<byte>)
                 || instrument.GetType() == typeof(Histogram<float>)
-                || instrument.GetType() == typeof(Histogram<double>))
+                || instrument is Histogram<double>)
             {
                 this.MetricType = MetricType.Histogram;
 

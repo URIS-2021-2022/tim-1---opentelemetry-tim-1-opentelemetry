@@ -29,10 +29,13 @@ namespace OpenTelemetry
     /// </remarks>
     public readonly struct Baggage : IEquatable<Baggage>
     {
+        /// <summary>
+        /// Baggagee comment for sonarCloud - zeljana.
+        /// </summary>
+        public readonly Dictionary<string, string> Baggagee;
+
         private static readonly RuntimeContextSlot<BaggageHolder> RuntimeContextSlot = RuntimeContext.RegisterSlot<BaggageHolder>("otel.baggage");
         private static readonly Dictionary<string, string> EmptyBaggage = new Dictionary<string, string>();
-
-        public readonly Dictionary<string, string> baggage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Baggage"/> struct.
@@ -40,7 +43,7 @@ namespace OpenTelemetry
         /// <param name="baggage">Baggage key/value pairs.</param>
         internal Baggage(Dictionary<string, string> baggage)
         {
-            this.baggage = baggage;
+            this.Baggagee = baggage;
         }
 
         /// <summary>
@@ -80,7 +83,7 @@ namespace OpenTelemetry
         /// <summary>
         /// Gets the number of key/value pairs in the baggage.
         /// </summary>
-        public int Count => this.baggage?.Count ?? 0;
+        public int Count => this.Baggagee?.Count ?? 0;
 
         /// <summary>
         /// Compare two entries of <see cref="Baggage"/> for equality.
@@ -231,7 +234,7 @@ namespace OpenTelemetry
         /// </summary>
         /// <returns>Baggage key/value pairs.</returns>
         public IReadOnlyDictionary<string, string> GetBaggage()
-            => this.baggage ?? EmptyBaggage;
+            => this.Baggagee ?? EmptyBaggage;
 
         /// <summary>
         /// Returns the value associated with the given name, or <see langword="null"/> if the given name is not present.
@@ -242,7 +245,7 @@ namespace OpenTelemetry
         {
             Guard.NullOrEmpty(name, nameof(name));
 
-            return this.baggage != null && this.baggage.TryGetValue(name, out string value)
+            return this.Baggagee != null && this.Baggagee.TryGetValue(name, out string value)
                 ? value
                 : null;
         }
@@ -261,7 +264,7 @@ namespace OpenTelemetry
             }
 
             return new Baggage(
-                new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase)
+                new Dictionary<string, string>(this.Baggagee ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase)
                 {
                     [name] = value,
                 });
@@ -287,7 +290,7 @@ namespace OpenTelemetry
                 return this;
             }
 
-            var newBaggage = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            var newBaggage = new Dictionary<string, string>(this.Baggagee ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
 
             foreach (var item in baggageItems)
             {
@@ -314,7 +317,7 @@ namespace OpenTelemetry
         public Baggage RemoveBaggage(string name)
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
-            var bagg = new Dictionary<string, string>(this.baggage ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
+            var bagg = new Dictionary<string, string>(this.Baggagee ?? EmptyBaggage, StringComparer.OrdinalIgnoreCase);
             bagg.Remove(name);
 
             return new Baggage(bagg);
@@ -332,16 +335,16 @@ namespace OpenTelemetry
         /// </summary>
         /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
         public Dictionary<string, string>.Enumerator GetEnumerator()
-            => (this.baggage ?? EmptyBaggage).GetEnumerator();
+            => (this.Baggagee ?? EmptyBaggage).GetEnumerator();
 
         /// <inheritdoc/>
         public bool Equals(Baggage other)
         {
-            bool baggageIsNullOrEmpty = this.baggage == null || this.baggage.Count <= 0;
+            bool baggageIsNullOrEmpty = this.Baggagee == null || this.Baggagee.Count <= 0;
 
-            if (baggageIsNullOrEmpty == (other.baggage == null || other.baggage.Count <= 0))
+            if (baggageIsNullOrEmpty == (other.Baggagee == null || other.Baggagee.Count <= 0))
             {
-                return baggageIsNullOrEmpty || this.baggage.SequenceEqual(other.baggage);
+                return baggageIsNullOrEmpty || this.Baggagee.SequenceEqual(other.Baggagee);
             }
 
             return false;
@@ -354,7 +357,7 @@ namespace OpenTelemetry
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            var baggage2 = this.baggage ?? EmptyBaggage;
+            var baggage2 = this.Baggagee ?? EmptyBaggage;
 
             unchecked
             {
