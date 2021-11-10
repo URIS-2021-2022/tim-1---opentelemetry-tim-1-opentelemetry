@@ -54,8 +54,8 @@ namespace OpenTelemetry.Metrics
                 aggType = AggregationType.LongSumIncomingDelta;
                 this.MetricType = MetricType.LongSum;
             }
-            else if (instrument.GetType() == typeof(Counter<double>)
-                || instrument.GetType() == typeof(Counter<float>))
+            else if ((instrument is Counter<double>)
+                || instrument is Counter<float>)
             {
                 aggType = AggregationType.DoubleSumIncomingDelta;
                 this.MetricType = MetricType.DoubleSum;
@@ -85,7 +85,7 @@ namespace OpenTelemetry.Metrics
                 || instrument.GetType() == typeof(Histogram<short>)
                 || instrument.GetType() == typeof(Histogram<byte>)
                 || instrument.GetType() == typeof(Histogram<float>)
-                || instrument.GetType() == typeof(Histogram<double>))
+                || instrument is Histogram<double>)
             {
                 this.MetricType = MetricType.Histogram;
 

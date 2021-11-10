@@ -23,7 +23,7 @@ namespace OpenTelemetry.Instrumentation.AspNetCore
     /// <summary>
     /// Asp.Net Core Requests instrumentation.
     /// </summary>
-    internal class AspNetCoreInstrumentation : IDisposable
+    internal sealed class AspNetCoreInstrumentation : IDisposable
     {
         private readonly DiagnosticSourceSubscriber diagnosticSourceSubscriber;
 

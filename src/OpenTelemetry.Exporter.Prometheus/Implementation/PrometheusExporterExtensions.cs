@@ -346,11 +346,8 @@ namespace OpenTelemetry.Exporter.Prometheus
                 int i = 0;
                 while (i < (keys?.Length ?? 0))
                 {
-                    if (keys[i] != null)
-                    {
-                        WriteKeyValuePair(buffer, ref bufferPosition, metricInfo.GetKeyUtf8(keys[i]), metricInfo.GetValueUtf8(values[i]), i > 0);
-                        i++;
-                    }
+                    WriteKeyValuePair(buffer, ref bufferPosition, metricInfo.GetKeyUtf8(keys[i] ?? null), metricInfo.GetValueUtf8(values[i]), i > 0);
+                    i++;
                 }
 
                 if (additionalKvp.HasValue)

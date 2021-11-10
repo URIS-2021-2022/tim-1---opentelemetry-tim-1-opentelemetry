@@ -68,7 +68,7 @@ namespace OpenTelemetry.Metrics
             if (timeoutMilliseconds == Timeout.Infinite)
             {
                 this.exporterThread.Join();
-                result = this.exporter.Shutdown() && result;
+                result = this.exporter.Shutdown();
             }
             else
             {

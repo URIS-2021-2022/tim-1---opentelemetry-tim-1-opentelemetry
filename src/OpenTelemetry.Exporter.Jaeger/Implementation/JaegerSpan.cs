@@ -75,13 +75,13 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 
         public PooledList<JaegerLog> Logs { get; }
 
-        public void Write(TProtocol oprot)
+        public void Write(TProtocol tProtocol)
         {
-            oprot.IncrementRecursionDepth();
+            tProtocol.IncrementRecursionDepth();
             try
             {
                 var struc = new TStruct("Span");
-                oprot.WriteStructBegin(struc);
+                tProtocol.WriteStructBegin(struc);
 
                 var field = new TField
                 {
@@ -90,76 +90,76 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     ID = 1,
                 };
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.TraceIdLow);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.TraceIdLow);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "traceIdHigh";
                 field.Type = TType.I64;
                 field.ID = 2;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.TraceIdHigh);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.TraceIdHigh);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "spanId";
                 field.Type = TType.I64;
                 field.ID = 3;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.SpanId);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.SpanId);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "parentSpanId";
                 field.Type = TType.I64;
                 field.ID = 4;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.ParentSpanId);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.ParentSpanId);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "operationName";
                 field.Type = TType.String;
                 field.ID = 5;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteString(this.OperationName);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteString(this.OperationName);
+                tProtocol.WriteFieldEnd();
 
                 if (!this.References.IsEmpty)
                 {
                     field.Name = "references";
                     field.Type = TType.List;
                     field.ID = 6;
-                    oprot.WriteFieldBegin(field);
-                    this.WriteList(oprot);
+                    tProtocol.WriteFieldBegin(field);
+                    this.WriteList(tProtocol);
 
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldEnd();
                 }
 
                 field.Name = "flags";
                 field.Type = TType.I32;
                 field.ID = 7;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI32(this.Flags);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI32(this.Flags);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "startTime";
                 field.Type = TType.I64;
                 field.ID = 8;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.StartTime);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.StartTime);
+                tProtocol.WriteFieldEnd();
 
                 field.Name = "duration";
                 field.Type = TType.I64;
                 field.ID = 9;
 
-                oprot.WriteFieldBegin(field);
-                oprot.WriteI64(this.Duration);
-                oprot.WriteFieldEnd();
+                tProtocol.WriteFieldBegin(field);
+                tProtocol.WriteI64(this.Duration);
+                tProtocol.WriteFieldEnd();
 
                 if (!this.Tags.IsEmpty)
                 {
@@ -167,19 +167,10 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Type = TType.List;
                     field.ID = 10;
 
-                    oprot.WriteFieldBegin(field);
-                    {
-                        oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
+                    tProtocol.WriteFieldBegin(field);
+                    this.WriteInList(tProtocol);
 
-                        for (int i = 0; i < this.Tags.Count; i++)
-                        {
-                            this.Tags[i].Write(oprot);
-                        }
-
-                        oprot.WriteListEnd();
-                    }
-
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldEnd();
                 }
 
                 if (!this.Logs.IsEmpty)
@@ -187,28 +178,40 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Name = "logs";
                     field.Type = TType.List;
                     field.ID = 11;
-                    oprot.WriteFieldBegin(field);
+                    tProtocol.WriteFieldBegin(field);
                     {
-                        oprot.WriteListBegin(new TList(TType.Struct, this.Logs.Count));
+                        tProtocol.WriteListBegin(new TList(TType.Struct, this.Logs.Count));
 
                         for (int i = 0; i < this.Logs.Count; i++)
                         {
-                            this.Logs[i].Write(oprot);
+                            this.Logs[i].Write(tProtocol);
                         }
 
-                        oprot.WriteListEnd();
+                        tProtocol.WriteListEnd();
                     }
 
-                    oprot.WriteFieldEnd();
+                    tProtocol.WriteFieldEnd();
                 }
 
-                oprot.WriteFieldStop();
-                oprot.WriteStructEnd();
+                tProtocol.WriteFieldStop();
+                tProtocol.WriteStructEnd();
             }
             finally
             {
-                oprot.DecrementRecursionDepth();
+                tProtocol.DecrementRecursionDepth();
             }
+        }
+
+        private void WriteInList(TProtocol oprot)
+        {
+            oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
+
+            for (int i = 0; i < this.Tags.Count; i++)
+            {
+                this.Tags[i].Write(oprot);
+            }
+
+            oprot.WriteListEnd();
         }
 
         private void WriteList(TProtocol oprot)

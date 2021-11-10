@@ -17,6 +17,7 @@
 using System;
 using System.Globalization;
 using System.Text;
+using System.Linq;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 
@@ -39,13 +40,9 @@ namespace OpenTelemetry.Exporter
                 this.resource = this.ParentProvider.GetResource();
                 if (this.resource != Resource.Empty)
                 {
-                    var resAttributes = this.resource.Attributes;
-                    foreach (var resourceAttribute in resAttributes)
+                    foreach (var resourceAttribute in this.resource.Attributes.Where(x => x.Key.Equals("service.name")))
                     {
-                        if (resourceAttribute.Key.Equals("service.name"))
-                        {
-                            Console.WriteLine("Service.Name" + resourceAttribute.Value);
-                        }
+                       Console.WriteLine("Service.Name" + resourceAttribute.Value);
                     }
                 }
             }

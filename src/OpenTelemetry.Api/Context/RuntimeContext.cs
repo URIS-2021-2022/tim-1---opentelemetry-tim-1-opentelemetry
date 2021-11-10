@@ -64,6 +64,9 @@ namespace OpenTelemetry.Context
         /// <param name="slotName">The name of the context slot.</param>
         /// <typeparam name="T">The type of the underlying value.</typeparam>
         /// <returns>The slot previously registered.</returns>
+        /// </summary>
+        /// Sets the value to a registered slot.
+        /// </summary>
         public static RuntimeContextSlot<T> GetSlot<T>(string slotName)
         {
             Guard.NullOrEmpty(slotName, nameof(slotName));
@@ -71,20 +74,6 @@ namespace OpenTelemetry.Context
             var contextSlot = Guard.Type<RuntimeContextSlot<T>>(slot, nameof(slot));
             return contextSlot;
         }
-
-        /// <summary>
-        /// Sets the value to a registered slot.
-        /// </summary>
-        /// <param name="slotName">The name of the context slot.</param>
-        /// <param name="value">The value to be set.</param>
-        /// <typeparam name="T">The type of the value.</typeparam>
-
-        /* [MethodImpl(MethodImplOptions.AggressiveInlining)]
-
-         private static void SetValue<T>(string slotName, T value)
-        {
-            GetSlot<T>(slotName).Set(value);
-        }*/
 
         /// <summary>
         /// Gets the value from a registered slot.

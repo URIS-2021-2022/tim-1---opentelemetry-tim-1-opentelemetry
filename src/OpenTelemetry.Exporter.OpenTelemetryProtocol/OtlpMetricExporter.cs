@@ -48,7 +48,7 @@ namespace OpenTelemetry.Exporter
         /// </summary>
         /// <param name="options">Configuration options for the export.</param>
         /// <param name="exportClient">Client used for sending export request.</param>
-        internal OtlpMetricExporter(OtlpExporterOptions options, IExportClient<OtlpCollector.ExportMetricsServiceRequest> exportClient = null)
+        internal OtlpMetricExporter(OtlpExporterOptions options, IExportClient<OtlpCollector.ExportMetricsServiceRequest> exportClient)
         {
             if (exportClient != null)
             {
@@ -64,14 +64,14 @@ namespace OpenTelemetry.Exporter
         internal OtlpResource.Resource ProcessResource => this.processResource ??= this.ParentProvider.GetResource().ToOtlpResource();
 
         /// <inheritdoc />
-        public override ExportResult Export(in Batch<Metric> metrics)
+        public override ExportResult Export(in Batch<Metric> batch)
         {
             // Prevents the exporter's gRPC and HTTP operations from being instrumented.
             using var scope = SuppressInstrumentationScope.Begin();
 
             var request = new OtlpCollector.ExportMetricsServiceRequest();
 
-            request.AddMetrics(this.ProcessResource, metrics);
+            request.AddMetrics(this.ProcessResource, batch);
 
             try
             {

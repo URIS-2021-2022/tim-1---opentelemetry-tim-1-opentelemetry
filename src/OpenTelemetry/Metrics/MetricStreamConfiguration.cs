@@ -46,7 +46,7 @@ namespace OpenTelemetry.Metrics
         {
             public override Aggregation Aggregation
             {
-                get => Aggregation.Drop;
+                get { return Aggregation.Drop; }
                 set { this.Aggregation = value; }
             }
         }
