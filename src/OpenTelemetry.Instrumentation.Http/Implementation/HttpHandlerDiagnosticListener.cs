@@ -167,13 +167,10 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
                             activity.SetStatus(Status.Error);
                         }
                     }
-                    else if (requestTaskStatus != TaskStatus.Faulted)
+                    else if (requestTaskStatus != TaskStatus.Faulted && currentStatusCode == StatusCode.Unset)
                     {
-                        if (currentStatusCode == StatusCode.Unset)
-                        {
-                            // Faults are handled in OnException and should already have a span.Status of Error w/ Description.
-                            activity.SetStatus(Status.Error);
-                        }
+                        // Faults are handled in OnException and should already have a span.Status of Error w/ Description.
+                        activity.SetStatus(Status.Error);
                     }
                 }
 

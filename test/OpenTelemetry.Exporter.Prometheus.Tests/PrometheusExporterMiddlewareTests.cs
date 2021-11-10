@@ -70,7 +70,7 @@ namespace OpenTelemetry.Exporter.Prometheus.Tests
 
         public class Startup
         {
-            public void ConfigureServices(IServiceCollection services)
+            public static void ConfigureServices(IServiceCollection services)
             {
                 services.AddOpenTelemetryMetrics(builder => builder
                     .AddMeter(MeterName)

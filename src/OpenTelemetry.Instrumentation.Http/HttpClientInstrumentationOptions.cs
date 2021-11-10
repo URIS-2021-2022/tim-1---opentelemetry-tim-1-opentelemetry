@@ -80,7 +80,8 @@ namespace OpenTelemetry.Instrumentation.Http
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool TryParseHttpRequestMessage(string activityName, object arg1, out HttpRequestMessage requestMessage)
         {
-            return (requestMessage = arg1 as HttpRequestMessage) != null && activityName == "System.Net.Http.HttpRequestOut";
+            requestMessage = arg1 as HttpRequestMessage;
+            return requestMessage != null && activityName == "System.Net.Http.HttpRequestOut";
         }
     }
 }
