@@ -72,7 +72,7 @@ namespace OpenTelemetry.Metrics
         }
 
         /// <inheritdoc/>
-        protected override bool OnCollect(int timeoutMilliseconds = Timeout.Infinite)
+        protected override bool OnCollect(int timeoutMilliseconds)
         {
             var result = true;
             var sw = Stopwatch.StartNew();

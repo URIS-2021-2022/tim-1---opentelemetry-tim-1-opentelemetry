@@ -62,14 +62,14 @@ namespace OpenTelemetry.Exporter
         internal OtlpResource.Resource ProcessResource => this.processResource ??= this.ParentProvider.GetResource().ToOtlpResource();
 
         /// <inheritdoc/>
-        public override ExportResult Export(in Batch<Activity> activityBatch)
+        public override ExportResult Export(in Batch<Activity> batch)
         {
             // Prevents the exporter's gRPC and HTTP operations from being instrumented.
             using var scope = SuppressInstrumentationScope.Begin();
 
             var request = new OtlpCollector.ExportTraceServiceRequest();
 
-            request.AddBatch(this.ProcessResource, activityBatch);
+            request.AddBatch(this.ProcessResource, batch);
 
             try
             {
