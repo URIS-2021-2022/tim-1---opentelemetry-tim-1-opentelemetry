@@ -29,8 +29,6 @@ namespace OpenTelemetry.Shims.OpenTracing
     {
         private static readonly ConditionalWeakTable<TelemetrySpan, IScope> SpanScopeTable = new ConditionalWeakTable<TelemetrySpan, IScope>();
 
-        private readonly Tracer tracer;
-
 #if DEBUG
         private int spanScopeTableCount;
 #endif
@@ -38,8 +36,6 @@ namespace OpenTelemetry.Shims.OpenTracing
         public ScopeManagerShim(Tracer tracer)
         {
             Guard.Null(tracer, nameof(tracer));
-
-            this.tracer = tracer;
         }
 
 #if DEBUG
@@ -77,8 +73,8 @@ namespace OpenTelemetry.Shims.OpenTracing
                 shim.Span,
                 () =>
                 {
-                    var removed = SpanScopeTable.Remove(shim.Span);
 #if DEBUG
+                    var removed = SpanScopeTable.Remove(shim.Span);
                     if (removed)
                     {
                         Interlocked.Decrement(ref this.spanScopeTableCount);

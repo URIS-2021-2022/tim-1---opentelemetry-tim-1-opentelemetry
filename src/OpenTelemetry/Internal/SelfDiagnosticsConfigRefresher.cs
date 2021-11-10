@@ -259,8 +259,9 @@ namespace OpenTelemetry.Internal
                     {
                         this.worker.Wait();
                     }
-                    catch (AggregateException)
+                    catch (AggregateException e)
                     {
+                        Console.WriteLine("There was {0} exceptions", e.InnerExceptions.Count);
                     }
                     finally
                     {

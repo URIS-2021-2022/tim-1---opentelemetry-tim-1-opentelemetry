@@ -89,7 +89,7 @@ namespace OpenTelemetry.Metrics.Tests
         [Fact]
         public void HistogramWithOnlySumCount()
         {
-            var bounds = new double[] { };
+            var bounds = Array.Empty<double>();
             var histogramPoint = new MetricPoint(AggregationType.HistogramSumCount, DateTimeOffset.Now, null, null, bounds);
 
             histogramPoint.Update(-10);

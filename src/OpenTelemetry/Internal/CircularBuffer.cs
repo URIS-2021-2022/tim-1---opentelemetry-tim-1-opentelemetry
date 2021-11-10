@@ -91,13 +91,13 @@ namespace OpenTelemetry.Internal
                     return false; // buffer is full
                 }
 
-                var head = Interlocked.CompareExchange(ref this.head, headSnapshot + 1, headSnapshot);
-                if (head != headSnapshot)
+                var head2 = Interlocked.CompareExchange(ref this.head, headSnapshot + 1, headSnapshot);
+                if (head2 != headSnapshot)
                 {
                     continue;
                 }
 
-                var index = (int)(head % this.Capacity);
+                var index = (int)(head2 % this.Capacity);
                 this.trait[index] = value;
                 return true;
             }
