@@ -71,7 +71,7 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
         }
 
 
-        private void WriteList(TProtocol tProtocol)
+       // private void WriteList(TProtocol tProtocol)
 
         public override string ToString()
         {
@@ -84,8 +84,7 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             return sb.ToString();
         }
 
-        private void WriteList(TProtocol oprot)
-
+        private void WriteList(TProtocol tProtocol)
         {
             tProtocol.WriteListBegin(new TList(TType.Struct, this.Fields.Count));
 

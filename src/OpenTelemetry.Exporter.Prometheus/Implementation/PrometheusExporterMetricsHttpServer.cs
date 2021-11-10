@@ -139,7 +139,7 @@ namespace OpenTelemetry.Exporter.Prometheus
             }
             catch (OperationCanceledException ex)
             {
-                PrometheusExporterEventSource.Log.CanceledExport(ex);
+                PrometheusExporterEventSource.Log.CanceledExport(ex.Message);
             }
             finally
             {
