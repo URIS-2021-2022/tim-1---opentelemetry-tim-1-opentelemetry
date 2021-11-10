@@ -70,7 +70,6 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             }
         }
 
-
        // private void WriteList(TProtocol tProtocol)
 
         public override string ToString()

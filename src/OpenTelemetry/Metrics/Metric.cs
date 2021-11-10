@@ -41,7 +41,7 @@ namespace OpenTelemetry.Metrics
             if (instrument is ObservableCounter<long>
                 || instrument.GetType() == typeof(ObservableCounter<int>)
                 || instrument.GetType() == typeof(ObservableCounter<short>)
-                || instrument.GetType() == typeof(ObservableCounter<byte>))
+                || instrument is ObservableCounter<byte>)
             {
                 aggType = AggregationType.LongSumIncomingCumulative;
                 this.MetricType = MetricType.LongSum;

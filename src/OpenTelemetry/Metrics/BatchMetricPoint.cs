@@ -42,6 +42,7 @@ namespace OpenTelemetry.Metrics
         /// <inheritdoc/>
         public void Dispose()
         {
+            throw new NotSupportedException();
         }
 
         /// <summary>

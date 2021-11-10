@@ -69,7 +69,7 @@ namespace OpenTelemetry.Shims.OpenTracing
                 {
                     if (key == null || !source.TryGetValue(key, out var value))
                     {
-                        return null;
+                        return System.Linq.Enumerable.Empty<string>();
                     }
 
                     return value;

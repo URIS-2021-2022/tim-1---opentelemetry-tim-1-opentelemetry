@@ -37,6 +37,12 @@ namespace OpenTelemetry.Exporter.Prometheus
             }
         }
 
+        [Event(1, Message = "Failed to export metrics: '{0}'", Level = EventLevel.Error)]
+        public void FailedExport(string exception)
+        {
+            this.WriteEvent(1, exception);
+        }
+
         [NonEvent]
         public void FailedShutdown(Exception ex)
         {
@@ -44,6 +50,12 @@ namespace OpenTelemetry.Exporter.Prometheus
             {
                 this.FailedShutdown(ex.ToInvariantString());
             }
+        }
+
+        [Event(3, Message = "Failed to shutdown Metrics server '{0}'", Level = EventLevel.Error)]
+        public void FailedShutdown(string exception)
+        {
+            this.WriteEvent(3, exception);
         }
 
         [NonEvent]
@@ -55,22 +67,10 @@ namespace OpenTelemetry.Exporter.Prometheus
             }
         }
 
-        [Event(1, Message = "Failed to export metrics: '{0}'", Level = EventLevel.Error)]
-        public void FailedExport(string exception)
-        {
-            this.WriteEvent(1, exception);
-        }
-
         [Event(2, Message = "Canceled to export metrics: '{0}'", Level = EventLevel.Error)]
         public void CanceledExport(string exception)
         {
             this.WriteEvent(2, exception);
-        }
-
-        [Event(3, Message = "Failed to shutdown Metrics server '{0}'", Level = EventLevel.Error)]
-        public void FailedShutdown(string exception)
-        {
-            this.WriteEvent(3, exception);
         }
     }
 }

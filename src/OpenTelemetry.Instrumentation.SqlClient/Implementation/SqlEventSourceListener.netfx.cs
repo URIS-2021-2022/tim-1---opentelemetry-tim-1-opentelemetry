@@ -115,7 +115,6 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
                 [3] -> CommandText
 
                 Note:
-                - For "Microsoft-AdoNet-SystemData": [3] CommandText = (CommandType == CommandType.StoredProcedure ? CommandText : string.Empty;
                 - For "Microsoft.Data.SqlClient.EventSource": [3] CommandText = sqlCommand.CommandText (so it is set for all command types).
              */
 

@@ -180,7 +180,7 @@ namespace OpenTelemetry.Trace
                 previousActivity = Activity.Current;
             }
 
-            var activity = this.ActivitySource.StartActivity(name, activityKind, parentContext.ActivityContext, initialAttributes?.Attributes ?? null, activityLinks, startTime);
+            var activity = this.ActivitySource.StartActivity(name, activityKind, parentContext.ActivityContext, initialAttributes?.Attributes, activityLinks, startTime);
             if (activity == null)
             {
                 return TelemetrySpan.NoopInstance;
