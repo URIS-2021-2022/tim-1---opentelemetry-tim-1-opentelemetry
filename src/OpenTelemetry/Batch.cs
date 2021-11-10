@@ -132,11 +132,11 @@ namespace OpenTelemetry
 
             private static readonly BatchEnumeratorMoveNextFunc MoveNextCircularBuffer = (ref Enumerator enumerator) =>
             {
-                var circularBuffer = enumerator.circularBuffer;
+                var cBuffer = enumerator.circularBuffer;
 
-                if (circularBuffer.RemovedCount < enumerator.targetCount)
+                if (cBuffer.RemovedCount < enumerator.targetCount)
                 {
-                    enumerator.Current = circularBuffer.Read();
+                    enumerator.Current = cBuffer.Read();
                     return true;
                 }
 

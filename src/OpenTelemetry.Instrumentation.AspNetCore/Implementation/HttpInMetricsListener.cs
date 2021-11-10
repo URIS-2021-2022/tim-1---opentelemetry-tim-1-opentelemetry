@@ -25,14 +25,12 @@ namespace OpenTelemetry.Instrumentation.AspNetCore.Implementation
     internal class HttpInMetricsListener : ListenerHandler
     {
         private readonly PropertyFetcher<HttpContext> stopContextFetcher = new PropertyFetcher<HttpContext>("HttpContext");
-        private readonly Meter meter;
 
         private readonly Histogram<double> httpServerDuration;
 
         public HttpInMetricsListener(string name, Meter meter)
             : base(name)
         {
-            this.meter = meter;
             this.httpServerDuration = meter.CreateHistogram<double>("http.server.duration", "ms", "measures the duration of the inbound HTTP request");
         }
 

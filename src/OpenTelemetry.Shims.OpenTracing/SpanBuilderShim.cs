@@ -172,12 +172,9 @@ namespace OpenTelemetry.Shims.OpenTracing
             {
                 span = this.tracer.StartSpan(this.spanName, this.spanKind, this.parentSpanContext, default, this.links, this.explicitStartTime ?? default);
             }
-            else if (this.parentSpan == null && !this.parentSpanContext.IsValid && Activity.Current != null && Activity.Current.IdFormat == ActivityIdFormat.W3C)
+            else if (this.parentSpan == null && !this.parentSpanContext.IsValid && Activity.Current != null && Activity.Current.IdFormat == ActivityIdFormat.W3C && this.rootOperationNamesForActivityBasedAutoInstrumentations.Contains(Activity.Current.OperationName))
             {
-                if (this.rootOperationNamesForActivityBasedAutoInstrumentations.Contains(Activity.Current.OperationName))
-                {
-                    span = Tracer.CurrentSpan;
-                }
+               span = Tracer.CurrentSpan;
             }
 
             if (span == null)
