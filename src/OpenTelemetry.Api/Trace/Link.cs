@@ -82,12 +82,6 @@ namespace OpenTelemetry.Trace
         public static bool operator !=(Link link1, Link link2) => !link1.Equals(link2);
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
-        {
-            return (obj is Link link) && this.ActivityLink.Equals(link.ActivityLink);
-        }
-
-        /// <inheritdoc />
         public override int GetHashCode()
         {
             return this.ActivityLink.GetHashCode();
@@ -97,6 +91,12 @@ namespace OpenTelemetry.Trace
         public bool Equals(Link other)
         {
             return this.ActivityLink.Equals(other.ActivityLink);
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            return (obj is Link link) && this.ActivityLink.Equals(link.ActivityLink);
         }
     }
 }
