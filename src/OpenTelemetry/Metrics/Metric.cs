@@ -82,7 +82,7 @@ namespace OpenTelemetry.Metrics
             }
             else if (instrument.GetType() == typeof(Histogram<long>)
                 || instrument.GetType() == typeof(Histogram<int>)
-                || instrument.GetType() == typeof(Histogram<short>)
+                || instrument is Histogram<short>
                 || instrument.GetType() == typeof(Histogram<byte>)
                 || instrument.GetType() == typeof(Histogram<float>)
                 || instrument is Histogram<double>)
