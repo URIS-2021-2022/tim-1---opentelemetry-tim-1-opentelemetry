@@ -21,9 +21,8 @@ namespace OpenTelemetry.Metrics
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public sealed class AggregationTemporalityAttribute : Attribute
     {
-        private readonly AggregationTemporality preferredAggregationTemporality;
-        private readonly AggregationTemporality supportedAggregationTemporality;
-
+        private readonly AggregationTemporalities preferredAggregationTemporality;
+        private readonly AggregationTemporalities supportedAggregationTemporality;
 
         public AggregationTemporalityAttribute(AggregationTemporalities supported)
             : this(supported, supported)

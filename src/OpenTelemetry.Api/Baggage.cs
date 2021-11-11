@@ -151,7 +151,7 @@ namespace OpenTelemetry
         /// </summary>
         /// <param name="baggage">Optional <see cref="Baggage"/>. <see cref="Current"/> is used if not specified.</param>
         /// <returns><see cref="Dictionary{TKey, TValue}.Enumerator"/>.</returns>
-        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage)
+        public static Dictionary<string, string>.Enumerator GetEnumerator(Baggage baggage = default)
             => baggage == default ? Current.GetEnumerator() : baggage.GetEnumerator();
 
         /// <summary>
