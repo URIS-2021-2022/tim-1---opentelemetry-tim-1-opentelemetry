@@ -277,7 +277,6 @@ namespace OpenTelemetry.Shims.OpenTracing
         public ISpanBuilder WithTag(global::OpenTracing.Tag.BooleanTag tag, bool value)
         {
             Guard.Null(tag?.Key, $"{nameof(tag)}?.{nameof(tag.Key)}");
-
             return this.WithTag(tag.Key, value);
         }
 

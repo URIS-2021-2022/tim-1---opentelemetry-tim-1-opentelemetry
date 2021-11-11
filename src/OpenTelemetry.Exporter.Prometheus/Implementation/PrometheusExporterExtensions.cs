@@ -478,7 +478,7 @@ namespace OpenTelemetry.Exporter.Prometheus
             WriteToBuffer(DoubleQuoteUtf8, destination, ref destinationOffset);
         }
 
-        private class MetricInfo
+        private sealed class MetricInfo
         {
             public byte[] NameUtf8;
             public byte[] TypeUtf8;

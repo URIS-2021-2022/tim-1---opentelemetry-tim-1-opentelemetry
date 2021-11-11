@@ -189,44 +189,14 @@ namespace OpenTelemetry.Metrics
                 case AggregationType.LongSumIncomingDelta:
                 case AggregationType.LongSumIncomingCumulative:
                     {
-                        if (outputDelta)
-                        {
-                            long initValue = Interlocked.Read(ref this.longVal);
-                            this.LongValue = initValue - this.lastLongSum;
-                            this.lastLongSum = initValue;
-                        }
-                        else
-                        {
-                            this.LongValue = Interlocked.Read(ref this.longVal);
-                        }
-
+                        this.AggTsumCumulative(outputDelta);
                         break;
                     }
 
                 case AggregationType.DoubleSumIncomingDelta:
                 case AggregationType.DoubleSumIncomingCumulative:
                     {
-                        if (outputDelta)
-                        {
-                            // TODO:
-                            // Is this thread-safe way to read double?
-                            // As long as the value is not -ve infinity,
-                            // the exchange (to 0.0) will never occur,
-                            // but we get the original value atomically.
-                            double initValue = Interlocked.CompareExchange(ref this.doubleVal, 0.0, double.NegativeInfinity);
-                            this.DoubleValue = initValue - this.lastDoubleSum;
-                            this.lastDoubleSum = initValue;
-                        }
-                        else
-                        {
-                            // TODO:
-                            // Is this thread-safe way to read double?
-                            // As long as the value is not -ve infinity,
-                            // the exchange (to 0.0) will never occur,
-                            // but we get the original value atomically.
-                            this.DoubleValue = Interlocked.CompareExchange(ref this.doubleVal, 0.0, double.NegativeInfinity);
-                        }
-
+                        this.AggTsumCumulativeDouble(outputDelta);
                         break;
                     }
 
@@ -249,44 +219,90 @@ namespace OpenTelemetry.Metrics
 
                 case AggregationType.Histogram:
                     {
-                        lock (this.lockObject)
-                        {
-                            this.LongValue = this.longVal;
-                            this.DoubleValue = this.doubleVal;
-                            if (outputDelta)
-                            {
-                                this.longVal = 0;
-                                this.doubleVal = 0;
-                            }
-
-                            for (int i = 0; i < this.bucketCounts.Length; i++)
-                            {
-                                this.BucketCounts[i] = this.bucketCounts[i];
-                                if (outputDelta)
-                                {
-                                    this.bucketCounts[i] = 0;
-                                }
-                            }
-                        }
-
+                        this.AggThistogram(outputDelta);
                         break;
                     }
 
                 case AggregationType.HistogramSumCount:
                     {
-                        lock (this.lockObject)
-                        {
-                            this.LongValue = this.longVal;
-                            this.DoubleValue = this.doubleVal;
-                            if (outputDelta)
-                            {
-                                this.longVal = 0;
-                                this.doubleVal = 0;
-                            }
-                        }
-
+                        this.AggThistogramSumCount(outputDelta);
                         break;
                     }
+            }
+        }
+
+        private void AggTsumCumulative(bool outputDelta)
+        {
+            if (outputDelta)
+            {
+                long initValue = Interlocked.Read(ref this.longVal);
+                this.LongValue = initValue - this.lastLongSum;
+                this.lastLongSum = initValue;
+            }
+            else
+            {
+                this.LongValue = Interlocked.Read(ref this.longVal);
+            }
+        }
+
+        private void AggTsumCumulativeDouble(bool outputDelta)
+        {
+            if (outputDelta)
+            {
+                // TODO:
+                // Is this thread-safe way to read double?
+                // As long as the value is not -ve infinity,
+                // the exchange (to 0.0) will never occur,
+                // but we get the original value atomically.
+                double initValue = Interlocked.CompareExchange(ref this.doubleVal, 0.0, double.NegativeInfinity);
+                this.DoubleValue = initValue - this.lastDoubleSum;
+                this.lastDoubleSum = initValue;
+            }
+            else
+            {
+                // TODO:
+                // Is this thread-safe way to read double?
+                // As long as the value is not -ve infinity,
+                // the exchange (to 0.0) will never occur,
+                // but we get the original value atomically.
+                this.DoubleValue = Interlocked.CompareExchange(ref this.doubleVal, 0.0, double.NegativeInfinity);
+            }
+        }
+
+        private void AggThistogram(bool outputDelta)
+        {
+            lock (this.lockObject)
+            {
+                this.LongValue = this.longVal;
+                this.DoubleValue = this.doubleVal;
+                if (outputDelta)
+                {
+                    this.longVal = 0;
+                    this.doubleVal = 0;
+                }
+
+                for (int i = 0; i < this.bucketCounts.Length; i++)
+                {
+                    this.BucketCounts[i] = this.bucketCounts[i];
+                    if (outputDelta)
+                    {
+                        this.bucketCounts[i] = 0;
+                    }
+                }
+            }
+        }
+
+        private void AggThistogramSumCount(bool outputDelta)
+        {
+            lock (this.lockObject)
+            {
+                this.LongValue = this.longVal;
+                this.DoubleValue = this.doubleVal;
+                if (outputDelta)
+                {
+                    this.longVal = 0;
+                    this.doubleVal = 0;
+                }
             }
         }
     }

@@ -128,6 +128,14 @@ namespace OpenTelemetry
                 return false;
             }
 
+            bool result = this.TimeOutMethode(timeoutMilliseconds);
+            return result;
+        }
+
+        private bool TimeOutMethode(int timeoutMilliseconds)
+        {
+            var head = this.circularBuffer.AddedCount;
+
             var triggers = new WaitHandle[] { this.dataExportedNotification, this.shutdownTrigger };
 
             var sw = Stopwatch.StartNew();
