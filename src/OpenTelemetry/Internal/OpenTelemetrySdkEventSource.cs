@@ -37,15 +37,6 @@ namespace OpenTelemetry.Internal
 #endif
 
         [NonEvent]
-        public void SpanProcessorException(string evnt, Exception ex)
-        {
-            if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
-            {
-                this.SpanProcessorException(evnt, ex.ToInvariantString());
-            }
-        }
-
-        [NonEvent]
         public void TracestateExtractException(Exception ex)
         {
             if (this.IsEnabled(EventLevel.Warning, EventKeywords.All))
@@ -70,15 +61,6 @@ namespace OpenTelemetry.Internal
                 {
                     this.ObservableInstrumentCallbackException(exception.ToInvariantString());
                 }
-            }
-        }
-
-        [NonEvent]
-        public void TracestateKeyIsInvalid(ReadOnlySpan<char> key)
-        {
-            if (this.IsEnabled(EventLevel.Warning, EventKeywords.All))
-            {
-                this.TracestateKeyIsInvalid(key.ToString());
             }
         }
 
@@ -109,6 +91,12 @@ namespace OpenTelemetry.Internal
             }
         }
 
+        [Event(24, Message = "Activity started. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
+        public void ActivityStarted(string operationName, string id)
+        {
+            this.WriteEvent(24, operationName, id);
+        }
+
         [NonEvent]
         public void ActivityStopped(Activity activity)
         {
@@ -116,6 +104,12 @@ namespace OpenTelemetry.Internal
             {
                 this.ActivityStopped(activity.OperationName, activity.Id);
             }
+        }
+
+        [Event(25, Message = "Activity stopped. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
+        public void ActivityStopped(string operationName, string id)
+        {
+            this.WriteEvent(25, operationName, id);
         }
 
         [NonEvent]
@@ -134,6 +128,12 @@ namespace OpenTelemetry.Internal
             {
                 this.TracerProviderException(evnt, ex.ToInvariantString());
             }
+        }
+
+        [Event(28, Message = "Unknown error in TracerProvider '{0}': '{1}'.", Level = EventLevel.Error)]
+        public void TracerProviderException(string evnt, string ex)
+        {
+            this.WriteEvent(28, evnt, ex);
         }
 
         [NonEvent]
@@ -194,6 +194,15 @@ namespace OpenTelemetry.Internal
             this.WriteEvent(4, evnt, ex);
         }
 
+        [NonEvent]
+        public void SpanProcessorException(string evnt, Exception ex)
+        {
+            if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
+            {
+                this.SpanProcessorException(evnt, ex.ToInvariantString());
+            }
+        }
+
         [Event(5, Message = "Calling '{0}' on ended span.", Level = EventLevel.Warning)]
         public void UnexpectedCallOnEndedSpan(string methodName)
         {
@@ -234,6 +243,15 @@ namespace OpenTelemetry.Internal
         public void TracestateKeyIsInvalid(string key)
         {
             this.WriteEvent(12, key);
+        }
+
+        [NonEvent]
+        public void TracestateKeyIsInvalid(ReadOnlySpan<char> key)
+        {
+            if (this.IsEnabled(EventLevel.Warning, EventKeywords.All))
+            {
+                this.TracestateKeyIsInvalid(key.ToString());
+            }
         }
 
         [Event(13, Message = "Tracestate value is invalid, value = '{0}'", Level = EventLevel.Warning)]
@@ -302,28 +320,10 @@ namespace OpenTelemetry.Internal
             this.WriteEvent(23, spansAttempted);
         }
 
-        [Event(24, Message = "Activity started. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
-        public void ActivityStarted(string operationName, string id)
-        {
-            this.WriteEvent(24, operationName, id);
-        }
-
-        [Event(25, Message = "Activity stopped. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
-        public void ActivityStopped(string operationName, string id)
-        {
-            this.WriteEvent(25, operationName, id);
-        }
-
         [Event(26, Message = "Failed to create file. LogDirectory ='{0}', Id = '{1}'.", Level = EventLevel.Warning)]
         public void SelfDiagnosticsFileCreateException(string logDirectory, string exception)
         {
             this.WriteEvent(26, logDirectory, exception);
-        }
-
-        [Event(28, Message = "Unknown error in TracerProvider '{0}': '{1}'.", Level = EventLevel.Error)]
-        public void TracerProviderException(string evnt, string ex)
-        {
-            this.WriteEvent(28, evnt, ex);
         }
 
         [Event(29, Message = "Failed to parse environment variable: '{0}', value: '{1}'.", Level = EventLevel.Warning)]
@@ -353,7 +353,7 @@ namespace OpenTelemetry.Internal
 #if DEBUG
         public class OpenTelemetryEventListener : EventListener
         {
-            private readonly List<EventSource> eventSources = new List<EventSource>();
+            private readonly List<EventSource> eventSources = new ();
 
             public override void Dispose()
             {

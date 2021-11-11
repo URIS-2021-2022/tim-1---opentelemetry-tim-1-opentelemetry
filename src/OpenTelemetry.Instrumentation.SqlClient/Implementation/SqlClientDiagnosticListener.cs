@@ -55,150 +55,156 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
             {
                 case SqlDataBeforeExecuteCommand:
                 case SqlMicrosoftBeforeExecuteCommand:
-                    {
-                        // SqlClient does not create an Activity. So the activity coming in here will be null or the root span.
-                        activity = SqlActivitySourceHelper.ActivitySource.StartActivity(
-                            SqlActivitySourceHelper.ActivityName,
-                            ActivityKind.Client,
-                            default(ActivityContext),
-                            SqlActivitySourceHelper.CreationTags);
-
-                        if (activity == null)
-                        {
-                            // There is no listener or it decided not to sample the current request.
-                            return;
-                        }
-
-                        _ = this.commandFetcher.TryFetch(payload, out var command);
-                        if (command == null)
-                        {
-                            SqlClientInstrumentationEventSource.Log.NullPayload(nameof(SqlClientDiagnosticListener), name);
-                            activity.Stop();
-                            return;
-                        }
-
-                        if (activity.IsAllDataRequested)
-                        {
-                            _ = this.connectionFetcher.TryFetch(command, out var connection);
-                            _ = this.databaseFetcher.TryFetch(connection, out var database);
-
-                            activity.DisplayName = (string)database;
-
-                            _ = this.dataSourceFetcher.TryFetch(connection, out var dataSource);
-                            _ = this.commandTextFetcher.TryFetch(command, out var commandText);
-
-                            activity.SetTag(SemanticConventions.AttributeDbName, (string)database);
-
-                            this.options.AddConnectionLevelDetailsToActivity((string)dataSource, activity);
-
-                            if (this.commandTypeFetcher.TryFetch(command, out CommandType commandType))
-                            {
-                                switch (commandType)
-                                {
-                                    case CommandType.StoredProcedure:
-                                        activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.StoredProcedure));
-                                        if (this.options.SetDbStatementForStoredProcedure)
-                                        {
-                                            activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
-                                        }
-
-                                        break;
-
-                                    case CommandType.Text:
-                                        activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.Text));
-                                        if (this.options.SetDbStatementForText)
-                                        {
-                                            activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
-                                        }
-
-                                        break;
-
-                                    case CommandType.TableDirect:
-                                        activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.TableDirect));
-                                        break;
-                                }
-                            }
-
-                            try
-                            {
-                                this.options.Enrich?.Invoke(activity, "OnCustom", command);
-                            }
-                            catch (Exception ex)
-                            {
-                                SqlClientInstrumentationEventSource.Log.EnrichmentException(ex);
-                            }
-                        }
-                    }
-
+                    this.BeforeExecuteCommand(name, activity, payload);
                     break;
                 case SqlDataAfterExecuteCommand:
                 case SqlMicrosoftAfterExecuteCommand:
-                    {
-                        if (activity == null)
-                        {
-                            SqlClientInstrumentationEventSource.Log.NullActivity(name);
-                            return;
-                        }
-
-                        if (activity.Source != SqlActivitySourceHelper.ActivitySource)
-                        {
-                            return;
-                        }
-
-                        try
-                        {
-                            if (activity.IsAllDataRequested)
-                            {
-                                activity.SetStatus(Status.Unset);
-                            }
-                        }
-                        finally
-                        {
-                            activity.Stop();
-                        }
-                    }
-
+                    this.MicrosoftAfterExecuteCommand(name, activity);
                     break;
                 case SqlDataWriteCommandError:
                 case SqlMicrosoftWriteCommandError:
+                    this.MicrosoftWriteCommandError(name, activity, payload);
+                    break;
+            }
+        }
+
+        private void BeforeExecuteCommand(string name, Activity activity, object payload)
+        {
+            // SqlClient does not create an Activity. So the activity coming in here will be null or the root span.
+            activity = SqlActivitySourceHelper.ActivitySource.StartActivity(
+            SqlActivitySourceHelper.ActivityName,
+            ActivityKind.Client,
+            default(ActivityContext),
+            SqlActivitySourceHelper.CreationTags);
+
+            if (activity == null)
+            {
+                // There is no listener or it decided not to sample the current request.
+                return;
+            }
+
+            _ = this.commandFetcher.TryFetch(payload, out var command);
+            if (command == null)
+            {
+                SqlClientInstrumentationEventSource.Log.NullPayload(nameof(SqlClientDiagnosticListener), name);
+                activity.Stop();
+                return;
+            }
+
+            if (activity.IsAllDataRequested)
+            {
+                _ = this.connectionFetcher.TryFetch(command, out var connection);
+                _ = this.databaseFetcher.TryFetch(connection, out var database);
+
+                activity.DisplayName = (string)database;
+
+                _ = this.dataSourceFetcher.TryFetch(connection, out var dataSource);
+                _ = this.commandTextFetcher.TryFetch(command, out var commandText);
+
+                activity.SetTag(SemanticConventions.AttributeDbName, (string)database);
+
+                this.options.AddConnectionLevelDetailsToActivity((string)dataSource, activity);
+
+                if (this.commandTypeFetcher.TryFetch(command, out CommandType commandType))
+                {
+                    switch (commandType)
                     {
-                        if (activity == null)
-                        {
-                            SqlClientInstrumentationEventSource.Log.NullActivity(name);
-                            return;
-                        }
-
-                        if (activity.Source != SqlActivitySourceHelper.ActivitySource)
-                        {
-                            return;
-                        }
-
-                        try
-                        {
-                            if (activity.IsAllDataRequested)
+                        case CommandType.StoredProcedure:
+                            activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.StoredProcedure));
+                            if (this.options.SetDbStatementForStoredProcedure)
                             {
-                                if (this.exceptionFetcher.TryFetch(payload, out Exception exception) && exception != null)
-                                {
-                                    activity.SetStatus(Status.Error.WithDescription(exception.Message));
-
-                                    if (this.options.RecordException)
-                                    {
-                                        activity.RecordException(exception);
-                                    }
-                                }
-                                else
-                                {
-                                    SqlClientInstrumentationEventSource.Log.NullPayload(nameof(SqlClientDiagnosticListener), name);
-                                }
+                                activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
                             }
-                        }
-                        finally
+
+                            break;
+
+                        case CommandType.Text:
+                            activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.Text));
+                            if (this.options.SetDbStatementForText)
+                            {
+                                activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
+                            }
+
+                            break;
+
+                        case CommandType.TableDirect:
+                            activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.TableDirect));
+                            break;
+                    }
+                }
+
+                try
+                {
+                    this.options.Enrich?.Invoke(activity, "OnCustom", command);
+                }
+                catch (Exception ex)
+                {
+                    SqlClientInstrumentationEventSource.Log.EnrichmentException(ex);
+                }
+            }
+        }
+
+        private void MicrosoftAfterExecuteCommand(string name, Activity activity)
+        {
+            if (activity == null)
+            {
+                SqlClientInstrumentationEventSource.Log.NullActivity(name);
+                return;
+            }
+
+            if (activity.Source != SqlActivitySourceHelper.ActivitySource)
+            {
+                return;
+            }
+
+            try
+            {
+                if (activity.IsAllDataRequested)
+                {
+                    activity.SetStatus(Status.Unset);
+                }
+            }
+            finally
+            {
+                activity.Stop();
+            }
+        }
+
+        private void MicrosoftWriteCommandError(string name, Activity activity, object payload)
+        {
+            if (activity == null)
+            {
+                SqlClientInstrumentationEventSource.Log.NullActivity(name);
+                return;
+            }
+
+            if (activity.Source != SqlActivitySourceHelper.ActivitySource)
+            {
+                return;
+            }
+
+            try
+            {
+                if (activity.IsAllDataRequested)
+                {
+                    if (this.exceptionFetcher.TryFetch(payload, out Exception exception) && exception != null)
+                    {
+                        activity.SetStatus(Status.Error.WithDescription(exception.Message));
+
+                        if (this.options.RecordException)
                         {
-                            activity.Stop();
+                            activity.RecordException(exception);
                         }
                     }
-
-                    break;
+                    else
+                    {
+                        SqlClientInstrumentationEventSource.Log.NullPayload(nameof(SqlClientDiagnosticListener), name);
+                    }
+                }
+            }
+            finally
+            {
+                activity.Stop();
             }
         }
     }

@@ -81,7 +81,6 @@ namespace OpenTelemetry.Shims.OpenTracing
             // TODO:
             //  Not sure what to do here. Really, Baggage should be returned and not set until this ISpanContext is turned into a live Span.
             //  But that code doesn't seem to exist.
-            // Baggage.Current = propagationContext.Baggage;
 
             return !propagationContext.ActivityContext.IsValid() ? null : new SpanContextShim(new Trace.SpanContext(propagationContext.ActivityContext));
         }

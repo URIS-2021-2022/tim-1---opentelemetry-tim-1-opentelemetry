@@ -28,6 +28,7 @@ namespace OpenTelemetry.Exporter.Prometheus
     internal sealed class PrometheusExporterMetricsHttpServer : IDisposable
     {
         private readonly PrometheusExporter exporter;
+        private PrometheusExporterEventSource prometheus = new PrometheusExporterEventSource();
         private readonly HttpListener httpListener = new HttpListener();
         private readonly object syncObject = new object();
 
@@ -118,7 +119,6 @@ namespace OpenTelemetry.Exporter.Prometheus
         private void WorkerThread()
         {
             this.httpListener.Start();
-
             try
             {
                 using var scope = SuppressInstrumentationScope.Begin();
@@ -139,7 +139,8 @@ namespace OpenTelemetry.Exporter.Prometheus
             }
             catch (OperationCanceledException ex)
             {
-                PrometheusExporterEventSource.Log.CanceledExport(ex.Message);
+                this.prometheus.Log.CanceledExport(ex.Message);
+                //PrometheusExporterEventSource.Log.CanceledExport(ex.Message);
             }
             finally
             {
@@ -150,7 +151,8 @@ namespace OpenTelemetry.Exporter.Prometheus
                 }
                 catch (Exception exFromFinally)
                 {
-                    PrometheusExporterEventSource.Log.FailedShutdown(exFromFinally);
+                    prometheus.Log.FailedShutdown(exFromFinally);
+                    //PrometheusExporterEventSource.Log.FailedShutdown(exFromFinally);
                 }
             }
         }
@@ -168,8 +170,8 @@ namespace OpenTelemetry.Exporter.Prometheus
             }
             catch (Exception ex)
             {
-                PrometheusExporterEventSource.Log.FailedExport(ex);
-
+                //PrometheusExporterEventSource.Log.FailedExport(ex);
+                this.prometheus.Log.FailedExport(ex);
                 context.Response.StatusCode = 500;
             }
             finally
@@ -180,7 +182,8 @@ namespace OpenTelemetry.Exporter.Prometheus
                 }
                 catch (Exception exc)
                 {
-                    PrometheusExporterEventSource.Log.FailedExport(exc);
+                    //PrometheusExporterEventSource.Log.FailedExport(exc);
+                    this.prometheus.Log.FailedExport(exc);
                 }
 
                 this.exporter.ReleaseSemaphore();

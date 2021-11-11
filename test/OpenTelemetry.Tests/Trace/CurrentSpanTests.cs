@@ -22,15 +22,10 @@ namespace OpenTelemetry.Trace.Tests
 {
     public class CurrentSpanTests : IDisposable
     {
-
-        private readonly Tracer tracer;
-
         public CurrentSpanTests()
         {
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
             Activity.ForceDefaultIdFormat = true;
-
-            this.tracer = TracerProvider.Default.GetTracer(null);
         }
 
         [Fact]

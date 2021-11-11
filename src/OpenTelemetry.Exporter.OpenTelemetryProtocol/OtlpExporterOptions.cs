@@ -40,7 +40,7 @@ namespace OpenTelemetry.Exporter
 
         internal const string TracesExportPath = "v1/traces";
         internal const string MetricsExportPath = "v1/metrics";
-        private const string UriConst = "http://localhost:4317";
+        private const string UriConst = "https://localhost:4317";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OtlpExporterOptions"/> class.
@@ -79,7 +79,7 @@ namespace OpenTelemetry.Exporter
         /// <summary>
         /// Gets or sets the target to which the exporter is going to send telemetry.
         /// Must be a valid Uri with scheme (http or https) and host, and
-        /// may contain a port and path. The default value is http://localhost:4317.
+        /// may contain a port and path. The default value is https://localhost:4317.
         /// </summary>
         public Uri Endpoint { get; set; } = new Uri(UriConst);
 
@@ -118,6 +118,6 @@ namespace OpenTelemetry.Exporter
         /// Gets or sets the AggregationTemporality used for Histogram
         /// and Sum metrics.
         /// </summary>
-        public AggregationTemporality AggregationTemporality { get; set; } = AggregationTemporality.Cumulative;
+        public AggregationTemporalities AggregationTemporality { get; set; } = AggregationTemporalities.Cumulative;
     }
 }

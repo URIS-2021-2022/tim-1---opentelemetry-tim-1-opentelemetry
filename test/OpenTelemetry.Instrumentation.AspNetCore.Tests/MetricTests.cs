@@ -65,7 +65,7 @@ namespace OpenTelemetry.Instrumentation.AspNetCore.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = AggregationTemporalities.Cumulative,
             };
             this.meterProvider = Sdk.CreateMeterProviderBuilder()
                 .AddAspNetCoreInstrumentation()
@@ -93,7 +93,7 @@ namespace OpenTelemetry.Instrumentation.AspNetCore.Tests
 
             var metric = requestMetrics[0];
             Assert.NotNull(metric);
-            Assert.True(metric.MetricType == MetricType.Histogram);
+            Assert.True(metric.MetricType == MetricTypes.Histogram);
             var metricPoints = new List<MetricPoint>();
             foreach (var p in metric.GetMetricPoints())
             {

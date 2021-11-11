@@ -88,7 +88,7 @@ namespace Benchmarks.Metrics
 
             this.reader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = AggregationTemporalities.Cumulative,
             };
             this.provider = Sdk.CreateMeterProviderBuilder()
                 .AddMeter("TestMeter")

@@ -51,6 +51,7 @@ namespace OpenTelemetry.Internal
         /// </summary>
         public static void EnsureInitialized()
         {
+            // To trigger CLR to initialize static fields and static constructors of SelfDiagnostics,
         }
 
         /// <inheritdoc/>

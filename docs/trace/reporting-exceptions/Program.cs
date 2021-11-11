@@ -19,33 +19,36 @@ using System.Diagnostics;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 
-public class Program
+namespace ProgramNameSpace
 {
-    private static readonly ActivitySource MyActivitySource = new ActivitySource(
-        "MyCompany.MyProduct.MyLibrary");
-
-    public static void Main()
+    public class Program
     {
-        using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-            .AddSource("MyCompany.MyProduct.MyLibrary")
-            .SetSampler(new AlwaysOnSampler())
-            .SetErrorStatusOnException()
-            .AddConsoleExporter()
-            .Build();
+        private static readonly ActivitySource MyActivitySource = new ActivitySource(
+            "MyCompany.MyProduct.MyLibrary");
 
-        try
+        public static void Main()
         {
-            using (MyActivitySource.StartActivity("Foo"))
+            using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+                .AddSource("MyCompany.MyProduct.MyLibrary")
+                .SetSampler(new AlwaysOnSampler())
+                .SetErrorStatusOnException()
+                .AddConsoleExporter()
+                .Build();
+
+            try
             {
-                using (MyActivitySource.StartActivity("Bar"))
+                using (MyActivitySource.StartActivity("Foo"))
                 {
-                    throw new Exception("Oops!");
+                    using (MyActivitySource.StartActivity("Bar"))
+                    {
+                        throw new Exception("Oops!");
+                    }
                 }
             }
-        }
-        catch (Exception)
-        {
-            // swallow the exception
+            catch (Exception)
+            {
+                // swallow the exception
+            }
         }
     }
 }

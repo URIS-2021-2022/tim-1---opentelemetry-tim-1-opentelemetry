@@ -112,9 +112,9 @@ namespace OpenTelemetry.Metrics.Tests
         }
 
         [Theory]
-        [InlineData(AggregationTemporality.Cumulative)]
-        [InlineData(AggregationTemporality.Delta)]
-        public void StreamNamesDuplicatesAreNotAllowedTest(AggregationTemporality temporality)
+        [InlineData(AggregationTemporalities.Cumulative)]
+        [InlineData(AggregationTemporalities.Delta)]
+        public void StreamNamesDuplicatesAreNotAllowedTest(AggregationTemporalities temporality)
         {
             var metricItems = new List<Metric>();
             int metricCount = 0;
@@ -279,7 +279,7 @@ namespace OpenTelemetry.Metrics.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = exportDelta ? AggregationTemporality.Delta : AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = exportDelta ? AggregationTemporalities.Delta : AggregationTemporalities.Cumulative,
             };
 
             using var meter = new Meter("TestMeter");
@@ -355,7 +355,7 @@ namespace OpenTelemetry.Metrics.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = exportDelta ? AggregationTemporality.Delta : AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = exportDelta ? AggregationTemporalities.Delta : AggregationTemporalities.Cumulative,
             };
 
             using var meter = new Meter(meterName);
@@ -404,9 +404,9 @@ namespace OpenTelemetry.Metrics.Tests
         }
 
         [Theory]
-        [InlineData(AggregationTemporality.Cumulative)]
-        [InlineData(AggregationTemporality.Delta)]
-        public void TestMetricPointCap(AggregationTemporality temporality)
+        [InlineData(AggregationTemporalities.Cumulative)]
+        [InlineData(AggregationTemporalities.Delta)]
+        public void TestMetricPointCap(AggregationTemporalities temporality)
         {
             var metricItems = new List<Metric>();
             int metricPointCount = 0;
@@ -476,7 +476,7 @@ namespace OpenTelemetry.Metrics.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = AggregationTemporalities.Cumulative,
             };
 
             using var meter = new Meter("TestLongCounterMeter");
@@ -545,7 +545,7 @@ namespace OpenTelemetry.Metrics.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = AggregationTemporalities.Cumulative,
             };
 
             using var meter = new Meter("TestDoubleCounterMeter");

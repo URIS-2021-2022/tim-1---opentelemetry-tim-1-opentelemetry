@@ -51,7 +51,7 @@ namespace OpenTelemetry.Metrics
             this.viewConfigs = viewConfigs;
             this.metrics = new Metric[MaxMetrics];
 
-            AggregationTemporality temporality = AggregationTemporality.Cumulative;
+            AggregationTemporalities temporality = AggregationTemporalities.Cumulative;
 
             foreach (var r in readers)
             {
@@ -145,7 +145,7 @@ namespace OpenTelemetry.Metrics
                     // Due to duplicate/max limit, we may not end up using them
                     // all, and that memory is wasted until Meter disposed.
                     // TODO: Revisit to see if we need to do metrics.TrimExcess()
-                    var metrics = new List<Metric>(maxCountMetricsToBeCreated);
+                    var metricsNew = new List<Metric>(maxCountMetricsToBeCreated);
                     lock (this.instrumentCreationLock)
                     {
                         for (int i = 0; i < maxCountMetricsToBeCreated; i++)
@@ -184,14 +184,14 @@ namespace OpenTelemetry.Metrics
                                 metric = new Metric(instrument, temporality, metricStreamName, metricDescription, histogramBucketBounds, tagKeysInteresting);
 
                                 this.metrics[index] = metric;
-                                metrics.Add(metric);
+                                metricsNew.Add(metric);
                                 this.metricStreamNames.Add(metricStreamName);
                             }
                         }
 
-                        if (metrics.Count > 0)
+                        if (metricsNew.Count > 0)
                         {
-                            listener.EnableMeasurementEvents(instrument, metrics);
+                            listener.EnableMeasurementEvents(instrument, metricsNew);
                         }
                     }
                 };

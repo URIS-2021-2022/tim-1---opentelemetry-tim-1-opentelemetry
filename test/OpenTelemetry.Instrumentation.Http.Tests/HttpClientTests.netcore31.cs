@@ -34,7 +34,7 @@ namespace OpenTelemetry.Instrumentation.Http.Tests
 {
     public partial class HttpClientTests
     {
-        public static int Counter;
+        private static int Counter;
 
         public static IEnumerable<object[]> TestData => HttpTestData.ReadTestCases();
 
@@ -67,7 +67,7 @@ namespace OpenTelemetry.Instrumentation.Http.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = AggregationTemporalities.Cumulative,
             };
             var meterProvider = Sdk.CreateMeterProviderBuilder()
                 .AddHttpClientInstrumentation()
@@ -156,7 +156,7 @@ namespace OpenTelemetry.Instrumentation.Http.Tests
 
                 var metric = requestMetrics[0];
                 Assert.NotNull(metric);
-                Assert.True(metric.MetricType == MetricType.Histogram);
+                Assert.True(metric.MetricType == MetricTypes.Histogram);
 
                 var metricPoints = new List<MetricPoint>();
                 foreach (var p in metric.GetMetricPoints())

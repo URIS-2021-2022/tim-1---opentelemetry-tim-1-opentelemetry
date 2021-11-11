@@ -179,16 +179,8 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                     field.Type = TType.List;
                     field.ID = 11;
                     tProtocol.WriteFieldBegin(field);
-                    {
-                        tProtocol.WriteListBegin(new TList(TType.Struct, this.Logs.Count));
 
-                        for (int i = 0; i < this.Logs.Count; i++)
-                        {
-                            this.Logs[i].Write(tProtocol);
-                        }
-
-                        tProtocol.WriteListEnd();
-                    }
+                    this.SepMet(tProtocol);
 
                     tProtocol.WriteFieldEnd();
                 }
@@ -200,30 +192,6 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             {
                 tProtocol.DecrementRecursionDepth();
             }
-        }
-
-        private void WriteInList(TProtocol oprot)
-        {
-            oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
-
-            for (int i = 0; i < this.Tags.Count; i++)
-            {
-                this.Tags[i].Write(oprot);
-            }
-
-            oprot.WriteListEnd();
-        }
-
-        private void WriteList(TProtocol oprot)
-        {
-            oprot.WriteListBegin(new TList(TType.Struct, this.References.Count));
-
-            for (int i = 0; i < this.References.Count; i++)
-            {
-                this.References[i].Write(oprot);
-            }
-
-            oprot.WriteListEnd();
         }
 
         public void Return()
@@ -280,6 +248,42 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 
             sb.Append(')');
             return sb.ToString();
+        }
+
+        private void SepMet(TProtocol tProtocol)
+        {
+            tProtocol.WriteListBegin(new TList(TType.Struct, this.Logs.Count));
+
+            for (int i = 0; i < this.Logs.Count; i++)
+            {
+                this.Logs[i].Write(tProtocol);
+            }
+
+            tProtocol.WriteListEnd();
+        }
+
+        private void WriteInList(TProtocol oprot)
+        {
+            oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
+
+            for (int i = 0; i < this.Tags.Count; i++)
+            {
+                this.Tags[i].Write(oprot);
+            }
+
+            oprot.WriteListEnd();
+        }
+
+        private void WriteList(TProtocol oprot)
+        {
+            oprot.WriteListBegin(new TList(TType.Struct, this.References.Count));
+
+            for (int i = 0; i < this.References.Count; i++)
+            {
+                this.References[i].Write(oprot);
+            }
+
+            oprot.WriteListEnd();
         }
     }
 }

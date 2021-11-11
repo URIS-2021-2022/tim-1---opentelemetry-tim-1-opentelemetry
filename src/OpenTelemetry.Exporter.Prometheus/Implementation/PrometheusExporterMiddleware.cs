@@ -58,7 +58,7 @@ namespace OpenTelemetry.Exporter.Prometheus
         public async Task InvokeAsync(HttpContext httpContext)
         {
             Debug.Assert(httpContext != null, "httpContext should not be null");
-
+            PrometheusExporterEventSource prometheus = new PrometheusExporterEventSource();
             var response = httpContext.Response;
 
             if (!this.exporter.TryEnterSemaphore())
@@ -80,7 +80,7 @@ namespace OpenTelemetry.Exporter.Prometheus
                     response.StatusCode = 500;
                 }
 
-                PrometheusExporterEventSource.Log.FailedExport(ex);
+                prometheus.Log.FailedExport(ex);
             }
             finally
             {

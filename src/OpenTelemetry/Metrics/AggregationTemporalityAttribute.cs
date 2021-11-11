@@ -24,19 +24,20 @@ namespace OpenTelemetry.Metrics
         private readonly AggregationTemporality preferredAggregationTemporality;
         private readonly AggregationTemporality supportedAggregationTemporality;
 
-        public AggregationTemporalityAttribute(AggregationTemporality supported)
+
+        public AggregationTemporalityAttribute(AggregationTemporalities supported)
             : this(supported, supported)
         {
         }
 
-        public AggregationTemporalityAttribute(AggregationTemporality supported, AggregationTemporality preferred)
+        public AggregationTemporalityAttribute(AggregationTemporalities supported, AggregationTemporalities preferred)
         {
             this.supportedAggregationTemporality = supported;
             this.preferredAggregationTemporality = preferred;
         }
 
-        public AggregationTemporality Preferred => this.preferredAggregationTemporality;
+        public AggregationTemporalities Preferred => this.preferredAggregationTemporality;
 
-        public AggregationTemporality Supported => this.supportedAggregationTemporality;
+        public AggregationTemporalities Supported => this.supportedAggregationTemporality;
     }
 }

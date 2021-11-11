@@ -84,7 +84,7 @@ namespace OpenTelemetry.Exporter.Prometheus.Tests
                     }));
             }
 
-            public void Configure(IApplicationBuilder app)
+            public static void Configure(IApplicationBuilder app)
             {
                 app.UseOpenTelemetryPrometheusScrapingEndpoint();
             }
