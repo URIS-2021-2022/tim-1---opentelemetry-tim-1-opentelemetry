@@ -26,11 +26,9 @@ namespace OpenTelemetry.Metrics.Tests
     public class MetricViewTests
     {
         private const int MaxTimeToAllowForFlush = 10000;
-        private readonly ITestOutputHelper output;
 
-        public MetricViewTests(ITestOutputHelper output)
+        public MetricViewTests()
         {
-            this.output = output;
         }
 
         [Fact]
@@ -243,7 +241,7 @@ namespace OpenTelemetry.Metrics.Tests
                 .AddView("FruitCounter", new MetricStreamConfiguration()
                 { TagKeys = new string[] { "size" }, Name = "SizeOnly" })
                 .AddView("FruitCounter", new MetricStreamConfiguration()
-                { TagKeys = new string[] { }, Name = "NoTags" })
+                { TagKeys = Array.Empty<string>(), Name = "NoTags" })
                 .AddInMemoryExporter(exportedItems)
                 .Build();
 

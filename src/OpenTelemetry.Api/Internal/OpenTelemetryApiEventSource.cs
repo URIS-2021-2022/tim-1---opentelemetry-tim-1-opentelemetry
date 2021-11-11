@@ -64,6 +64,12 @@ namespace OpenTelemetry.Internal
             }
         }
 
+        [Event(4, Message = "Tracestate key is invalid, key = '{0}'", Level = EventLevel.Warning)]
+        public void TracestateKeyIsInvalid(string key)
+        {
+            this.WriteEvent(4, key);
+        }
+
         [NonEvent]
         public void TracestateValueIsInvalid(ReadOnlySpan<char> value)
         {
@@ -73,22 +79,16 @@ namespace OpenTelemetry.Internal
             }
         }
 
-        [Event(3, Message = "Failed to parse tracestate: too many items", Level = EventLevel.Warning)]
-        public void TooManyItemsInTracestate()
-        {
-            this.WriteEvent(3);
-        }
-
-        [Event(4, Message = "Tracestate key is invalid, key = '{0}'", Level = EventLevel.Warning)]
-        public void TracestateKeyIsInvalid(string key)
-        {
-            this.WriteEvent(4, key);
-        }
-
         [Event(5, Message = "Tracestate value is invalid, value = '{0}'", Level = EventLevel.Warning)]
         public void TracestateValueIsInvalid(string value)
         {
             this.WriteEvent(5, value);
+        }
+
+        [Event(3, Message = "Failed to parse tracestate: too many items", Level = EventLevel.Warning)]
+        public void TooManyItemsInTracestate()
+        {
+            this.WriteEvent(3);
         }
 
         [Event(6, Message = "Tracestate parse error: '{0}'", Level = EventLevel.Warning)]

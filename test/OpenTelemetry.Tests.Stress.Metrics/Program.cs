@@ -21,37 +21,35 @@ using System.Threading;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 
-// namespace OpenTelemetry.Tests.Stress;
-
 public partial class Program
-{
-    private const int ArraySize = 10;
-    private static readonly Meter TestMeter = new Meter("TestMeter", "1.0.0");
-    private static readonly Counter<long> TestCounter = TestMeter.CreateCounter<long>("TestCounter");
-    private static readonly string[] DimensionValues = new string[ArraySize];
-    private static readonly ThreadLocal<Random> ThreadLocalRandom = new ThreadLocal<Random>(() => new Random());
-
-    public static void Main()
     {
-        for (int i = 0; i < ArraySize; i++)
+        private const int ArraySize = 10;
+        private static readonly Meter TestMeter = new Meter("TestMeter", "1.0.0");
+        private static readonly Counter<long> TestCounter = TestMeter.CreateCounter<long>("TestCounter");
+        private static readonly string[] DimensionValues = new string[ArraySize];
+        private static readonly ThreadLocal<Random> ThreadLocalRandom = new ThreadLocal<Random>(() => new Random());
+
+        public static void Main()
         {
-            DimensionValues[i] = $"DimValue{i}";
+            for (int i = 0; i < ArraySize; i++)
+            {
+                DimensionValues[i] = $"DimValue{i}";
+            }
+
+            using var meterProvider = Sdk.CreateMeterProviderBuilder()
+                .AddMeter("TestMeter")
+                .Build();
+            Stress();
         }
 
-        using var meterProvider = Sdk.CreateMeterProviderBuilder()
-            .AddMeter("TestMeter")
-            .Build();
-        Stress();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static void Run()
+        {
+            var random = ThreadLocalRandom.Value;
+            TestCounter.Add(
+                100,
+                new("DimName1", DimensionValues[random.Next(0, ArraySize)]),
+                new("DimName2", DimensionValues[random.Next(0, ArraySize)]),
+                new("DimName3", DimensionValues[random.Next(0, ArraySize)]));
+        }
     }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected static void Run()
-    {
-        var random = ThreadLocalRandom.Value;
-        TestCounter.Add(
-            100,
-            new("DimName1", DimensionValues[random.Next(0, ArraySize)]),
-            new("DimName2", DimensionValues[random.Next(0, ArraySize)]),
-            new("DimName3", DimensionValues[random.Next(0, ArraySize)]));
-    }
-}

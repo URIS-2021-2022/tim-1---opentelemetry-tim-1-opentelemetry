@@ -54,22 +54,22 @@ namespace OpenTelemetry.Internal
         {
             Guard.Null(list.buffer, $"{nameof(list)}.{nameof(list.buffer)}");
 
-            var buffer = list.buffer;
+            var b = list.buffer;
 
-            if (list.Count >= buffer.Length)
+            if (list.Count >= b.Length)
             {
-                lastAllocatedSize = buffer.Length * 2;
-                var previousBuffer = buffer;
+                lastAllocatedSize = b.Length * 2;
+                var previousBuffer = b;
 
-                buffer = ArrayPool<T>.Shared.Rent(lastAllocatedSize);
+                b = ArrayPool<T>.Shared.Rent(lastAllocatedSize);
 
                 var span = previousBuffer.AsSpan();
-                span.CopyTo(buffer);
+                span.CopyTo(b);
                 ArrayPool<T>.Shared.Return(previousBuffer);
             }
 
-            buffer[list.Count] = item;
-            list = new PooledList<T>(buffer, list.Count + 1);
+            b[list.Count] = item;
+            list = new PooledList<T>(b, list.Count + 1);
         }
 
         public static void Clear(ref PooledList<T> list)
@@ -106,7 +106,7 @@ namespace OpenTelemetry.Internal
             return new Enumerator(in this);
         }
 
-        public struct Enumerator : IEnumerator<T>, IEnumerator
+        public struct Enumerator : IEnumerator<T>, IEnumerator, IDisposable
         {
             private readonly T[] buffer;
             private readonly int count;
