@@ -47,7 +47,7 @@ namespace OpenTelemetry.Exporter
         /// </summary>
         /// <param name="options">Configuration options for the export.</param>
         /// <param name="exportClient">Client used for sending export request.</param>
-        internal OtlpTraceExporter(OtlpExporterOptions options, IExportClient<OtlpCollector.ExportTraceServiceRequest> exportClient = null)
+        internal OtlpTraceExporter(OtlpExporterOptions options, IExportClient<OtlpCollector.ExportTraceServiceRequest> exportClient)
         {
             if (exportClient != null)
             {

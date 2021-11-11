@@ -15,7 +15,6 @@
 // </copyright>
 // da
 
-
 using System;
 using System.Threading;
 using OpenTelemetry.Internal;

@@ -18,56 +18,59 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 
-public class Program
+namespace ProgramExtending
 {
-    public static void Main()
+    public class Program
     {
-        using var loggerFactory = LoggerFactory.Create(builder =>
-            builder.AddOpenTelemetry(options =>
+        public static void Main()
+        {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+                builder.AddOpenTelemetry(options =>
+                {
+                    options.IncludeScopes = true;
+                    options.AddProcessor(new MyProcessor("ProcessorA"))
+                           .AddProcessor(new MyProcessor("ProcessorB"))
+                           .AddProcessor(new SimpleLogRecordExportProcessor(new MyExporter("ExporterX")))
+                           .AddMyExporter();
+                }));
+
+            var logger = loggerFactory.CreateLogger<Program>();
+
+            // unstructured log
+            logger.LogInformation("Hello, World!");
+
+            // unstructured log with string interpolation
+            logger.LogInformation($"Hello from potato {0.99}.");
+
+            // structured log with template
+            logger.LogInformation("Hello from {name} {price}.", "tomato", 2.99);
+
+            // structured log with strong type
+            logger.LogInformation("{food}", new Food { Name = "artichoke", Price = 3.99 });
+
+            // structured log with anonymous type
+            logger.LogInformation("{food}", new { Name = "pumpkin", Price = 5.99 });
+
+            // structured log with general type
+            logger.LogInformation("{food}", new Dictionary<string, object>
             {
-                options.IncludeScopes = true;
-                options.AddProcessor(new MyProcessor("ProcessorA"))
-                       .AddProcessor(new MyProcessor("ProcessorB"))
-                       .AddProcessor(new SimpleLogRecordExportProcessor(new MyExporter("ExporterX")))
-                       .AddMyExporter();
-            }));
+                ["Name"] = "truffle",
+                ["Price"] = 299.99,
+            });
 
-        var logger = loggerFactory.CreateLogger<Program>();
-
-        // unstructured log
-        logger.LogInformation("Hello, World!");
-
-        // unstructured log with string interpolation
-        logger.LogInformation($"Hello from potato {0.99}.");
-
-        // structured log with template
-        logger.LogInformation("Hello from {name} {price}.", "tomato", 2.99);
-
-        // structured log with strong type
-        logger.LogInformation("{food}", new Food { Name = "artichoke", Price = 3.99 });
-
-        // structured log with anonymous type
-        logger.LogInformation("{food}", new { Name = "pumpkin", Price = 5.99 });
-
-        // structured log with general type
-        logger.LogInformation("{food}", new Dictionary<string, object>
-        {
-            ["Name"] = "truffle",
-            ["Price"] = 299.99,
-        });
-
-        // log with scopes
-        using (logger.BeginScope("[operation]"))
-        using (logger.BeginScope("[hardware]"))
-        {
-            logger.LogError("{name} is broken.", "refrigerator");
+            // log with scopes
+            using (logger.BeginScope("[operation]"))
+            using (logger.BeginScope("[hardware]"))
+            {
+                logger.LogError("{name} is broken.", "refrigerator");
+            }
         }
-    }
 
-    internal struct Food
-    {
-        public string Name { get; set; }
+        internal struct Food
+        {
+            public string Name { get; set; }
 
-        public double Price { get; set; }
+            public double Price { get; set; }
+        }
     }
 }

@@ -44,7 +44,10 @@ namespace OpenTelemetry.Exporter.ZPages
         {
             Guard.Null(exporter?.Options?.Url, $"{nameof(exporter)}?.{nameof(exporter.Options)}?.{nameof(exporter.Options.Url)}");
 
-            this.httpListener.Prefixes.Add(exporter.Options.Url);
+            if (exporter != null)
+            {
+                this.httpListener.Prefixes.Add(exporter.Options.Url);
+            }
         }
 
         /// <summary>

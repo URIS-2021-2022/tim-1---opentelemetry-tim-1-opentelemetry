@@ -35,7 +35,7 @@ namespace OpenTelemetry.Benchmarks
         }
 
         [Benchmark]
-        public void EventWithCheck()
+        public static void EventWithCheck()
         {
             Activity activity = new Activity("TestActivity");
             activity.SetIdFormat(ActivityIdFormat.W3C);

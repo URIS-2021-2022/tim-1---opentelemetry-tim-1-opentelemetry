@@ -141,35 +141,32 @@ namespace OpenTelemetry.Exporter.Prometheus
 
                 BatchMetricPoint.Enumerator enumerator = metric.GetMetricPoints().GetEnumerator();
 
-                if (TryGetMetric(ref enumerator, out var state))
+                if (TryGetMetric(ref enumerator, out var state) && state.explicitBounds != null)
                 {
                     await WriteMetric(stream, getUtcNowDateTimeOffset, buffer, metricInfo, metricInfo.HistogramSumUtf8, state.keys, state.values, state.sum).ConfigureAwait(false);
 
                     await WriteMetric(stream, getUtcNowDateTimeOffset, buffer, metricInfo, metricInfo.HistogramCountUtf8, state.keys, state.values, state.count).ConfigureAwait(false);
 
-                    if (state.explicitBounds != null)
+                    long totalCount = 0;
+                    for (int i = 0; i < state.explicitBounds.Length + 1; i++)
                     {
-                        long totalCount = 0;
-                        for (int i = 0; i < state.explicitBounds.Length + 1; i++)
-                        {
-                            totalCount += state.bucketCounts[i];
+                        totalCount += state.bucketCounts[i];
 
-                            byte[] bucketValueUtf8 = i == state.explicitBounds.Length
-                                ? PrometheusHistogramBucketLabelPositiveInfinityUtf8
-                                : metricInfo.GetBucketUtf8(state.explicitBounds[i]);
+                        byte[] bucketValueUtf8 = i == state.explicitBounds.Length
+                            ? PrometheusHistogramBucketLabelPositiveInfinityUtf8
+                            : metricInfo.GetBucketUtf8(state.explicitBounds[i]);
 
-                            await WriteMetric(
-                                stream,
-                                getUtcNowDateTimeOffset,
-                                buffer,
-                                metricInfo,
-                                metricInfo.HistogramBucketUtf8,
-                                state.keys,
-                                state.values,
-                                totalCount,
-                                additionalKvp: new KeyValuePair<byte[], byte[]>(PrometheusHistogramBucketLabelLessThanUtf8, bucketValueUtf8)).ConfigureAwait(false);
+                        await WriteMetric(
+                             stream,
+                             getUtcNowDateTimeOffset,
+                             buffer,
+                             metricInfo,
+                             metricInfo.HistogramBucketUtf8,
+                             state.keys,
+                             state.values,
+                             totalCount,
+                             additionalKvp: new KeyValuePair<byte[], byte[]>(PrometheusHistogramBucketLabelLessThanUtf8, bucketValueUtf8)).ConfigureAwait(false);
                         }
-                    }
                 }
 
                 static bool TryGetMetric(

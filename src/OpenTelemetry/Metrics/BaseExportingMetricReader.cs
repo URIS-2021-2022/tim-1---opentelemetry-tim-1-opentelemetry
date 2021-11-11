@@ -109,7 +109,7 @@ namespace OpenTelemetry.Metrics
 
             if (timeoutMilliseconds == Timeout.Infinite)
             {
-                result = this.Collect(Timeout.Infinite);
+                _ = this.Collect(Timeout.Infinite);
                 result = this.exporter.Shutdown(Timeout.Infinite);
             }
             else

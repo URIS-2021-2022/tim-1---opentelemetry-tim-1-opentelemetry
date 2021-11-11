@@ -34,6 +34,7 @@ namespace OpenTelemetry.Instrumentation
 
         public void OnCompleted()
         {
+            throw new NotSupportedException();
         }
 
         /// <summary>
