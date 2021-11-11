@@ -78,11 +78,11 @@ namespace OpenTelemetry.Metrics
                 aggType = AggregationType.LongGauge;
                 this.MetricType = MetricType.LongGauge;
             }
-            else if (instrument.GetType() == typeof(Histogram<long>)
-                || instrument.GetType() == typeof(Histogram<int>)
-                || instrument.GetType() == typeof(Histogram<short>)
-                || instrument.GetType() == typeof(Histogram<byte>)
-                || instrument.GetType() == typeof(Histogram<float>)
+            else if (instrument is Histogram<long>
+                || instrument is Histogram<int>
+                || instrument is Histogram<short>
+                || instrument is Histogram<byte>
+                || instrument is Histogram<float>
                 || instrument is Histogram<double>)
             {
                 this.MetricType = MetricType.Histogram;

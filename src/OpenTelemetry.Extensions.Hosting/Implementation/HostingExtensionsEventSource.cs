@@ -26,7 +26,7 @@ namespace OpenTelemetry.Extensions.Hosting.Implementation
     [EventSource(Name = "OpenTelemetry-Extensions-Hosting")]
     internal class HostingExtensionsEventSource : EventSource
     {
-        public static HostingExtensionsEventSource Log = new HostingExtensionsEventSource();
+        public static readonly HostingExtensionsEventSource Log = new HostingExtensionsEventSource();
 
         [NonEvent]
         public void FailedInitialize(Exception ex)
@@ -37,6 +37,12 @@ namespace OpenTelemetry.Extensions.Hosting.Implementation
             }
         }
 
+        [Event(1, Message = "An exception occurred while initializing OpenTelemetry Tracing. OpenTelemetry tracing will remain disabled. Exception: '{0}'.", Level = EventLevel.Error)]
+        public void FailedInitialize(string exception)
+        {
+            this.WriteEvent(1, exception);
+        }
+
         [NonEvent]
         public void FailedOpenTelemetrySDK(Exception ex)
         {
@@ -44,12 +50,6 @@ namespace OpenTelemetry.Extensions.Hosting.Implementation
             {
                 this.FailedOpenTelemetrySDK(ex.ToInvariantString());
             }
-        }
-
-        [Event(1, Message = "An exception occurred while initializing OpenTelemetry Tracing. OpenTelemetry tracing will remain disabled. Exception: '{0}'.", Level = EventLevel.Error)]
-        public void FailedInitialize(string exception)
-        {
-            this.WriteEvent(1, exception);
         }
 
         [Event(2, Message = "An exception occurred while retrieving OpenTelemetry Tracer. OpenTelemetry tracing will remain disabled. Exception: '{0}'.", Level = EventLevel.Error)]
