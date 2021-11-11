@@ -53,27 +53,27 @@ namespace OpenTelemetry.Metrics
 
             AggregationTemporality temporality = AggregationTemporality.Cumulative;
 
-            foreach (var reader in readers)
+            foreach (var r in readers)
             {
-                Guard.Null(reader, nameof(reader));
+                Guard.Null(r, nameof(r));
 
-                reader.SetParentProvider(this);
+                r.SetParentProvider(this);
 
                 // TODO: Actually support multiple readers.
                 // Currently the last reader's temporality wins.
-                temporality = reader.PreferredAggregationTemporality;
+                temporality = r.PreferredAggregationTemporality;
 
                 if (this.reader == null)
                 {
-                    this.reader = reader;
+                    this.reader = r;
                 }
                 else if (this.reader is CompositeMetricReader compositeReader)
                 {
-                    compositeReader.AddReader(reader);
+                    compositeReader.AddReader(r);
                 }
                 else
                 {
-                    this.reader = new CompositeMetricReader(new[] { this.reader, reader });
+                    this.reader = new CompositeMetricReader(new[] { this.reader, r });
                 }
             }
 
