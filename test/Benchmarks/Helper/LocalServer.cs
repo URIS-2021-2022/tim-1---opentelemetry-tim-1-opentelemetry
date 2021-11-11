@@ -70,7 +70,7 @@ namespace Benchmarks.Helper
 
         private class Startup
         {
-            public void Configure(IApplicationBuilder app)
+            public static void Configure(IApplicationBuilder app)
             {
                 app.Run(async (context) =>
                 {

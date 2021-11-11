@@ -39,17 +39,17 @@ namespace OpenTelemetry.Metrics
             this.Meter = instrument.Meter;
             AggregationType aggType = default;
             if (instrument is ObservableCounter<long>
-                || instrument.GetType() == typeof(ObservableCounter<int>)
+                || instrument is ObservableCounter<int>
                 || instrument is ObservableCounter<short>
                 || instrument is ObservableCounter<byte>)
             {
                 aggType = AggregationType.LongSumIncomingCumulative;
                 this.MetricType = MetricTypes.LongSum;
             }
-            else if (instrument.GetType() == typeof(Counter<long>)
-                || instrument.GetType() == typeof(Counter<int>)
-                || instrument.GetType() == typeof(Counter<short>)
-                || instrument.GetType() == typeof(Counter<byte>))
+            else if (instrument is Counter<long>
+                || instrument is Counter<int>
+                || instrument is Counter <short>
+                || instrument is Counter<byte>)
             {
                 aggType = AggregationType.LongSumIncomingDelta;
                 this.MetricType = MetricTypes.LongSum;

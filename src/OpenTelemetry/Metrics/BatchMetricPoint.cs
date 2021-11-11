@@ -62,7 +62,7 @@ namespace OpenTelemetry.Metrics
             private readonly MetricPoint[] metricsPoints;
             private readonly DateTimeOffset start;
             private readonly DateTimeOffset end;
-            private long targetCount;
+            private readonly long targetCount;
             private long index;
 
             internal Enumerator(MetricPoint[] metricsPoints, long targetCount, DateTimeOffset start, DateTimeOffset end)

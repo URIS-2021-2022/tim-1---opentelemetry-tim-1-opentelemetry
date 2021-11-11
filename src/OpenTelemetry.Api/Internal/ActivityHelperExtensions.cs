@@ -179,7 +179,7 @@ namespace OpenTelemetry.Trace
             ActivityEventsEnumeratorFactory<T>.Enumerate(activity, ref eventEnumerator);
         }
 
-        private static class ActivityEventsEnumeratorFactory<TState>
+        private sealed class ActivityEventsEnumeratorFactory<TState>
             where TState : struct, IActivityEnumerator<ActivityEvent>
         {
             private static readonly object EmptyActivityEvents = typeof(Activity).GetField("s_emptyEvents", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);

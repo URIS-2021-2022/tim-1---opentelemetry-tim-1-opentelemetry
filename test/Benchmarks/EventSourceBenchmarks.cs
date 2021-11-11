@@ -24,7 +24,7 @@ namespace OpenTelemetry.Benchmarks
     public class EventSourceBenchmarks
     {
         [Benchmark]
-        public void EventWithIdAllocation()
+        public static void EventWithIdAllocation()
         {
             Activity activity = new Activity("TestActivity");
             activity.SetIdFormat(ActivityIdFormat.W3C);

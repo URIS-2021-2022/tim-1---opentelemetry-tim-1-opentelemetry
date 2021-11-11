@@ -118,6 +118,11 @@ namespace OpenTelemetry.Instrumentation
             {
                 private readonly Func<TDeclaredObject, TDeclaredProperty> propertyFetch;
 
+                public TypedPropertyFetch(Func<TDeclaredObject, TDeclaredProperty> propertyFetch)
+                {
+                    this.propertyFetch = propertyFetch;
+                }
+
                 public override bool TryFetch(object obj, out T value)
                 {
                     if (obj is TDeclaredObject o)

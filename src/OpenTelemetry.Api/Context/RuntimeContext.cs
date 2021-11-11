@@ -90,19 +90,6 @@ namespace OpenTelemetry.Context
         }
 
         /// <summary>
-        /// Sets the value to a registered slot.
-        /// </summary>
-        /// <param name="slotName">The name of the context slot.</param>
-        /// <param name="value">The value to be set.</param>
-        public static void SetValue(string slotName, object value)
-        {
-            Guard.NullOrEmpty(slotName, nameof(slotName));
-            var slot = GuardNotFound(slotName);
-            var runtimeContextSlotValueAccessor = Guard.Type<IRuntimeContextSlotValueAccessor>(slot, nameof(slot));
-            runtimeContextSlotValueAccessor.Value = value;
-        }
-
-        /// <summary>
         /// Gets the value from a registered slot.
         /// </summary>
         /// <param name="slotName">The name of the context slot.</param>
@@ -113,6 +100,19 @@ namespace OpenTelemetry.Context
             var slot = GuardNotFound(slotName);
             var runtimeContextSlotValueAccessor = Guard.Type<IRuntimeContextSlotValueAccessor>(slot, nameof(slot));
             return runtimeContextSlotValueAccessor.Value;
+        }
+
+        /// <summary>
+        /// Sets the value to a registered slot.
+        /// </summary>
+        /// <param name="slotName">The name of the context slot.</param>
+        /// <param name="value">The value to be set.</param>
+        public static void SetValue(string slotName, object value)
+        {
+            Guard.NullOrEmpty(slotName, nameof(slotName));
+            var slot = GuardNotFound(slotName);
+            var runtimeContextSlotValueAccessor = Guard.Type<IRuntimeContextSlotValueAccessor>(slot, nameof(slot));
+            runtimeContextSlotValueAccessor.Value = value;
         }
 
         // For testing purpose

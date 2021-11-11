@@ -110,6 +110,5 @@ namespace OpenTelemetry.Trace
             result = (31 * result) + this.Attributes.GetHashCode();
             return result;
         }
-
     }
 }
