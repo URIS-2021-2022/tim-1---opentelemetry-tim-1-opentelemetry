@@ -74,9 +74,8 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
                 field.ID = 2;
 
                 oprot.WriteFieldBegin(field);
-                {
-                    this.WriteField(oprot);
-                }
+
+                this.WriteField(oprot);
 
                 oprot.WriteFieldEnd();
                 oprot.WriteFieldStop();

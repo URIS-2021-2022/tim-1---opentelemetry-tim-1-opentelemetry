@@ -61,7 +61,8 @@ namespace OpenTelemetry.Instrumentation.Grpc.Tests
         public void Dispose()
         {
             this.host.StopAsync(TimeSpan.FromSeconds(5)).GetAwaiter().GetResult();
-            this.host.Dispose();
+            //this.host.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         private IHost CreateServer()
@@ -83,12 +84,12 @@ namespace OpenTelemetry.Instrumentation.Grpc.Tests
 
         private class Startup
         {
-            public void ConfigureServices(IServiceCollection services)
+            public static void ConfigureServices(IServiceCollection services)
             {
                 services.AddGrpc();
             }
 
-            public void Configure(IApplicationBuilder app)
+            public static void Configure(IApplicationBuilder app)
             {
                 app.UseRouting();
 

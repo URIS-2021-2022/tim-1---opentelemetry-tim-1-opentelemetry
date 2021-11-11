@@ -60,14 +60,12 @@ namespace OpenTelemetry.Metrics
                 aggType = AggregationType.DoubleSumIncomingDelta;
                 this.MetricType = MetricType.DoubleSum;
             }
-            else if (instrument.GetType() == typeof(ObservableCounter<double>)
-                || instrument.GetType() == typeof(ObservableCounter<float>))
+            else if (instrument is ObservableCounter<double> || instrument is ObservableCounter<float>)
             {
                 aggType = AggregationType.DoubleSumIncomingCumulative;
                 this.MetricType = MetricType.DoubleSum;
             }
-            else if (instrument.GetType() == typeof(ObservableGauge<double>)
-                || instrument.GetType() == typeof(ObservableGauge<float>))
+            else if (instrument is ObservableGauge<double> || instrument is ObservableGauge<float>)
             {
                 aggType = AggregationType.DoubleGauge;
                 this.MetricType = MetricType.DoubleGauge;
