@@ -41,6 +41,12 @@ namespace OpenTelemetry.Instrumentation.AspNet
             }
         }
 
+        [Event(2, Message = "Activity started, Id='{0}'", Level = EventLevel.Verbose)]
+        public void ActivityStarted(string id)
+        {
+            this.WriteEvent(2, id);
+        }
+
         [NonEvent]
         public void ActivityStopped(Activity activity)
         {
@@ -48,6 +54,12 @@ namespace OpenTelemetry.Instrumentation.AspNet
             {
                 this.ActivityStopped(activity?.Id);
             }
+        }
+
+        [Event(3, Message = "Activity stopped, Id='{0}'", Level = EventLevel.Verbose)]
+        public void ActivityStopped(string id)
+        {
+            this.WriteEvent(3, id);
         }
 
         [NonEvent]
@@ -81,18 +93,6 @@ namespace OpenTelemetry.Instrumentation.AspNet
         public void TraceCallback(string callback)
         {
             this.WriteEvent(1, callback);
-        }
-
-        [Event(2, Message = "Activity started, Id='{0}'", Level = EventLevel.Verbose)]
-        public void ActivityStarted(string id)
-        {
-            this.WriteEvent(2, id);
-        }
-
-        [Event(3, Message = "Activity stopped, Id='{0}'", Level = EventLevel.Verbose)]
-        public void ActivityStopped(string id)
-        {
-            this.WriteEvent(3, id);
         }
 
         [Event(4, Message = "Activity restored, Id='{0}'", Level = EventLevel.Informational)]

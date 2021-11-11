@@ -354,14 +354,7 @@ namespace OpenTelemetry.Context.Propagation
                     break;
                 }
 
-                if (!(IsLowerAlphaDigit(ch)
-                    || ch == '_'
-                    || ch == '-'
-                    || ch == '*'
-                    || ch == '/'))
-                {
-                    return false;
-                }
+                IsLowDigit(ch);
             }
 
             if (tenantLength == -1)
@@ -394,6 +387,20 @@ namespace OpenTelemetry.Context.Propagation
                 {
                     return false;
                 }
+            }
+
+            return true;
+        }
+
+        private static bool IsLowDigit(char ch)
+        {
+            if (!(IsLowerAlphaDigit(ch)
+                    || ch == '_'
+                    || ch == '-'
+                    || ch == '*'
+                    || ch == '/'))
+            {
+                return false;
             }
 
             return true;

@@ -141,35 +141,32 @@ namespace OpenTelemetry.Exporter.Prometheus
 
                 BatchMetricPoint.Enumerator enumerator = metric.GetMetricPoints().GetEnumerator();
 
-                if (TryGetMetric(ref enumerator, out var state))
+                if (TryGetMetric(ref enumerator, out var state) && state.explicitBounds != null)
                 {
                     await WriteMetric(stream, getUtcNowDateTimeOffset, buffer, metricInfo, metricInfo.HistogramSumUtf8, state.keys, state.values, state.sum).ConfigureAwait(false);
 
                     await WriteMetric(stream, getUtcNowDateTimeOffset, buffer, metricInfo, metricInfo.HistogramCountUtf8, state.keys, state.values, state.count).ConfigureAwait(false);
 
-                    if (state.explicitBounds != null)
+                    long totalCount = 0;
+                    for (int i = 0; i < state.explicitBounds.Length + 1; i++)
                     {
-                        long totalCount = 0;
-                        for (int i = 0; i < state.explicitBounds.Length + 1; i++)
-                        {
-                            totalCount += state.bucketCounts[i];
+                        totalCount += state.bucketCounts[i];
 
-                            byte[] bucketValueUtf8 = i == state.explicitBounds.Length
-                                ? PrometheusHistogramBucketLabelPositiveInfinityUtf8
-                                : metricInfo.GetBucketUtf8(state.explicitBounds[i]);
+                        byte[] bucketValueUtf8 = i == state.explicitBounds.Length
+                            ? PrometheusHistogramBucketLabelPositiveInfinityUtf8
+                            : metricInfo.GetBucketUtf8(state.explicitBounds[i]);
 
-                            await WriteMetric(
-                                stream,
-                                getUtcNowDateTimeOffset,
-                                buffer,
-                                metricInfo,
-                                metricInfo.HistogramBucketUtf8,
-                                state.keys,
-                                state.values,
-                                totalCount,
-                                additionalKvp: new KeyValuePair<byte[], byte[]>(PrometheusHistogramBucketLabelLessThanUtf8, bucketValueUtf8)).ConfigureAwait(false);
+                        await WriteMetric(
+                             stream,
+                             getUtcNowDateTimeOffset,
+                             buffer,
+                             metricInfo,
+                             metricInfo.HistogramBucketUtf8,
+                             state.keys,
+                             state.values,
+                             totalCount,
+                             additionalKvp: new KeyValuePair<byte[], byte[]>(PrometheusHistogramBucketLabelLessThanUtf8, bucketValueUtf8)).ConfigureAwait(false);
                         }
-                    }
                 }
 
                 static bool TryGetMetric(
@@ -219,35 +216,35 @@ namespace OpenTelemetry.Exporter.Prometheus
 
                         switch (metric.MetricType)
                         {
-                            case MetricType.LongSum:
+                            case MetricTypes.LongSum:
                                 {
                                     metricTypeUtf8 = PrometheusCounterTypeUtf8;
                                     writeMetricFunc = WriteLongMetrics;
                                     break;
                                 }
 
-                            case MetricType.DoubleSum:
+                            case MetricTypes.DoubleSum:
                                 {
                                     metricTypeUtf8 = PrometheusCounterTypeUtf8;
                                     writeMetricFunc = WriteDoubleMetrics;
                                     break;
                                 }
 
-                            case MetricType.LongGauge:
+                            case MetricTypes.LongGauge:
                                 {
                                     metricTypeUtf8 = PrometheusGaugeTypeUtf8;
                                     writeMetricFunc = WriteLongMetrics;
                                     break;
                                 }
 
-                            case MetricType.DoubleGauge:
+                            case MetricTypes.DoubleGauge:
                                 {
                                     metricTypeUtf8 = PrometheusGaugeTypeUtf8;
                                     writeMetricFunc = WriteDoubleMetrics;
                                     break;
                                 }
 
-                            case MetricType.Histogram:
+                            case MetricTypes.Histogram:
                                 {
                                     metricTypeUtf8 = PrometheusHistogramTypeUtf8;
                                     writeMetricFunc = WriteHistogramMetrics;
@@ -346,7 +343,7 @@ namespace OpenTelemetry.Exporter.Prometheus
                 int i = 0;
                 while (i < (keys?.Length ?? 0))
                 {
-                    WriteKeyValuePair(buffer, ref bufferPosition, metricInfo.GetKeyUtf8(keys[i] ?? null), metricInfo.GetValueUtf8(values[i]), i > 0);
+                    WriteKeyValuePair(buffer, ref bufferPosition, metricInfo.GetKeyUtf8(keys?[i]), metricInfo.GetValueUtf8(values[i]), i > 0);
                     i++;
                 }
 
@@ -478,7 +475,7 @@ namespace OpenTelemetry.Exporter.Prometheus
             WriteToBuffer(DoubleQuoteUtf8, destination, ref destinationOffset);
         }
 
-        private class MetricInfo
+        private sealed class MetricInfo
         {
             public byte[] NameUtf8;
             public byte[] TypeUtf8;
@@ -521,7 +518,7 @@ namespace OpenTelemetry.Exporter.Prometheus
                         metricInfo.HelpUtf8 = stream.ToArray();
                     }
 
-                    if (metric.MetricType == MetricType.Histogram)
+                    if (metric.MetricType == MetricTypes.Histogram)
                     {
                         stream.Position = 0;
                         stream.SetLength(0);

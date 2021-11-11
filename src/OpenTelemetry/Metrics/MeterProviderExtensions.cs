@@ -54,7 +54,6 @@ namespace OpenTelemetry.Metrics
                 catch (Exception)
                 {
                     // TODO: what event source do we use?
-                    // OpenTelemetrySdkEventSource.Log.MeterProviderException(nameof(meterProviderSdk.OnForceFlush), ex);
                     return false;
                 }
             }

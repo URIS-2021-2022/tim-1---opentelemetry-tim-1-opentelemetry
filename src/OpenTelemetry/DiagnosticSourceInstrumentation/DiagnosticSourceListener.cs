@@ -34,10 +34,16 @@ namespace OpenTelemetry.Instrumentation
 
         public void OnCompleted()
         {
+            throw new NotSupportedException();
         }
 
+        /// <summary>
+        /// Nested comment for method below.
+        /// </summary>
+        /// <param name="error">Some not supported error.</param>
         public void OnError(Exception error)
         {
+            throw new NotSupportedException(error.Message);
         }
 
         public void OnNext(KeyValuePair<string, object> value)

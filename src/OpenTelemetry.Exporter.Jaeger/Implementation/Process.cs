@@ -65,18 +65,6 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             return sb.ToString();
         }
 
-        private void SepMet(TProtocol oprot)
-        {
-            oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
-
-            foreach (var jt in this.Tags)
-            {
-                jt.Value.Write(oprot);
-            }
-
-            oprot.WriteListEnd();
-        }
-
         internal void Write(TProtocol oprot)
         {
             oprot.IncrementRecursionDepth();
@@ -117,6 +105,18 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
             {
                 oprot.DecrementRecursionDepth();
             }
+        }
+
+        private void SepMet(TProtocol oprot)
+        {
+            oprot.WriteListBegin(new TList(TType.Struct, this.Tags.Count));
+
+            foreach (var jt in this.Tags)
+            {
+                jt.Value.Write(oprot);
+            }
+
+            oprot.WriteListEnd();
         }
     }
 }

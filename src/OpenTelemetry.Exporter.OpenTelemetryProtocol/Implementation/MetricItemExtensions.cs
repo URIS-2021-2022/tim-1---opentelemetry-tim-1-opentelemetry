@@ -143,7 +143,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
 
             switch (metric.MetricType)
             {
-                case MetricType.LongSum:
+                case MetricTypes.LongSum:
                     {
                         var sum = new OtlpMetrics.Sum();
                         sum.IsMonotonic = true;
@@ -167,7 +167,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
                         break;
                     }
 
-                case MetricType.DoubleSum:
+                case MetricTypes.DoubleSum:
                     {
                         var sum = new OtlpMetrics.Sum();
                         sum.IsMonotonic = true;
@@ -191,7 +191,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
                         break;
                     }
 
-                case MetricType.LongGauge:
+                case MetricTypes.LongGauge:
                     {
                         var gauge = new OtlpMetrics.Gauge();
                         foreach (ref var metricPoint in metric.GetMetricPoints())
@@ -212,7 +212,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
                         break;
                     }
 
-                case MetricType.DoubleGauge:
+                case MetricTypes.DoubleGauge:
                     {
                         var gauge = new OtlpMetrics.Gauge();
                         foreach (ref var metricPoint in metric.GetMetricPoints())
@@ -233,7 +233,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
                         break;
                     }
 
-                case MetricType.Histogram:
+                case MetricTypes.Histogram:
                     {
                         var histogram = new OtlpMetrics.Histogram();
                         histogram.AggregationTemporality = temporality;

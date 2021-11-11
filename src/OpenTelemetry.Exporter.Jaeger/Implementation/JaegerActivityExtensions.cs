@@ -110,7 +110,6 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 
             if (activity.IdFormat == ActivityIdFormat.W3C)
             {
-                // TODO: The check above should be enforced by the usage of the exporter. Perhaps enforce at higher-level.
                 traceId = new Int128(activity.TraceId);
                 spanId = new Int128(activity.SpanId);
                 if (activity.ParentSpanId != default)

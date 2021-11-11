@@ -18,27 +18,30 @@ using System.Diagnostics;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 
-public class Program
+namespace ProgramNS
 {
-    private static readonly ActivitySource DemoSource = new ActivitySource("OTel.Demo");
-
-    public static void Main()
+    public class Program
     {
-        using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-            .SetSampler(new MySampler())
-            .AddSource("OTel.Demo")
-            .AddProcessor(new MyProcessor("ProcessorA"))
-            .AddProcessor(new MyProcessor("ProcessorB"))
-            .AddProcessor(new SimpleActivityExportProcessor(new MyExporter("ExporterX")))
-            .AddMyExporter()
-            .Build();
+        private static readonly ActivitySource DemoSource = new ActivitySource("OTel.Demo");
 
-        using (var foo = DemoSource.StartActivity("Foo"))
+        public static void Main()
         {
-            using (var bar = DemoSource.StartActivity("Bar"))
+            using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+                .SetSampler(new MySampler())
+                .AddSource("OTel.Demo")
+                .AddProcessor(new MyProcessor("ProcessorA"))
+                .AddProcessor(new MyProcessor("ProcessorB"))
+                .AddProcessor(new SimpleActivityExportProcessor(new MyExporter("ExporterX")))
+                .AddMyExporter()
+                .Build();
+
+            using (var foo = DemoSource.StartActivity("Foo"))
             {
-                using (var baz = DemoSource.StartActivity("Baz"))
+                using (var bar = DemoSource.StartActivity("Bar"))
                 {
+                    using (var baz = DemoSource.StartActivity("Baz"))
+                    {
+                    }
                 }
             }
         }

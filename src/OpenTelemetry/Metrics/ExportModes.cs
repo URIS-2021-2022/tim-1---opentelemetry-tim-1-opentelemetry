@@ -21,18 +21,6 @@ namespace OpenTelemetry.Metrics
     [Flags]
     public enum ExportModes : byte
     {
-        /*
-        0 0 0 0 0 0 0 0
-        | | | | | | | +--- Push
-        | | | | | | +----- Pull
-        | | | | | +------- (reserved)
-        | | | | +--------- (reserved)
-        | | | +----------- (reserved)
-        | | +------------- (reserved)
-        | +--------------- (reserved)
-        +----------------- (reserved)
-        */
-
         /// <summary>
         /// Push.
         /// </summary>

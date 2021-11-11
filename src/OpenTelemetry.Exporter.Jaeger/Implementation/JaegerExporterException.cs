@@ -24,9 +24,5 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 #pragma warning restore CA1064 // Exceptions should be public
 #pragma warning restore CA1032 // Implement standard exception constructors
     {
-        private JaegerExporterException(string message, Exception originalException)
-            : base(message, originalException)
-        {
-        }
     }
 }

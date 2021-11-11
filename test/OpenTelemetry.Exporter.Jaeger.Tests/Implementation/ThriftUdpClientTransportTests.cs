@@ -30,7 +30,10 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation.Tests
 
         public void Dispose()
         {
-            this.testingMemoryStream?.Dispose();
+            if (this.testingMemoryStream != null)
+            {
+                GC.SuppressFinalize(this);
+            }
         }
 
         [Fact]

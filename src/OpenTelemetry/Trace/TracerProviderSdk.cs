@@ -58,9 +58,9 @@ namespace OpenTelemetry.Trace
                 break;
             }
 
-            foreach (var processor in processors)
+            foreach (var processorName in processors)
             {
-                this.AddProcessor(processor);
+                this.AddProcessor(processorName);
             }
 
             if (instrumentationFactories.Any())
@@ -144,7 +144,6 @@ namespace OpenTelemetry.Trace
                     // than Span and we don't have strong reason to do this
                     // now, as Activity anyway allows read/write always.
                     // Intentionally commenting the following line.
-                    // activity.IsAllDataRequested = false;
 
                     if (SuppressInstrumentationScope.DecrementIfTriggered() == 0)
                     {
