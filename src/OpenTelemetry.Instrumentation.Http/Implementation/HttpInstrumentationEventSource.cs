@@ -29,15 +29,6 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
         public static HttpInstrumentationEventSource Log = new HttpInstrumentationEventSource();
 
         [NonEvent]
-        public void FailedProcessResult(Exception ex)
-        {
-            if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
-            {
-                this.FailedProcessResult(ex.ToInvariantString());
-            }
-        }
-
-        [NonEvent]
         public void RequestFilterException(Exception ex)
         {
             if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
@@ -59,6 +50,15 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
         public void FailedProcessResult(string ex)
         {
             this.WriteEvent(1, ex);
+        }
+
+        [NonEvent]
+        public void FailedProcessResult(Exception ex)
+        {
+            if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
+            {
+                this.FailedProcessResult(ex.ToInvariantString());
+            }
         }
 
         [Event(2, Message = "Error initializing instrumentation type {0}. Exception : {1}", Level = EventLevel.Error)]

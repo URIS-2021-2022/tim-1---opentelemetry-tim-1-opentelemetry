@@ -338,7 +338,6 @@ namespace OpenTelemetry.Internal
             }
 
             this.disposedValue = true;
-            GC.SuppressFinalize(this);
         }
     }
 }
