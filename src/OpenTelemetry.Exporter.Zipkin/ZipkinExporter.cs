@@ -140,15 +140,12 @@ namespace OpenTelemetry.Exporter
 
                 if (results != null && results.Length > 0)
                 {
-                    foreach (var addr in results)
+                    foreach (var addr in results.Where(x => x.AddressFamily.Equals(family)))
                     {
-                        if (addr.AddressFamily.Equals(family))
-                        {
-                            var sanitizedAddress = new IPAddress(addr.GetAddressBytes()); // Construct address sans ScopeID
-                            result = sanitizedAddress.ToString();
+                        var sanitizedAddress = new IPAddress(addr.GetAddressBytes()); // Construct address sans ScopeID
+                        result = sanitizedAddress.ToString();
 
-                            break;
-                        }
+                        break;
                     }
                 }
             }
