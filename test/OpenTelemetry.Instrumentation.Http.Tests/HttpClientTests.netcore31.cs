@@ -34,7 +34,7 @@ namespace OpenTelemetry.Instrumentation.Http.Tests
 {
     public partial class HttpClientTests
     {
-        public static int Counter;
+        private static int Counter;
 
         public static IEnumerable<object[]> TestData => HttpTestData.ReadTestCases();
 
