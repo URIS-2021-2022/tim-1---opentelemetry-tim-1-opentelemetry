@@ -73,8 +73,8 @@ namespace OpenTelemetry.Metrics
                 this.MetricType = MetricType.DoubleGauge;
             }
             else if (instrument.GetType() == typeof(ObservableGauge<long>)
-                || instrument.GetType() == typeof(ObservableGauge<int>)
-                || instrument.GetType() == typeof(ObservableGauge<short>)
+                || instrument is ObservableGauge<int>
+                || instrument is ObservableGauge<short>
                 || instrument.GetType() == typeof(ObservableGauge<byte>))
             {
                 aggType = AggregationType.LongGauge;

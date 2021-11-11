@@ -120,6 +120,34 @@ namespace OpenTelemetry.Trace
         }
 
         /// <summary>
+        /// Enumerates all the key/value pairs on an <see cref="ActivityLink"/> without performing an allocation.
+        /// </summary>
+        /// <typeparam name="T">The struct <see cref="IActivityEnumerator{T}"/> implementation to use for the enumeration.</typeparam>
+        /// <param name="activityLink">ActivityLink instance.</param>
+        /// <param name="tagEnumerator">Tag enumerator.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "ActivityProcessor is hot path")]
+        public static void EnumerateTags<T>(this ActivityLink activityLink, ref T tagEnumerator)
+            where T : struct, IActivityEnumerator<KeyValuePair<string, object>>
+        {
+            ActivityTagsEnumeratorFactory<T>.Enumerate(activityLink, ref tagEnumerator);
+        }
+
+        /// <summary>
+        /// Enumerates all the key/value pairs on an <see cref="ActivityEvent"/> without performing an allocation.
+        /// </summary>
+        /// <typeparam name="T">The struct <see cref="IActivityEnumerator{T}"/> implementation to use for the enumeration.</typeparam>
+        /// <param name="activityEvent">ActivityEvent instance.</param>
+        /// <param name="tagEnumerator">Tag enumerator.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "ActivityProcessor is hot path")]
+        public static void EnumerateTags<T>(this ActivityEvent activityEvent, ref T tagEnumerator)
+            where T : struct, IActivityEnumerator<KeyValuePair<string, object>>
+        {
+            ActivityTagsEnumeratorFactory<T>.Enumerate(activityEvent, ref tagEnumerator);
+        }
+
+        /// <summary>
         /// Enumerates all the <see cref="ActivityLink"/>s on an <see cref="Activity"/> without performing an allocation.
         /// </summary>
         /// <typeparam name="T">The struct <see cref="IActivityEnumerator{T}"/> implementation to use for the enumeration.</typeparam>
@@ -136,20 +164,6 @@ namespace OpenTelemetry.Trace
         }
 
         /// <summary>
-        /// Enumerates all the key/value pairs on an <see cref="ActivityLink"/> without performing an allocation.
-        /// </summary>
-        /// <typeparam name="T">The struct <see cref="IActivityEnumerator{T}"/> implementation to use for the enumeration.</typeparam>
-        /// <param name="activityLink">ActivityLink instance.</param>
-        /// <param name="tagEnumerator">Tag enumerator.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "ActivityProcessor is hot path")]
-        public static void EnumerateTags<T>(this ActivityLink activityLink, ref T tagEnumerator)
-            where T : struct, IActivityEnumerator<KeyValuePair<string, object>>
-        {
-            ActivityTagsEnumeratorFactory<T>.Enumerate(activityLink, ref tagEnumerator);
-        }
-
-        /// <summary>
         /// Enumerates all the <see cref="ActivityEvent"/>s on an <see cref="Activity"/> without performing an allocation.
         /// </summary>
         /// <typeparam name="T">The struct <see cref="IActivityEnumerator{T}"/> implementation to use for the enumeration.</typeparam>
@@ -163,20 +177,6 @@ namespace OpenTelemetry.Trace
             Debug.Assert(activity != null, "Activity should not be null");
 
             ActivityEventsEnumeratorFactory<T>.Enumerate(activity, ref eventEnumerator);
-        }
-
-        /// <summary>
-        /// Enumerates all the key/value pairs on an <see cref="ActivityEvent"/> without performing an allocation.
-        /// </summary>
-        /// <typeparam name="T">The struct <see cref="IActivityEnumerator{T}"/> implementation to use for the enumeration.</typeparam>
-        /// <param name="activityEvent">ActivityEvent instance.</param>
-        /// <param name="tagEnumerator">Tag enumerator.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "ActivityProcessor is hot path")]
-        public static void EnumerateTags<T>(this ActivityEvent activityEvent, ref T tagEnumerator)
-            where T : struct, IActivityEnumerator<KeyValuePair<string, object>>
-        {
-            ActivityTagsEnumeratorFactory<T>.Enumerate(activityEvent, ref tagEnumerator);
         }
 
         private static class ActivityEventsEnumeratorFactory<TState>

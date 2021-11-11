@@ -83,6 +83,7 @@ namespace OpenTelemetry.Instrumentation
 
         public void OnError(Exception error)
         {
+            throw new NotSupportedException();
         }
 
         /// <inheritdoc/>

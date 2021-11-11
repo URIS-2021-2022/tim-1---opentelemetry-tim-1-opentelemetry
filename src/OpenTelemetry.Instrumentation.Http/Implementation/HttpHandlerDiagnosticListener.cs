@@ -197,45 +197,45 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
 
         public override void OnException(Activity activity, object payload)
         {
-            if (activity.IsAllDataRequested)
+            if (!activity.IsAllDataRequested)
             {
-                if (!this.stopExceptionFetcher.TryFetch(payload, out Exception exc) || exc == null)
-                {
-                    HttpInstrumentationEventSource.Log.NullPayload(nameof(HttpHandlerDiagnosticListener), nameof(this.OnException));
-                    return;
-                }
+                return;
+            }
 
-                if (this.options.RecordException)
-                {
-                    activity.RecordException(exc);
-                }
+            if (!this.stopExceptionFetcher.TryFetch(payload, out Exception exc) || exc == null)
+            {
+                HttpInstrumentationEventSource.Log.NullPayload(nameof(HttpHandlerDiagnosticListener), nameof(this.OnException));
+                return;
+            }
+            else if (this.options.RecordException)
+            {
+                activity.RecordException(exc);
+            }
 
-                if (exc is HttpRequestException)
+            if (exc is HttpRequestException)
+            {
+                if (exc.InnerException is SocketException exception)
                 {
-                    if (exc.InnerException is SocketException exception)
+                    switch (exception.SocketErrorCode)
                     {
-                        switch (exception.SocketErrorCode)
-                        {
-                            case SocketError.HostNotFound:
-                                activity.SetStatus(Status.Error.WithDescription(exc.Message));
-                                return;
-                        }
-                    }
-
-                    if (exc.InnerException != null)
-                    {
+                        case SocketError.HostNotFound:
                         activity.SetStatus(Status.Error.WithDescription(exc.Message));
+                        return;
                     }
                 }
+                else if (exc.InnerException != null)
+                {
+                    activity.SetStatus(Status.Error.WithDescription(exc.Message));
+                }
+            }
 
-                try
-                {
-                    this.options.Enrich?.Invoke(activity, "OnException", exc);
-                }
-                catch (Exception ex)
-                {
-                    HttpInstrumentationEventSource.Log.EnrichmentException(ex);
-                }
+            try
+            {
+                this.options.Enrich?.Invoke(activity, "OnException", exc);
+            }
+            catch (Exception ex)
+            {
+                HttpInstrumentationEventSource.Log.EnrichmentException(ex);
             }
         }
     }

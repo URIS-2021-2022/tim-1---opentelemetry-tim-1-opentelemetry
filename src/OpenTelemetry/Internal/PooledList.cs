@@ -79,10 +79,10 @@ namespace OpenTelemetry.Internal
 
         public void Return()
         {
-            var buffer = this.buffer;
-            if (buffer != null)
+            var buffer2 = this.buffer;
+            if (buffer2 != null)
             {
-                ArrayPool<T>.Shared.Return(buffer);
+                ArrayPool<T>.Shared.Return(buffer2);
             }
         }
 

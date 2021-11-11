@@ -109,6 +109,12 @@ namespace OpenTelemetry.Internal
             }
         }
 
+        [Event(24, Message = "Activity started. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
+        public void ActivityStarted(string operationName, string id)
+        {
+            this.WriteEvent(24, operationName, id);
+        }
+
         [NonEvent]
         public void ActivityStopped(Activity activity)
         {
@@ -116,6 +122,12 @@ namespace OpenTelemetry.Internal
             {
                 this.ActivityStopped(activity.OperationName, activity.Id);
             }
+        }
+
+        [Event(25, Message = "Activity stopped. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
+        public void ActivityStopped(string operationName, string id)
+        {
+            this.WriteEvent(25, operationName, id);
         }
 
         [NonEvent]
@@ -300,18 +312,6 @@ namespace OpenTelemetry.Internal
         public void SpanExporterTimeout(int spansAttempted)
         {
             this.WriteEvent(23, spansAttempted);
-        }
-
-        [Event(24, Message = "Activity started. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
-        public void ActivityStarted(string operationName, string id)
-        {
-            this.WriteEvent(24, operationName, id);
-        }
-
-        [Event(25, Message = "Activity stopped. OperationName = '{0}', Id = '{1}'.", Level = EventLevel.Verbose)]
-        public void ActivityStopped(string operationName, string id)
-        {
-            this.WriteEvent(25, operationName, id);
         }
 
         [Event(26, Message = "Failed to create file. LogDirectory ='{0}', Id = '{1}'.", Level = EventLevel.Warning)]

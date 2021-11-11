@@ -134,7 +134,6 @@ namespace OpenTelemetry.Metrics
                         catch (Exception)
                         {
                             // TODO: which event source do we use?
-                            // OpenTelemetrySdkEventSource.Log.SpanProcessorException(nameof(this.Dispose), ex);
                         }
                     }
                 }

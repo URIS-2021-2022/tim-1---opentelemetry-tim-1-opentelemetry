@@ -39,7 +39,10 @@ namespace OpenTelemetry.Exporter.ZPages
         {
             Guard.Null(options?.RetentionTime, $"{nameof(options)}?.{nameof(options.RetentionTime)}");
 
-            ZPagesActivityTracker.RetentionTime = options.RetentionTime;
+            if (options != null)
+            {
+                ZPagesActivityTracker.RetentionTime = options.RetentionTime;
+            }
 
             this.Options = options;
 
