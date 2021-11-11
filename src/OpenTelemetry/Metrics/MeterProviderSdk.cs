@@ -51,7 +51,7 @@ namespace OpenTelemetry.Metrics
             this.viewConfigs = viewConfigs;
             this.metrics = new Metric[MaxMetrics];
 
-            AggregationTemporality temporality = AggregationTemporality.Cumulative;
+            AggregationTemporalities temporality = AggregationTemporalities.Cumulative;
 
             foreach (var reader in readers)
             {

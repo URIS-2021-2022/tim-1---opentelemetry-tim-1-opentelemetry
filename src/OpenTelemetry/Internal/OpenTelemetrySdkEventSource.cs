@@ -130,6 +130,12 @@ namespace OpenTelemetry.Internal
             }
         }
 
+        [Event(28, Message = "Unknown error in TracerProvider '{0}': '{1}'.", Level = EventLevel.Error)]
+        public void TracerProviderException(string evnt, string ex)
+        {
+            this.WriteEvent(28, evnt, ex);
+        }
+
         [NonEvent]
         public void MissingPermissionsToReadEnvironmentVariable(SecurityException ex)
         {
@@ -320,12 +326,6 @@ namespace OpenTelemetry.Internal
             this.WriteEvent(26, logDirectory, exception);
         }
 
-        [Event(28, Message = "Unknown error in TracerProvider '{0}': '{1}'.", Level = EventLevel.Error)]
-        public void TracerProviderException(string evnt, string ex)
-        {
-            this.WriteEvent(28, evnt, ex);
-        }
-
         [Event(29, Message = "Failed to parse environment variable: '{0}', value: '{1}'.", Level = EventLevel.Warning)]
         public void FailedToParseEnvironmentVariable(string name, string value)
         {
@@ -353,7 +353,7 @@ namespace OpenTelemetry.Internal
 #if DEBUG
         public class OpenTelemetryEventListener : EventListener
         {
-            private readonly List<EventSource> eventSources = new List<EventSource>();
+            private readonly List<EventSource> eventSources = new ();
 
             public override void Dispose()
             {

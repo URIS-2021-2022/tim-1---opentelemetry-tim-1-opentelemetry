@@ -118,6 +118,6 @@ namespace OpenTelemetry.Exporter
         /// Gets or sets the AggregationTemporality used for Histogram
         /// and Sum metrics.
         /// </summary>
-        public AggregationTemporality AggregationTemporality { get; set; } = AggregationTemporality.Cumulative;
+        public AggregationTemporalities AggregationTemporality { get; set; } = AggregationTemporalities.Cumulative;
     }
 }

@@ -34,7 +34,7 @@ namespace OpenTelemetry.Metrics
         private readonly ConcurrentDictionary<string[], ConcurrentDictionary<object[], int>> keyValue2MetricAggs =
             new ConcurrentDictionary<string[], ConcurrentDictionary<object[], int>>(new StringArrayEqualityComparer());
 
-        private readonly AggregationTemporality temporality;
+        private readonly AggregationTemporalities temporality;
         private readonly bool outputDelta;
         private readonly MetricPoint[] metricPoints;
         private readonly AggregationType aggType;
@@ -48,14 +48,14 @@ namespace OpenTelemetry.Metrics
 
         internal AggregatorStore(
             AggregationType aggType,
-            AggregationTemporality temporality,
+            AggregationTemporalities temporality,
             double[] histogramBounds,
             string[] tagKeysInteresting = null)
         {
             this.metricPoints = new MetricPoint[MaxMetricPoints];
             this.aggType = aggType;
             this.temporality = temporality;
-            this.outputDelta = temporality == AggregationTemporality.Delta;
+            this.outputDelta = temporality == AggregationTemporalities.Delta;
             this.histogramBounds = histogramBounds;
             this.startTimeExclusive = DateTimeOffset.UtcNow;
             if (tagKeysInteresting == null)
@@ -107,7 +107,7 @@ namespace OpenTelemetry.Metrics
                 metricPoint.TakeSnapShot(this.outputDelta);
             }
 
-            if (this.temporality == AggregationTemporality.Delta && this.endTimeInclusive != default)
+            if (this.temporality == AggregationTemporalities.Delta && this.endTimeInclusive != default)
             {
                 this.startTimeExclusive = this.endTimeInclusive;
             }

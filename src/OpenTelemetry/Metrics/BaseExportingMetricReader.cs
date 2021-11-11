@@ -105,8 +105,7 @@ namespace OpenTelemetry.Metrics
         /// <inheritdoc />
         protected override bool OnShutdown(int timeoutMilliseconds)
         {
-            var result = true;
-
+            bool result;
             if (timeoutMilliseconds == Timeout.Infinite)
             {
                 _ = this.Collect(Timeout.Infinite);
@@ -115,7 +114,7 @@ namespace OpenTelemetry.Metrics
             else
             {
                 var sw = Stopwatch.StartNew();
-                result = this.Collect(timeoutMilliseconds);
+                _ = this.Collect(timeoutMilliseconds);
                 var timeout = timeoutMilliseconds - sw.ElapsedMilliseconds;
                 result = this.exporter.Shutdown((int)Math.Max(timeout, 0));
             }

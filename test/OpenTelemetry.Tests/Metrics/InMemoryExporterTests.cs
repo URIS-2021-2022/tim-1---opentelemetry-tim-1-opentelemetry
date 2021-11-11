@@ -31,7 +31,7 @@ namespace OpenTelemetry.Metrics.Tests
             var exportedItems = new List<Metric>();
             using var inMemoryReader = new BaseExportingMetricReader(new InMemoryExporter<Metric>(exportedItems))
             {
-                PreferredAggregationTemporality = AggregationTemporality.Delta,
+                PreferredAggregationTemporality = AggregationTemporalities.Delta,
             };
 
             using var meterProvider = Sdk.CreateMeterProviderBuilder()

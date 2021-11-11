@@ -32,7 +32,6 @@ namespace OpenTelemetry.Exporter
     public class JaegerExporter : BaseExporter<Activity>
     {
         private readonly int maxPayloadSizeInBytes;
-        private readonly TProtocolFactory protocolFactory;
         private readonly TTransport clientTransport;
         private readonly JaegerThriftClient thriftClient;
         private readonly InMemoryTransport memoryTransport;
@@ -47,14 +46,16 @@ namespace OpenTelemetry.Exporter
 
         internal JaegerExporter(JaegerExporterOptions options, TTransport clientTransport = null)
         {
+            TProtocolFactory protocolFactory;
+
             Guard.Null(options, nameof(options));
 
             this.maxPayloadSizeInBytes = (!options.MaxPayloadSizeInBytes.HasValue || options.MaxPayloadSizeInBytes <= 0) ? JaegerExporterOptions.DefaultMaxPayloadSizeInBytes : options.MaxPayloadSizeInBytes.Value;
-            this.protocolFactory = new TCompactProtocol.Factory();
+            protocolFactory = new TCompactProtocol.Factory();
             this.clientTransport = clientTransport ?? new JaegerThriftClientTransport(options.AgentHost, options.AgentPort);
-            this.thriftClient = new JaegerThriftClient(this.protocolFactory.GetProtocol(this.clientTransport));
+            this.thriftClient = new JaegerThriftClient(protocolFactory.GetProtocol(this.clientTransport));
             this.memoryTransport = new InMemoryTransport(16000);
-            this.memoryProtocol = this.protocolFactory.GetProtocol(this.memoryTransport);
+            this.memoryProtocol = protocolFactory.GetProtocol(this.memoryTransport);
 
             string serviceName = (string)this.ParentProvider.GetDefaultResource().Attributes.FirstOrDefault(pair => pair.Key == ResourceSemanticConventions.AttributeServiceName).Value;
             this.Process = new Process(serviceName);

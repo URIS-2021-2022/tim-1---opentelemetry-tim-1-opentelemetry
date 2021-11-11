@@ -58,7 +58,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Tests
 
             var metricReader = new BaseExportingMetricReader(new TestExporter<Metric>(RunTest))
             {
-                PreferredAggregationTemporality = AggregationTemporality.Delta,
+                PreferredAggregationTemporality = AggregationTemporalities.Delta,
             };
 
             using var provider = Sdk.CreateMeterProviderBuilder()

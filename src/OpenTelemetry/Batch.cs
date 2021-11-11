@@ -146,11 +146,11 @@ namespace OpenTelemetry
 
             private static readonly BatchEnumeratorMoveNextFunc MoveNextArray = (ref Enumerator enumerator) =>
             {
-                var items = enumerator.items;
+                var itemsLV = enumerator.items;
 
                 if (enumerator.itemIndex < enumerator.targetCount)
                 {
-                    enumerator.Current = items[enumerator.itemIndex++];
+                    enumerator.Current = itemsLV[enumerator.itemIndex++];
                     return true;
                 }
 

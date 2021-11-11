@@ -153,7 +153,6 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis.Implementation
                 activity.SetTag(StackExchangeRedisCallsInstrumentation.RedisDatabaseIndexKeyName, command.Db);
 
                 // TODO: deal with the re-transmission
-                // command.RetransmissionOf;
                 // command.RetransmissionReason;
 
                 var enqueued = command.CommandCreated.Add(command.CreationToEnqueued);

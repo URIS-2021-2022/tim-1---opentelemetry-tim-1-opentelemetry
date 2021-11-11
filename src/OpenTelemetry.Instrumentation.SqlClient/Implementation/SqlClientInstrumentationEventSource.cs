@@ -26,7 +26,7 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
     [EventSource(Name = "OpenTelemetry-Instrumentation-SqlClient")]
     internal class SqlClientInstrumentationEventSource : EventSource
     {
-        public static SqlClientInstrumentationEventSource Log = new SqlClientInstrumentationEventSource();
+        public static readonly SqlClientInstrumentationEventSource Log = new SqlClientInstrumentationEventSource();
 
         [NonEvent]
         public void UnknownErrorProcessingEvent(string handlerName, string eventName, Exception ex)

@@ -67,7 +67,7 @@ namespace OpenTelemetry.Instrumentation.Http.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = AggregationTemporalities.Cumulative,
             };
             var meterProvider = Sdk.CreateMeterProviderBuilder()
                 .AddHttpClientInstrumentation()

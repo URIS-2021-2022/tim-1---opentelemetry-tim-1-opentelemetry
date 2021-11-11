@@ -24,18 +24,18 @@ namespace OpenTelemetry.Metrics
 {
     public abstract class MetricReader : IDisposable
     {
-        private const AggregationTemporality CumulativeAndDelta = AggregationTemporality.Cumulative | AggregationTemporality.Delta;
+        private const AggregationTemporalities CumulativeAndDelta = AggregationTemporalities.Cumulative | AggregationTemporalities.Delta;
         private readonly object newTaskLock = new object();
         private readonly object onCollectLock = new object();
         private readonly TaskCompletionSource<bool> shutdownTcs = new TaskCompletionSource<bool>();
-        private AggregationTemporality preferredAggregationTemporality = CumulativeAndDelta;
-        private AggregationTemporality supportedAggregationTemporality = CumulativeAndDelta;
+        private AggregationTemporalities preferredAggregationTemporality = CumulativeAndDelta;
+        private AggregationTemporalities supportedAggregationTemporality = CumulativeAndDelta;
         private int shutdownCount;
         private TaskCompletionSource<bool> collectionTcs;
 
         public BaseProvider ParentProvider { get; private set; }
 
-        public AggregationTemporality PreferredAggregationTemporality
+        public AggregationTemporalities PreferredAggregationTemporality
         {
             get => this.preferredAggregationTemporality;
             set
@@ -45,7 +45,7 @@ namespace OpenTelemetry.Metrics
             }
         }
 
-        public AggregationTemporality SupportedAggregationTemporality
+        public AggregationTemporalities SupportedAggregationTemporality
         {
             get => this.supportedAggregationTemporality;
             set
@@ -100,7 +100,7 @@ namespace OpenTelemetry.Metrics
 
             if (!shouldRunCollect)
             {
-                return Task.WaitAny(tcs.Task, this.shutdownTcs.Task, Task.Delay(timeoutMilliseconds)) == 0 ? tcs.Task.Result : false;
+                return Task.WaitAny(tcs.Task, this.shutdownTcs.Task, Task.Delay(timeoutMilliseconds)) == 0 && tcs.Task.Result;
             }
 
             var result = false;
@@ -262,7 +262,7 @@ namespace OpenTelemetry.Metrics
         {
         }
 
-        private static void ValidateAggregationTemporality(AggregationTemporality preferred, AggregationTemporality supported)
+        private static void ValidateAggregationTemporality(AggregationTemporalities preferred, AggregationTemporalities supported)
         {
             Guard.Zero((int)(preferred & CumulativeAndDelta), $"PreferredAggregationTemporality has an invalid value {preferred}", nameof(preferred));
             Guard.Zero((int)(supported & CumulativeAndDelta), $"SupportedAggregationTemporality has an invalid value {supported}", nameof(supported));

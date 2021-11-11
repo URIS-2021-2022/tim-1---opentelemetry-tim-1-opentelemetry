@@ -26,23 +26,19 @@ namespace OpenTelemetry.Exporter.ZPages.Implementation
     /// </summary>
     internal static class ZPagesActivityTracker
     {
-        private static readonly long StartTime;
+        private static readonly long StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
         /// <summary>
         /// Initializes static members of the <see cref="ZPagesActivityTracker"/> class.
         /// </summary>
-        static ZPagesActivityTracker()
-        {
-            ZQueue = new LinkedList<Dictionary<string, ZPagesActivityAggregate>>();
-            ProcessingList = new Dictionary<string, long>();
-            CurrentMinuteList = new ConcurrentDictionary<string, ZPagesActivityAggregate>();
-            CurrentHourList = new ConcurrentDictionary<string, ZPagesActivityAggregate>();
-            TotalCount = new Dictionary<string, long>();
-            TotalEndedCount = new Dictionary<string, long>();
-            TotalErrorCount = new Dictionary<string, long>();
-            TotalLatency = new Dictionary<string, long>();
-            StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        }
+        private static LinkedList<Dictionary<string, ZPagesActivityAggregate>> zQueue = new ();
+        private static Dictionary<string, long> processingList = new ();
+        private static ConcurrentDictionary<string, ZPagesActivityAggregate> currentMinuteList = new ();
+        private static ConcurrentDictionary<string, ZPagesActivityAggregate> currentHourList = new ();
+        private static Dictionary<string, long> totalCount = new ();
+        private static Dictionary<string, long> totalEndedCount = new ();
+        private static Dictionary<string, long> totalErrorCount = new ();
+        private static Dictionary<string, long> totalLatency = new ();
 
         /// <summary>
         /// Gets or sets ZQueue which stores the minute-wise activity information.

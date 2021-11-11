@@ -73,7 +73,7 @@ namespace OpenTelemetry.Metrics
             else
             {
                 var sw = Stopwatch.StartNew();
-                result = this.exporterThread.Join(timeoutMilliseconds) && result;
+                result = this.exporterThread.Join(timeoutMilliseconds);
                 var timeout = timeoutMilliseconds - sw.ElapsedMilliseconds;
                 result = this.exporter.Shutdown((int)Math.Max(timeout, 0)) && result;
             }
