@@ -188,7 +188,9 @@ namespace Benchmarks.Trace
         }
 
         [Benchmark]
+#pragma warning disable SA1204 // Static elements should appear before instance elements
         public static void LegacyActivity_ExactMatchMode()
+#pragma warning restore SA1204 // Static elements should appear before instance elements
         {
             using (var activity = new Activity("ExactMatch.OperationName1").Start())
             {

@@ -278,7 +278,7 @@ namespace OpenTelemetry.Shims.OpenTracing
         {
             Guard.Null(tag?.Key, $"{nameof(tag)}?.{nameof(tag.Key)}");
 
-            return this.WithTag(tag.Key, value);
+            return this.WithTag(tag?.Key, value);
         }
 
         /// <inheritdoc/>

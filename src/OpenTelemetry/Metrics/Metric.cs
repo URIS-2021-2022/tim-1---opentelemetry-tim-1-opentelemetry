@@ -44,7 +44,7 @@ namespace OpenTelemetry.Metrics
                 || instrument is ObservableCounter<byte>)
             {
                 aggType = AggregationType.LongSumIncomingCumulative;
-                this.MetricType = MetricType.LongSum;
+                this.MetricType = MetricTypes.LongSum;
             }
             else if (instrument.GetType() == typeof(Counter<long>)
                 || instrument.GetType() == typeof(Counter<int>)
@@ -52,25 +52,23 @@ namespace OpenTelemetry.Metrics
                 || instrument.GetType() == typeof(Counter<byte>))
             {
                 aggType = AggregationType.LongSumIncomingDelta;
-                this.MetricType = MetricType.LongSum;
+                this.MetricType = MetricTypes.LongSum;
             }
             else if ((instrument is Counter<double>)
                 || instrument is Counter<float>)
             {
                 aggType = AggregationType.DoubleSumIncomingDelta;
-                this.MetricType = MetricType.DoubleSum;
+                this.MetricType = MetricTypes.DoubleSum;
             }
-            else if (instrument.GetType() == typeof(ObservableCounter<double>)
-                || instrument.GetType() == typeof(ObservableCounter<float>))
+            else if (instrument is ObservableCounter<double> || instrument is ObservableCounter<float>)
             {
                 aggType = AggregationType.DoubleSumIncomingCumulative;
-                this.MetricType = MetricType.DoubleSum;
+                this.MetricType = MetricTypes.DoubleSum;
             }
-            else if (instrument.GetType() == typeof(ObservableGauge<double>)
-                || instrument.GetType() == typeof(ObservableGauge<float>))
+            else if (instrument is ObservableGauge<double> || instrument is ObservableGauge<float>)
             {
                 aggType = AggregationType.DoubleGauge;
-                this.MetricType = MetricType.DoubleGauge;
+                this.MetricType = MetricTypes.DoubleGauge;
             }
             else if (instrument.GetType() == typeof(ObservableGauge<long>)
                 || instrument is ObservableGauge<int>
@@ -78,16 +76,16 @@ namespace OpenTelemetry.Metrics
                 || instrument.GetType() == typeof(ObservableGauge<byte>))
             {
                 aggType = AggregationType.LongGauge;
-                this.MetricType = MetricType.LongGauge;
+                this.MetricType = MetricTypes.LongGauge;
             }
-            else if (instrument.GetType() == typeof(Histogram<long>)
-                || instrument.GetType() == typeof(Histogram<int>)
-                || instrument.GetType() == typeof(Histogram<short>)
-                || instrument.GetType() == typeof(Histogram<byte>)
-                || instrument.GetType() == typeof(Histogram<float>)
+            else if (instrument is Histogram<long>
+                || instrument is Histogram<int>
+                || instrument is Histogram<short>
+                || instrument is Histogram<byte>
+                || instrument is Histogram<float>
                 || instrument is Histogram<double>)
             {
-                this.MetricType = MetricType.Histogram;
+                this.MetricType = MetricTypes.Histogram;
 
                 if (histogramBounds != null
                     && histogramBounds.Length == 0)
@@ -108,7 +106,7 @@ namespace OpenTelemetry.Metrics
             this.Temporality = temporality;
         }
 
-        public MetricType MetricType { get; private set; }
+        public MetricTypes MetricType { get; private set; }
 
         public AggregationTemporality Temporality { get; private set; }
 

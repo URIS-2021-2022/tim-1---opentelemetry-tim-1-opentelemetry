@@ -18,7 +18,7 @@ using System.Diagnostics;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 
-namespace ProgramGettingStarted
+namespace TraceProgram
 {
     public class Program
     {

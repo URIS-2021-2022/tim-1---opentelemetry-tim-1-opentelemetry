@@ -34,6 +34,12 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
             }
         }
 
+        [Event(2, Message = "Exporter failed send data to collector. Data will not be sent. Exception: {0}", Level = EventLevel.Error)]
+        public void FailedToReachCollector(string ex)
+        {
+            this.WriteEvent(2, ex);
+        }
+
         [NonEvent]
         public void ExportMethodException(Exception ex)
         {
@@ -43,22 +49,16 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
             }
         }
 
-        [Event(2, Message = "Exporter failed send data to collector. Data will not be sent. Exception: {0}", Level = EventLevel.Error)]
-        public void FailedToReachCollector(string ex)
+        [Event(4, Message = "Unknown error in export method: {0}", Level = EventLevel.Error)]
+        public void ExportMethodException(string ex)
         {
-            this.WriteEvent(2, ex);
+            this.WriteEvent(4, ex);
         }
 
         [Event(3, Message = "Could not translate activity from class '{0}' and method '{1}', span will not be recorded.", Level = EventLevel.Informational)]
         public void CouldNotTranslateActivity(string className, string methodName)
         {
             this.WriteEvent(3, className, methodName);
-        }
-
-        [Event(4, Message = "Unknown error in export method: {0}", Level = EventLevel.Error)]
-        public void ExportMethodException(string ex)
-        {
-            this.WriteEvent(4, ex);
         }
 
         [Event(5, Message = "Could not translate metric from class '{0}' and method '{1}', metric will not be recorded.", Level = EventLevel.Informational)]
