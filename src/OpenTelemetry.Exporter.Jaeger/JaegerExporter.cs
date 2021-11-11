@@ -45,7 +45,7 @@ namespace OpenTelemetry.Exporter
         {
         }
 
-        internal JaegerExporter(JaegerExporterOptions options, TTransport clientTransport = null)
+        internal JaegerExporter(JaegerExporterOptions options, TTransport clientTransport)
         {
             Guard.Null(options, nameof(options));
 

@@ -133,8 +133,8 @@ namespace OpenTelemetry.Internal
                     return false; // buffer is full
                 }
 
-                var head = Interlocked.CompareExchange(ref this.head, headSnapshot + 1, headSnapshot);
-                if (head != headSnapshot)
+                var h = Interlocked.CompareExchange(ref this.head, headSnapshot + 1, headSnapshot);
+                if (h != headSnapshot)
                 {
                     if (spinCountDown-- == 0)
                     {
@@ -144,7 +144,7 @@ namespace OpenTelemetry.Internal
                     continue;
                 }
 
-                var index = (int)(head % this.Capacity);
+                var index = (int)(h % this.Capacity);
                 this.trait[index] = value;
                 return true;
             }

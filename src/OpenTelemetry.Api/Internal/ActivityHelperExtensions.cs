@@ -179,7 +179,7 @@ namespace OpenTelemetry.Trace
             ActivityTagsEnumeratorFactory<T>.Enumerate(activityEvent, ref tagEnumerator);
         }
 
-        private static class ActivityEventsEnumeratorFactory<TState>
+        private sealed class ActivityEventsEnumeratorFactory<TState>
             where TState : struct, IActivityEnumerator<ActivityEvent>
         {
             private static readonly object EmptyActivityEvents = typeof(Activity).GetField("s_emptyEvents", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
@@ -346,7 +346,7 @@ namespace OpenTelemetry.Trace
             private static bool ForEachTagValueCallback(ref TState state, KeyValuePair<string, object> item)
                 => state.ForEach(item);
         }
-      
+
         private sealed class ActivityLinksEnumeratorFactory<TState>
             where TState : struct, IActivityEnumerator<ActivityLink>
         {
