@@ -132,7 +132,7 @@ namespace OpenTelemetry.Exporter.OpenTelemetryProtocol.Implementation
             }
 
             OtlpMetrics.AggregationTemporality temporality;
-            if (metric.Temporality == AggregationTemporality.Delta)
+            if (metric.Temporality == AggregationTemporalities.Delta)
             {
                 temporality = OtlpMetrics.AggregationTemporality.Delta;
             }

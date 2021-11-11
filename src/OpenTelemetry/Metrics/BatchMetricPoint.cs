@@ -42,7 +42,7 @@ namespace OpenTelemetry.Metrics
         /// <inheritdoc/>
         public void Dispose()
         {
-            throw new NotSupportedException();
+            // This method is empty
         }
 
         /// <summary>
@@ -87,6 +87,7 @@ namespace OpenTelemetry.Metrics
 
             public void Dispose()
             {
+                // This method is empty
             }
 
             /// <inheritdoc/>

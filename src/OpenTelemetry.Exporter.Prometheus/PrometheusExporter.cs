@@ -24,7 +24,7 @@ namespace OpenTelemetry.Exporter
     /// <summary>
     /// Exporter of OpenTelemetry batch to Prometheus.
     /// </summary>
-    [AggregationTemporality(AggregationTemporality.Cumulative)]
+    [AggregationTemporality(AggregationTemporalities.Cumulative)]
     [ExportModes(ExportModes.Pull)]
     public class PrometheusExporter : BaseExporter<Metric>, IPullMetricExporter
     {

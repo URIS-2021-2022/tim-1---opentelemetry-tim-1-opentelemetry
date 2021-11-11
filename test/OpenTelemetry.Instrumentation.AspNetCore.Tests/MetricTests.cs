@@ -65,7 +65,7 @@ namespace OpenTelemetry.Instrumentation.AspNetCore.Tests
 
             var metricReader = new BaseExportingMetricReader(metricExporter)
             {
-                PreferredAggregationTemporality = AggregationTemporality.Cumulative,
+                PreferredAggregationTemporality = AggregationTemporalities.Cumulative,
             };
             this.meterProvider = Sdk.CreateMeterProviderBuilder()
                 .AddAspNetCoreInstrumentation()

@@ -210,7 +210,9 @@ namespace OpenTelemetry.Trace
                 => state.ForEach(item);
         }
 
+#pragma warning disable SA1201 // Elements should appear in the correct order
         private struct ActivitySingleTagEnumerator : IActivityEnumerator<KeyValuePair<string, object>>
+#pragma warning restore SA1201 // Elements should appear in the correct order
         {
             public object Value;
 
@@ -282,7 +284,13 @@ namespace OpenTelemetry.Trace
         private sealed class ActivityTagsEnumeratorFactory<TState>
             where TState : struct, IActivityEnumerator<KeyValuePair<string, object>>
         {
+            private ActivityTagsEnumeratorFactory()
+            {
+            }
+
+#pragma warning disable SA1201 // Elements should appear in the correct order
             private static readonly object EmptyActivityTagObjects = typeof(Activity).GetField("s_emptyTagObjects", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+#pragma warning restore SA1201 // Elements should appear in the correct order
 
             private static readonly object EmptyActivityEventTags = typeof(ActivityEvent).GetField("s_emptyTags", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 
@@ -346,7 +354,7 @@ namespace OpenTelemetry.Trace
             private static bool ForEachTagValueCallback(ref TState state, KeyValuePair<string, object> item)
                 => state.ForEach(item);
         }
-      
+
         private sealed class ActivityLinksEnumeratorFactory<TState>
             where TState : struct, IActivityEnumerator<ActivityLink>
         {

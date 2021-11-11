@@ -91,7 +91,7 @@ namespace OpenTelemetry.Shims.OpenTracing
             return instrumentation;
         }
 
-        private class ScopeInstrumentation : IScope
+        private sealed class ScopeInstrumentation : IScope
         {
             private readonly Action disposeAction;
 

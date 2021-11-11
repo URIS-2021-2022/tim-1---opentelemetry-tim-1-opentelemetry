@@ -307,7 +307,14 @@ namespace OpenTelemetry.Shims.OpenTracing
         {
             Guard.Null(tag?.Key, $"{nameof(tag)}?.{nameof(tag.Key)}");
 
-            return this.WithTag(tag.Key, value);
+            if (tag != null)
+            {
+                return this.WithTag(tag.Key, value);
+            }
+            else
+            {
+                throw new ArgumentNullException();
+            }
         }
 
         /// <summary>

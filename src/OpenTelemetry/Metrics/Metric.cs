@@ -23,11 +23,11 @@ namespace OpenTelemetry.Metrics
     public sealed class Metric
     {
         internal static readonly double[] DefaultHistogramBounds = new double[] { 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 };
-        private AggregatorStore aggStore;
+        private readonly AggregatorStore aggStore;
 
         internal Metric(
             Instrument instrument,
-            AggregationTemporality temporality,
+            AggregationTemporalities temporality,
             string metricName,
             string metricDescription,
             double[] histogramBounds = null,
@@ -40,7 +40,7 @@ namespace OpenTelemetry.Metrics
             AggregationType aggType = default;
             if (instrument is ObservableCounter<long>
                 || instrument.GetType() == typeof(ObservableCounter<int>)
-                || instrument.GetType() == typeof(ObservableCounter<short>)
+                || instrument is ObservableCounter<short>
                 || instrument is ObservableCounter<byte>)
             {
                 aggType = AggregationType.LongSumIncomingCumulative;
@@ -72,16 +72,16 @@ namespace OpenTelemetry.Metrics
                 aggType = AggregationType.DoubleGauge;
                 this.MetricType = MetricType.DoubleGauge;
             }
-            else if (instrument.GetType() == typeof(ObservableGauge<long>)
+            else if (instrument is ObservableGauge<long>
                 || instrument.GetType() == typeof(ObservableGauge<int>)
                 || instrument.GetType() == typeof(ObservableGauge<short>)
-                || instrument.GetType() == typeof(ObservableGauge<byte>))
+                || instrument is ObservableGauge<byte>)
             {
                 aggType = AggregationType.LongGauge;
                 this.MetricType = MetricType.LongGauge;
             }
             else if (instrument.GetType() == typeof(Histogram<long>)
-                || instrument.GetType() == typeof(Histogram<int>)
+                || instrument is Histogram<int>
                 || instrument.GetType() == typeof(Histogram<short>)
                 || instrument.GetType() == typeof(Histogram<byte>)
                 || instrument.GetType() == typeof(Histogram<float>)
@@ -110,7 +110,7 @@ namespace OpenTelemetry.Metrics
 
         public MetricType MetricType { get; private set; }
 
-        public AggregationTemporality Temporality { get; private set; }
+        public AggregationTemporalities Temporality { get; private set; }
 
         public string Name { get; private set; }
 
