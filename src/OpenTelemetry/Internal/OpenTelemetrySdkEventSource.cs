@@ -37,15 +37,6 @@ namespace OpenTelemetry.Internal
 #endif
 
         [NonEvent]
-        public void SpanProcessorException(string evnt, Exception ex)
-        {
-            if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
-            {
-                this.SpanProcessorException(evnt, ex.ToInvariantString());
-            }
-        }
-
-        [NonEvent]
         public void TracestateExtractException(Exception ex)
         {
             if (this.IsEnabled(EventLevel.Warning, EventKeywords.All))
@@ -70,15 +61,6 @@ namespace OpenTelemetry.Internal
                 {
                     this.ObservableInstrumentCallbackException(exception.ToInvariantString());
                 }
-            }
-        }
-
-        [NonEvent]
-        public void TracestateKeyIsInvalid(ReadOnlySpan<char> key)
-        {
-            if (this.IsEnabled(EventLevel.Warning, EventKeywords.All))
-            {
-                this.TracestateKeyIsInvalid(key.ToString());
             }
         }
 
@@ -194,6 +176,15 @@ namespace OpenTelemetry.Internal
             this.WriteEvent(4, evnt, ex);
         }
 
+        [NonEvent]
+        public void SpanProcessorException(string evnt, Exception ex)
+        {
+            if (this.IsEnabled(EventLevel.Error, EventKeywords.All))
+            {
+                this.SpanProcessorException(evnt, ex.ToInvariantString());
+            }
+        }
+
         [Event(5, Message = "Calling '{0}' on ended span.", Level = EventLevel.Warning)]
         public void UnexpectedCallOnEndedSpan(string methodName)
         {
@@ -234,6 +225,15 @@ namespace OpenTelemetry.Internal
         public void TracestateKeyIsInvalid(string key)
         {
             this.WriteEvent(12, key);
+        }
+
+        [NonEvent]
+        public void TracestateKeyIsInvalid(ReadOnlySpan<char> key)
+        {
+            if (this.IsEnabled(EventLevel.Warning, EventKeywords.All))
+            {
+                this.TracestateKeyIsInvalid(key.ToString());
+            }
         }
 
         [Event(13, Message = "Tracestate value is invalid, value = '{0}'", Level = EventLevel.Warning)]
