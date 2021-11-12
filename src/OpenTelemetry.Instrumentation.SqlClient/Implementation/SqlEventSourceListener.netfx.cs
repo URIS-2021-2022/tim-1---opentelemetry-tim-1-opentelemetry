@@ -136,7 +136,11 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
                 return;
             }
 
-            string databaseName = (string)eventData.Payload[2];
+            string databaseName = null;
+            if (eventData != null)
+            {
+                databaseName = (string)eventData.Payload[2];
+            }
 
             activity.DisplayName = databaseName;
 

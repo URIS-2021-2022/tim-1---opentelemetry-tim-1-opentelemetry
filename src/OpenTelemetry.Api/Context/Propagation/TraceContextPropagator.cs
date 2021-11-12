@@ -345,17 +345,7 @@ namespace OpenTelemetry.Context.Propagation
             }
 
             int tenantLength = -1;
-            for (int i = 1; i < key.Length; ++i)
-            {
-                char ch = key[i];
-                if (ch == '@')
-                {
-                    tenantLength = i;
-                    break;
-                }
-
-                IsLowDigit(ch);
-            }
+            tenantLength = IsLowDigit(key, tenantLength);
 
             if (tenantLength == -1)
             {
@@ -392,18 +382,28 @@ namespace OpenTelemetry.Context.Propagation
             return true;
         }
 
-        private static bool IsLowDigit(char ch)
+        private static int IsLowDigit(ReadOnlySpan<char> key, int tenantLength)
         {
-            if (!(IsLowerAlphaDigit(ch)
+            for (int i = 1; i < key.Length; ++i)
+            {
+                char ch = key[i];
+                if (ch == '@')
+                {
+                    tenantLength = i;
+                    break;
+                }
+
+                if (!(IsLowerAlphaDigit(ch)
                     || ch == '_'
                     || ch == '-'
                     || ch == '*'
                     || ch == '/'))
-            {
-                return false;
+                {
+                    return 0;
+                }
             }
 
-            return true;
+            return tenantLength;
         }
 
         private static bool ValidateValue(ReadOnlySpan<char> value)

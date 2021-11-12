@@ -114,7 +114,6 @@ namespace OpenTelemetry.Metrics
             }
             catch (Exception)
             {
-                // TODO: OpenTelemetrySdkEventSource.Log.SpanProcessorException(nameof(this.Shutdown), ex);
             }
 
             tcs.TrySetResult(result);

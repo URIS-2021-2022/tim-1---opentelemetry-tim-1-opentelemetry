@@ -48,8 +48,6 @@ namespace OpenTelemetry.Instrumentation.Http
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
-            this.diagnosticSourceSubscriber?.Dispose();
-            this.meter?.Dispose();
         }
 
         protected virtual void Dispose(bool disposing)

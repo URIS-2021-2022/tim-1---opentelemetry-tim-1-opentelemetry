@@ -285,25 +285,25 @@ namespace OpenTelemetry.Metrics
         internal void MeasurementRecordedDouble(Instrument instrument, double value, ReadOnlySpan<KeyValuePair<string, object>> tagsRos, object state)
         {
             // Get Instrument State
-            var metrics = state as List<Metric>;
+            var metrics2 = state as List<Metric>;
 
             Debug.Assert(instrument != null, "instrument must be non-null.");
-            if (metrics == null)
+            if (metrics2 == null)
             {
                 // TODO: log
                 return;
             }
 
-            if (metrics.Count == 1)
+            if (metrics2.Count == 1)
             {
                 // special casing the common path
                 // as this is faster than the
                 // foreach, when count is 1.
-                metrics[0].UpdateDouble(value, tagsRos);
+                metrics2[0].UpdateDouble(value, tagsRos);
             }
             else
             {
-                foreach (var metric in metrics)
+                foreach (var metric in metrics2)
                 {
                     metric.UpdateDouble(value, tagsRos);
                 }
