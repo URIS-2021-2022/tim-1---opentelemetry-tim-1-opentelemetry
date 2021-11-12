@@ -203,6 +203,7 @@ namespace OpenTelemetry
             /// <inheritdoc/>
             public void Dispose()
             {
+                throw new NotSupportedException();
             }
 
             /// <inheritdoc/>

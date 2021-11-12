@@ -40,7 +40,9 @@ namespace OpenTelemetry.Exporter
 
         internal const string TracesExportPath = "v1/traces";
         internal const string MetricsExportPath = "v1/metrics";
+#pragma warning disable S1075 // URIs should not be hardcoded
         private const string UriConst = "https://localhost:4317";
+#pragma warning restore S1075 // URIs should not be hardcoded
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OtlpExporterOptions"/> class.

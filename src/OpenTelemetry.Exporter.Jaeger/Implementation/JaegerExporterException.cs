@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 using System;
+using System.Runtime.Serialization;
 
 namespace OpenTelemetry.Exporter.Jaeger.Implementation
 {
@@ -24,5 +25,9 @@ namespace OpenTelemetry.Exporter.Jaeger.Implementation
 #pragma warning restore CA1064 // Exceptions should be public
 #pragma warning restore CA1032 // Implement standard exception constructors
     {
+        private JaegerExporterException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
     }
 }

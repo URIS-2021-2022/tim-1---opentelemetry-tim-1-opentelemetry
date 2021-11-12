@@ -177,7 +177,6 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
 
             try
             {
-
                 if (activity == null)
                         throw new ArgumentNullException("Activity can't be null!");
                 
