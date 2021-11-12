@@ -101,6 +101,12 @@ namespace OpenTelemetry.Trace
         }
 
         /// <inheritdoc/>
+        public bool Equals(Status other)
+        {
+            return this.StatusCode == other.StatusCode && this.Description == other.Description;
+        }
+
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             var result = 1;
@@ -117,12 +123,6 @@ namespace OpenTelemetry.Trace
                 + nameof(this.StatusCode) + "=" + this.StatusCode + ", "
                 + nameof(this.Description) + "=" + this.Description
                 + "}";
-        }
-
-        /// <inheritdoc/>
-        public bool Equals(Status other)
-        {
-            return this.StatusCode == other.StatusCode && this.Description == other.Description;
         }
     }
 }

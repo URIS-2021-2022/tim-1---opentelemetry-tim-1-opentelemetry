@@ -313,7 +313,7 @@ namespace OpenTelemetry.Shims.OpenTracing
             }
             else
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(tag), "Exception...");
             }
         }
 

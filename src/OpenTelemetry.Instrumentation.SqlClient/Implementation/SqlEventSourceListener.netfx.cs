@@ -182,8 +182,9 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
             try
             {
                 if (activity == null)
-                        throw new ArgumentNullException("Activity can't be null!");
-                
+                {
+                    throw new ArgumentNullException(nameof(activity), "Activity can't be null!");
+                }
                 if (activity.IsAllDataRequested)
                 {
                     int compositeState = (int)eventData.Payload[1];
