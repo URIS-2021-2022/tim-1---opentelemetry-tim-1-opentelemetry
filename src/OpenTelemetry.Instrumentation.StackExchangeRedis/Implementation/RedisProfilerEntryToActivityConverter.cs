@@ -91,7 +91,7 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis.Implementation
 
             activity.SetEndTime(command.CommandCreated + command.ElapsedTime);
 
-            if (activity.IsAllDataRequested)
+            if (activity.IsAllDataRequested && options.SetVerboseDatabaseStatements)
             {
                 // see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/database.md
 
@@ -110,22 +110,14 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis.Implementation
 
                 activity.SetTag(StackExchangeRedisCallsInstrumentation.RedisFlagsKeyName, command.Flags.ToString());
 
-                if (options.SetVerboseDatabaseStatements)
+                var (commandAndKey, script) = MessageDataGetter.Value.Invoke(command);
+                if (!string.IsNullOrEmpty(commandAndKey) && !string.IsNullOrEmpty(script))
                 {
-                    var (commandAndKey, script) = MessageDataGetter.Value.Invoke(command);
-
-                    if (!string.IsNullOrEmpty(commandAndKey) && !string.IsNullOrEmpty(script))
-                    {
-                        activity.SetTag(SemanticConventions.AttributeDbStatement, commandAndKey + " " + script);
-                    }
-                    else if (!string.IsNullOrEmpty(commandAndKey))
-                    {
-                        activity.SetTag(SemanticConventions.AttributeDbStatement, commandAndKey);
-                    }
-                    else if (command.Command != null)
-                    {
-                        activity.SetTag(SemanticConventions.AttributeDbStatement, command.Command);
-                    }
+                    activity.SetTag(SemanticConventions.AttributeDbStatement, commandAndKey + " " + script);
+                }
+                else if (!string.IsNullOrEmpty(commandAndKey))
+                {
+                    activity.SetTag(SemanticConventions.AttributeDbStatement, commandAndKey);
                 }
                 else if (command.Command != null)
                 {
@@ -134,26 +126,25 @@ namespace OpenTelemetry.Instrumentation.StackExchangeRedis.Implementation
 
                 if (command.EndPoint != null)
                 {
-                    if (command.EndPoint is IPEndPoint ipEndPoint)
+                    switch (command.EndPoint)
                     {
-                        activity.SetTag(SemanticConventions.AttributeNetPeerIp, ipEndPoint.Address.ToString());
-                        activity.SetTag(SemanticConventions.AttributeNetPeerPort, ipEndPoint.Port);
-                    }
-                    else if (command.EndPoint is DnsEndPoint dnsEndPoint)
-                    {
-                        activity.SetTag(SemanticConventions.AttributeNetPeerName, dnsEndPoint.Host);
-                        activity.SetTag(SemanticConventions.AttributeNetPeerPort, dnsEndPoint.Port);
-                    }
-                    else
-                    {
-                        activity.SetTag(SemanticConventions.AttributePeerService, command.EndPoint.ToString());
+                        case IPEndPoint ipEndPoint:
+                            activity.SetTag(SemanticConventions.AttributeNetPeerIp, ipEndPoint.Address.ToString());
+                            activity.SetTag(SemanticConventions.AttributeNetPeerPort, ipEndPoint.Port);
+                            break;
+                        case DnsEndPoint dnsEndPoint:
+                            activity.SetTag(SemanticConventions.AttributeNetPeerName, dnsEndPoint.Host);
+                            activity.SetTag(SemanticConventions.AttributeNetPeerPort, dnsEndPoint.Port);
+                            break;
+                        default:
+                            activity.SetTag(SemanticConventions.AttributePeerService, command.EndPoint.ToString());
+                            break;
                     }
                 }
 
                 activity.SetTag(StackExchangeRedisCallsInstrumentation.RedisDatabaseIndexKeyName, command.Db);
 
                 // TODO: deal with the re-transmission
-                // command.RetransmissionReason;
 
                 var enqueued = command.CommandCreated.Add(command.CreationToEnqueued);
                 var send = enqueued.Add(command.EnqueuedToSending);

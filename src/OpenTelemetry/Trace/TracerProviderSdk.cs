@@ -55,7 +55,6 @@ namespace OpenTelemetry.Trace
             {
                 legacyActivityWildcardMode = true;
                 legacyActivityWildcardModeRegex = GetWildcardRegex(legacyActivityOperationNames.Keys);
-                break;
             }
 
             foreach (var processorName in processors)

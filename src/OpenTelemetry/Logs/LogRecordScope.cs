@@ -89,7 +89,7 @@ namespace OpenTelemetry.Logs
 
             public void Dispose()
             {
-                throw new NotSupportedException();
+                // Empty method
             }
 
             public void Reset()
