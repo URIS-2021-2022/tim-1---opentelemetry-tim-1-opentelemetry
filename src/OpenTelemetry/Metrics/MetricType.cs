@@ -18,7 +18,6 @@ using System;
 
 namespace OpenTelemetry.Metrics
 {
-    [Flags]
     public enum MetricTypes : byte
     {
         /*

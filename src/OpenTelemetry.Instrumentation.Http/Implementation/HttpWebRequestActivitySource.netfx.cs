@@ -42,7 +42,7 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
         internal static readonly Func<HttpWebRequest, string, IEnumerable<string>> HttpWebRequestHeaderValuesGetter = (request, name) => request.Headers.GetValues(name);
         internal static readonly Action<HttpWebRequest, string, string> HttpWebRequestHeaderValuesSetter = (request, name, value) => request.Headers.Add(name, value);
 
-        internal static HttpWebRequestInstrumentationOptions Options = new HttpWebRequestInstrumentationOptions();
+        internal static readonly HttpWebRequestInstrumentationOptions Options = new HttpWebRequestInstrumentationOptions();
 
         private static readonly Version Version = typeof(HttpWebRequestActivitySource).Assembly.GetName().Version;
         private static readonly ActivitySource WebRequestActivitySource = new ActivitySource(ActivitySourceName, Version.ToString());

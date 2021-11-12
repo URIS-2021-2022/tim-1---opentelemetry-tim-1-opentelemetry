@@ -35,13 +35,13 @@ namespace OpenTelemetry
 
         private readonly CircularBuffer<T> circularBuffer;
         private readonly int scheduledDelayMilliseconds;
-        private readonly int exporterTimeoutMilliseconds;
         private readonly int maxExportBatchSize;
         private readonly Thread exporterThread;
         private readonly AutoResetEvent exportTrigger = new AutoResetEvent(false);
         private readonly ManualResetEvent dataExportedNotification = new ManualResetEvent(false);
         private readonly ManualResetEvent shutdownTrigger = new ManualResetEvent(false);
         private long shutdownDrainTarget = long.MaxValue;
+        private int exporterTimeoutMilliseconds;
         private long droppedCount;
         private bool disposed;
 

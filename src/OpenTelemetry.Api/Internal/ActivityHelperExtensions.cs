@@ -190,6 +190,8 @@ namespace OpenTelemetry.Trace
 
             private static readonly ListEnumerator<ActivityEvent, TState>.ForEachDelegate ForEachEventCallbackRef = ForEachEventCallback;
 
+            private ActivityEventsEnumeratorFactory() { }
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static void Enumerate(Activity activity, ref TState state)
             {

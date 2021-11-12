@@ -21,12 +21,12 @@ namespace OpenTelemetry.Metrics
 {
     public struct MetricPoint
     {
+        private readonly object lockObject;
         private readonly long[] bucketCounts;
         private long longVal;
         private long lastLongSum;
         private double doubleVal;
         private double lastDoubleSum;
-        private object lockObject;
 
         internal MetricPoint(
             AggregationType aggType,

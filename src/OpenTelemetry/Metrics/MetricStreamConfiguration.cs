@@ -54,7 +54,6 @@ namespace OpenTelemetry.Metrics
                 set
                 {
                     this.Aggregation = value;
-                    return;
                 }
             }
         }
