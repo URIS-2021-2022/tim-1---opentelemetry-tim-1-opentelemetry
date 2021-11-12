@@ -178,7 +178,6 @@ namespace OpenTelemetry.Trace
                     // than Span and we don't have strong reason to do this
                     // now, as Activity anyway allows read/write always.
                     // Intentionally commenting the following line.
-                    // activity.IsAllDataRequested = false;
 
                     if (SuppressInstrumentationScope.DecrementIfTriggered() == 0)
                     {

@@ -31,7 +31,7 @@ namespace OpenTelemetry.Internal
     [EventSource(Name = "OpenTelemetry-Sdk")]
     internal class OpenTelemetrySdkEventSource : EventSource
     {
-        public static OpenTelemetrySdkEventSource Log = new OpenTelemetrySdkEventSource();
+        public static readonly OpenTelemetrySdkEventSource Log = new OpenTelemetrySdkEventSource();
 #if DEBUG
         public static OpenTelemetryEventListener Listener = new OpenTelemetryEventListener();
 #endif

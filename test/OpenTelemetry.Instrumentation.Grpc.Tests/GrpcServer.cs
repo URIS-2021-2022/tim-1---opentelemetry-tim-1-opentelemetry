@@ -61,7 +61,6 @@ namespace OpenTelemetry.Instrumentation.Grpc.Tests
         public void Dispose()
         {
             this.host.StopAsync(TimeSpan.FromSeconds(5)).GetAwaiter().GetResult();
-            //this.host.Dispose();
             GC.SuppressFinalize(this);
         }
 

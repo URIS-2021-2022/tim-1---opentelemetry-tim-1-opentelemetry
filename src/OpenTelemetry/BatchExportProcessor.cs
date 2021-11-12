@@ -181,8 +181,6 @@ namespace OpenTelemetry
 
             var triggers = new WaitHandle[] { this.dataExportedNotification, this.shutdownTrigger };
 
-            var sw = Stopwatch.StartNew();
-
             // There is a chance that the export thread finished processing all the data from the queue,
             // and signaled before we enter wait here, use polling to prevent being blocked indefinitely.
             const int pollingMilliseconds = 1000;
@@ -202,33 +200,46 @@ namespace OpenTelemetry
                 }
                 else
                 {
-                    var timeout = timeoutMilliseconds - sw.ElapsedMilliseconds;
-
-                    if (timeout <= 0)
-                    {
-                        return this.circularBuffer.RemovedCount >= head;
-                    }
-
-                    try
-                    {
-                        WaitHandle.WaitAny(triggers, Math.Min((int)timeout, pollingMilliseconds));
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        return false;
-                    }
+                    this.HelperMethod(timeoutMilliseconds);
                 }
 
                 if (this.circularBuffer.RemovedCount >= head)
                 {
                     return true;
                 }
-
-                if (this.shutdownDrainTarget != long.MaxValue)
+                else if (this.shutdownDrainTarget != long.MaxValue)
                 {
                     return false;
                 }
             }
+        }
+
+        private bool HelperMethod(int timeoutMilliseconds)
+        {
+            var head = this.circularBuffer.AddedCount;
+
+            var sw = Stopwatch.StartNew();
+            var triggers = new WaitHandle[] { this.dataExportedNotification, this.shutdownTrigger };
+
+            var timeout = timeoutMilliseconds - sw.ElapsedMilliseconds;
+
+            const int pollingMilliseconds = 1000;
+
+            if (timeout <= 0)
+            {
+                return this.circularBuffer.RemovedCount >= head;
+            }
+
+            try
+            {
+                WaitHandle.WaitAny(triggers, Math.Min((int)timeout, pollingMilliseconds));
+            }
+            catch (ObjectDisposedException)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void ExporterProc()
