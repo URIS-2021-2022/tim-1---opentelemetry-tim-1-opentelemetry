@@ -31,7 +31,6 @@ namespace OpenTelemetry.Exporter.Prometheus
         private readonly PrometheusExporterEventSource prometheus = new PrometheusExporterEventSource();
         private readonly HttpListener httpListener = new HttpListener();
         private readonly object syncObject = new object();
-
         private CancellationTokenSource tokenSource;
         private Task workerThread;
 

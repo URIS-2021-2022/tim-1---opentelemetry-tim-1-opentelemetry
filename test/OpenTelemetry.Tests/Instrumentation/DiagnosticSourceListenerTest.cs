@@ -21,13 +21,11 @@ namespace OpenTelemetry.Instrumentation.Tests
     public class DiagnosticSourceListenerTest
     {
         private const string TestSourceName = "TestSourceName";
-        private readonly DiagnosticSource diagnosticSource;
         private readonly TestListenerHandler testListenerHandler;
         private readonly DiagnosticSourceSubscriber testDiagnosticSourceSubscriber;
 
         public DiagnosticSourceListenerTest()
         {
-            this.diagnosticSource = new DiagnosticListener(TestSourceName);
             this.testListenerHandler = new TestListenerHandler(TestSourceName);
             this.testDiagnosticSourceSubscriber = new DiagnosticSourceSubscriber(this.testListenerHandler, null);
             this.testDiagnosticSourceSubscriber.Subscribe();

@@ -69,6 +69,7 @@ namespace OpenTelemetry.Context
         /// <summary>
         /// Sets the value to a registered slot.
         /// </summary>
+        /// <returns>Documentation for element.</returns>
         public static RuntimeContextSlot<T> GetSlot<T>(string slotName)
         {
             Guard.NullOrEmpty(slotName, nameof(slotName));

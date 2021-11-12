@@ -132,6 +132,49 @@ namespace OpenTelemetry
             return result;
         }
 
+        /// <inheritdoc/>
+        protected override bool OnShutdown(int timeoutMilliseconds)
+        {
+            this.shutdownDrainTarget = this.circularBuffer.AddedCount;
+            this.shutdownTrigger.Set();
+
+            OpenTelemetrySdkEventSource.Log.DroppedExportProcessorItems(this.GetType().Name, this.exporter.GetType().Name, this.droppedCount);
+
+            if (timeoutMilliseconds == Timeout.Infinite)
+            {
+                this.exporterThread.Join();
+                return this.exporter.Shutdown();
+            }
+
+            if (timeoutMilliseconds == 0)
+            {
+                return this.exporter.Shutdown(0);
+            }
+
+            var sw = Stopwatch.StartNew();
+            this.exporterThread.Join(timeoutMilliseconds);
+            var timeout = timeoutMilliseconds - sw.ElapsedMilliseconds;
+            return this.exporter.Shutdown((int)Math.Max(timeout, 0));
+        }
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    this.exportTrigger.Dispose();
+                    this.dataExportedNotification.Dispose();
+                    this.shutdownTrigger.Dispose();
+                }
+
+                this.disposed = true;
+            }
+
+            base.Dispose(disposing);
+        }
+
         private bool TimeOutMethode(int timeoutMilliseconds)
         {
             var head = this.circularBuffer.AddedCount;
@@ -197,49 +240,6 @@ namespace OpenTelemetry
             }
 
             return true;
-        }
-
-        /// <inheritdoc/>
-        protected override bool OnShutdown(int timeoutMilliseconds)
-        {
-            this.shutdownDrainTarget = this.circularBuffer.AddedCount;
-            this.shutdownTrigger.Set();
-
-            OpenTelemetrySdkEventSource.Log.DroppedExportProcessorItems(this.GetType().Name, this.exporter.GetType().Name, this.droppedCount);
-
-            if (timeoutMilliseconds == Timeout.Infinite)
-            {
-                this.exporterThread.Join();
-                return this.exporter.Shutdown();
-            }
-
-            if (timeoutMilliseconds == 0)
-            {
-                return this.exporter.Shutdown(0);
-            }
-
-            var sw = Stopwatch.StartNew();
-            this.exporterThread.Join(timeoutMilliseconds);
-            var timeout = timeoutMilliseconds - sw.ElapsedMilliseconds;
-            return this.exporter.Shutdown((int)Math.Max(timeout, 0));
-        }
-
-        /// <inheritdoc/>
-        protected override void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    this.exportTrigger.Dispose();
-                    this.dataExportedNotification.Dispose();
-                    this.shutdownTrigger.Dispose();
-                }
-
-                this.disposed = true;
-            }
-
-            base.Dispose(disposing);
         }
 
         private void ExporterProc()
