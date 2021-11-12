@@ -46,7 +46,7 @@ namespace OpenTelemetry.Instrumentation.Http.Tests
                 Enrich = ActivityEnrichment,
             };
 
-            HttpWebRequestActivitySource.Options = options;
+            // HttpWebRequestActivitySource.Options = options;
 
             // Need to touch something in HttpWebRequestActivitySource/Sdk to do the static injection.
             GC.KeepAlive(HttpWebRequestActivitySource.Options);
