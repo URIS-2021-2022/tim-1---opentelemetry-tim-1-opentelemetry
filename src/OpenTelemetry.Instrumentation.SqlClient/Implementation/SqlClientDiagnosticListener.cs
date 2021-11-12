@@ -110,20 +110,12 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
                     switch (commandType)
                     {
                         case CommandType.StoredProcedure:
-                            activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.StoredProcedure));
-                            if (this.options.SetDbStatementForStoredProcedure)
-                            {
-                                activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
-                            }
+                            this.StoredProcOrText(activity, 's', payload);
 
                             break;
 
                         case CommandType.Text:
-                            activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.Text));
-                            if (this.options.SetDbStatementForText)
-                            {
-                                activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
-                            }
+                            this.StoredProcOrText(activity, 't', payload);
 
                             break;
 
@@ -140,6 +132,28 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
                 catch (Exception ex)
                 {
                     SqlClientInstrumentationEventSource.Log.EnrichmentException(ex);
+                }
+            }
+        }
+
+        private void StoredProcOrText(Activity activity, char spt, object payload)
+        {
+            _ = this.commandFetcher.TryFetch(payload, out var command);
+            _ = this.commandTextFetcher.TryFetch(command, out var commandText);
+            if (spt.Equals('s'))
+            {
+                activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.StoredProcedure));
+                if (this.options.SetDbStatementForStoredProcedure)
+                {
+                    activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
+                }
+            }
+            else
+            {
+                activity.SetTag(SpanAttributeConstants.DatabaseStatementTypeKey, nameof(CommandType.Text));
+                if (this.options.SetDbStatementForText)
+                {
+                    activity.SetTag(SemanticConventions.AttributeDbStatement, (string)commandText);
                 }
             }
         }

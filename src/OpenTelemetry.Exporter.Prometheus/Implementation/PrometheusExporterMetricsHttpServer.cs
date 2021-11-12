@@ -28,7 +28,7 @@ namespace OpenTelemetry.Exporter.Prometheus
     internal sealed class PrometheusExporterMetricsHttpServer : IDisposable
     {
         private readonly PrometheusExporter exporter;
-        private PrometheusExporterEventSource prometheus = new PrometheusExporterEventSource();
+        private readonly PrometheusExporterEventSource prometheus = new PrometheusExporterEventSource();
         private readonly HttpListener httpListener = new HttpListener();
         private readonly object syncObject = new object();
 
@@ -140,7 +140,6 @@ namespace OpenTelemetry.Exporter.Prometheus
             catch (OperationCanceledException ex)
             {
                 this.prometheus.Log.CanceledExport(ex.Message);
-                //PrometheusExporterEventSource.Log.CanceledExport(ex.Message);
             }
             finally
             {
@@ -151,8 +150,7 @@ namespace OpenTelemetry.Exporter.Prometheus
                 }
                 catch (Exception exFromFinally)
                 {
-                    prometheus.Log.FailedShutdown(exFromFinally);
-                    //PrometheusExporterEventSource.Log.FailedShutdown(exFromFinally);
+                    this.prometheus.Log.FailedShutdown(exFromFinally);
                 }
             }
         }
@@ -170,7 +168,6 @@ namespace OpenTelemetry.Exporter.Prometheus
             }
             catch (Exception ex)
             {
-                //PrometheusExporterEventSource.Log.FailedExport(ex);
                 this.prometheus.Log.FailedExport(ex);
                 context.Response.StatusCode = 500;
             }
@@ -182,7 +179,6 @@ namespace OpenTelemetry.Exporter.Prometheus
                 }
                 catch (Exception exc)
                 {
-                    //PrometheusExporterEventSource.Log.FailedExport(exc);
                     this.prometheus.Log.FailedExport(exc);
                 }
 
