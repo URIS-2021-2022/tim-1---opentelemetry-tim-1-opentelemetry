@@ -27,7 +27,7 @@ using Xunit;
 
 namespace OpenTelemetry.Instrumentation.SqlClient.Tests
 {
-    public class SqlClientTests : IDisposable
+    public class SqlClientTests
     {
         /*
             To run the integration tests, set the OTEL_SQLCONNECTIONSTRING machine-level environment variable to a valid Sql Server connection string.

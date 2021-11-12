@@ -73,6 +73,12 @@ namespace OpenTelemetry.Internal
             }
         }
 
+        [Event(13, Message = "Tracestate value is invalid, value = '{0}'", Level = EventLevel.Warning)]
+        public void TracestateValueIsInvalid(string value)
+        {
+            this.WriteEvent(13, value);
+        }
+
         [NonEvent]
         public void MetricControllerException(Exception ex)
         {
@@ -80,6 +86,12 @@ namespace OpenTelemetry.Internal
             {
                 this.MetricControllerException(ex.ToInvariantString());
             }
+        }
+
+        [Event(19, Message = "Exception occurred in Metric Controller while processing metrics from one Collect cycle. This does not shutdown controller and subsequent collections will be done. Exception: '{0}'", Level = EventLevel.Warning)]
+        public void MetricControllerException(string exception)
+        {
+            this.WriteEvent(19, exception);
         }
 
         [NonEvent]
@@ -254,12 +266,6 @@ namespace OpenTelemetry.Internal
             }
         }
 
-        [Event(13, Message = "Tracestate value is invalid, value = '{0}'", Level = EventLevel.Warning)]
-        public void TracestateValueIsInvalid(string value)
-        {
-            this.WriteEvent(13, value);
-        }
-
         [Event(14, Message = "Tracestate parse error: '{0}'", Level = EventLevel.Warning)]
         public void TracestateExtractError(string error)
         {
@@ -288,12 +294,6 @@ namespace OpenTelemetry.Internal
         public void CollectionCompleted(long msec)
         {
             this.WriteEvent(18, msec);
-        }
-
-        [Event(19, Message = "Exception occurred in Metric Controller while processing metrics from one Collect cycle. This does not shutdown controller and subsequent collections will be done. Exception: '{0}'", Level = EventLevel.Warning)]
-        public void MetricControllerException(string exception)
-        {
-            this.WriteEvent(19, exception);
         }
 
         [Event(20, Message = "Meter Collect Invoked for Meter: '{0}'", Level = EventLevel.Verbose)]

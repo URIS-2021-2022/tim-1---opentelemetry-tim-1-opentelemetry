@@ -39,7 +39,7 @@ namespace OpenTelemetry.Context
         // The workaround is to use a well known type that exists in all AppDomains, and
         // put the actual payload as a non-public field so the field is ignored during
         // marshalling.
-        private static readonly FieldInfo WrapperField = typeof(BitArray).GetField("_syncRoot", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static FieldInfo WrapperField = typeof(BitArray).GetField("_syncRoot", BindingFlags.Instance | BindingFlags.NonPublic);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemotingRuntimeContextSlot{T}"/> class.

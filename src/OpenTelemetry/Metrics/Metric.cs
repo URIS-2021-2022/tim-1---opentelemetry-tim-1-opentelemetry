@@ -48,7 +48,7 @@ namespace OpenTelemetry.Metrics
             }
             else if (instrument is Counter<long>
                 || instrument is Counter<int>
-                || instrument is Counter <short>
+                || instrument is Counter<short>
                 || instrument is Counter<byte>)
             {
                 aggType = AggregationType.LongSumIncomingDelta;

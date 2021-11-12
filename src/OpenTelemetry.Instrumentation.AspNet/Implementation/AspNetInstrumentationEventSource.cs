@@ -37,6 +37,12 @@ namespace OpenTelemetry.Instrumentation.AspNet.Implementation
             }
         }
 
+        [Event(2, Message = "Filter callback threw an exception. Request will not be collected. Operation='{0}': {1}", Level = EventLevel.Error)]
+        public void RequestFilterException(string operationName, string exception)
+        {
+            this.WriteEvent(2, operationName, exception);
+        }
+
         [NonEvent]
         public void EnrichmentException(string eventName, Exception ex)
         {
@@ -50,12 +56,6 @@ namespace OpenTelemetry.Instrumentation.AspNet.Implementation
         public void RequestIsFilteredOut(string operationName)
         {
             this.WriteEvent(1, operationName);
-        }
-
-        [Event(2, Message = "Filter callback threw an exception. Request will not be collected. Operation='{0}': {1}", Level = EventLevel.Error)]
-        public void RequestFilterException(string operationName, string exception)
-        {
-            this.WriteEvent(2, operationName, exception);
         }
 
         [Event(3, Message = "Enrich callback threw an exception. Event='{0}': {1}", Level = EventLevel.Error)]
