@@ -158,27 +158,21 @@ namespace OpenTelemetry.Instrumentation.SqlClient
             string maybeProtocol = match.Groups[1].Value;
             bool isNamedPipe = maybeProtocol.Length > 0 &&
                                maybeProtocol.StartsWith("np", StringComparison.OrdinalIgnoreCase);
-
-            if (isNamedPipe)
+            string pipeName = match.Groups[3].Value;
+            var namedInstancePipeMatch = NamedPipeRegex.Match(pipeName);
+            if (isNamedPipe && pipeName.Length > 0 && namedInstancePipeMatch.Success)
             {
-                string pipeName = match.Groups[3].Value;
-                if (pipeName.Length > 0)
-                {
-                    var namedInstancePipeMatch = NamedPipeRegex.Match(pipeName);
-                    if (namedInstancePipeMatch.Success)
-                    {
-                        instanceName = namedInstancePipeMatch.Groups[1].Value;
-                        return new SqlConnectionDetails
-                        {
-                            ServerHostName = serverHostName,
-                            ServerIpAddress = serverIpAddress,
-                            InstanceName = instanceName,
-                            Port = null,
-                        };
-                    }
-                }
-
+                instanceName = namedInstancePipeMatch.Groups[1].Value;
                 return new SqlConnectionDetails
+                {
+                    ServerHostName = serverHostName,
+                    ServerIpAddress = serverIpAddress,
+                    InstanceName = instanceName,
+                    Port = null,
+                };
+#pragma warning disable CS0162 // Unreachable code detected
+                return new SqlConnectionDetails
+#pragma warning restore CS0162 // Unreachable code detected
                 {
                     ServerHostName = serverHostName,
                     ServerIpAddress = serverIpAddress,
@@ -188,6 +182,7 @@ namespace OpenTelemetry.Instrumentation.SqlClient
             }
 
             string port;
+            instanceName = match.Groups[3].Value;
             if (match.Groups[4].Length > 0)
             {
                 instanceName = match.Groups[3].Value;
@@ -202,15 +197,13 @@ namespace OpenTelemetry.Instrumentation.SqlClient
                 port = parsedPort == 1433 ? null : match.Groups[3].Value;
                 instanceName = null;
             }
+            else if (string.IsNullOrEmpty(instanceName))
+            {
+                instanceName = null;
+                port = null;
+            }
             else
             {
-                instanceName = match.Groups[3].Value;
-
-                if (string.IsNullOrEmpty(instanceName))
-                {
-                    instanceName = null;
-                }
-
                 port = null;
             }
 

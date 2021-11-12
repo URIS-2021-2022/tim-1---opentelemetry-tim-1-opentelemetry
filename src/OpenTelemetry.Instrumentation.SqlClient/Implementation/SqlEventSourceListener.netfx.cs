@@ -200,7 +200,14 @@ namespace OpenTelemetry.Instrumentation.SqlClient.Implementation
             }
             finally
             {
-                activity.Stop();
+                if(activity == null)
+                {
+                    throw new ArgumentNullException("Activity can't be null");
+                }
+                else
+                {
+                    activity.Stop();
+                }
             }
         }
     }
