@@ -43,7 +43,7 @@ namespace OpenTelemetry.Trace
 
             configureHttpWebRequestInstrumentationOptions?.Invoke(options);
 
-            HttpWebRequestActivitySource.Options = options;
+            // HttpWebRequestActivitySource.Options = options;
 
             builder.AddSource(HttpWebRequestActivitySource.ActivitySourceName);
 

@@ -28,9 +28,9 @@ namespace OpenTelemetry.Exporter.Prometheus
     internal sealed class PrometheusExporterMetricsHttpServer : IDisposable
     {
         private readonly PrometheusExporter exporter;
-        private readonly PrometheusExporterEventSource prometheus = new PrometheusExporterEventSource();
         private readonly HttpListener httpListener = new HttpListener();
         private readonly object syncObject = new object();
+        private readonly PrometheusExporterEventSource prometheus = new PrometheusExporterEventSource();
         private CancellationTokenSource tokenSource;
         private Task workerThread;
 
