@@ -37,6 +37,12 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
             }
         }
 
+        [Event(4, Message = "Filter threw exception. Request will not be collected. Exception {0}.", Level = EventLevel.Error)]
+        public void RequestFilterException(string exception)
+        {
+            this.WriteEvent(4, exception);
+        }
+
         [NonEvent]
         public void ExceptionInitializingInstrumentation(string instrumentationType, Exception ex)
         {
@@ -44,6 +50,12 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
             {
                 this.ExceptionInitializingInstrumentation(instrumentationType, ex.ToInvariantString());
             }
+        }
+
+        [Event(2, Message = "Error initializing instrumentation type {0}. Exception : {1}", Level = EventLevel.Error)]
+        public void ExceptionInitializingInstrumentation(string instrumentationType, string ex)
+        {
+            this.WriteEvent(2, instrumentationType, ex);
         }
 
         [Event(1, Message = "Failed to process result: '{0}'", Level = EventLevel.Error)]
@@ -61,22 +73,10 @@ namespace OpenTelemetry.Instrumentation.Http.Implementation
             }
         }
 
-        [Event(2, Message = "Error initializing instrumentation type {0}. Exception : {1}", Level = EventLevel.Error)]
-        public void ExceptionInitializingInstrumentation(string instrumentationType, string ex)
-        {
-            this.WriteEvent(2, instrumentationType, ex);
-        }
-
         [Event(3, Message = "Payload is NULL in event '{1}' from handler '{0}', span will not be recorded.", Level = EventLevel.Warning)]
         public void NullPayload(string handlerName, string eventName)
         {
             this.WriteEvent(3, handlerName, eventName);
-        }
-
-        [Event(4, Message = "Filter threw exception. Request will not be collected. Exception {0}.", Level = EventLevel.Error)]
-        public void RequestFilterException(string exception)
-        {
-            this.WriteEvent(4, exception);
         }
 
         [NonEvent]

@@ -19,81 +19,84 @@ using System.Diagnostics.Metrics;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 
-public class Program
+namespace ProgramCustomizing
 {
-    private static readonly Meter Meter1 = new Meter("CompanyA.ProductA.Library1", "1.0");
-    private static readonly Meter Meter2 = new Meter("CompanyA.ProductB.Library2", "1.0");
-
-    public static void Main(string[] args)
+    public class Program
     {
-        using var meterProvider = Sdk.CreateMeterProviderBuilder()
-            .AddMeter(Meter1.Name)
-            .AddMeter(Meter2.Name)
+        private static readonly Meter Meter1 = new Meter("CompanyA.ProductA.Library1", "1.0");
+        private static readonly Meter Meter2 = new Meter("CompanyA.ProductB.Library2", "1.0");
 
-            // Rename an instrument to new name.
-            .AddView(instrumentName: "MyCounter", name: "MyCounterRenamed")
-
-            // Change Histogram bounds
-            .AddView(instrumentName: "MyHistogram", new HistogramConfiguration() { BucketBounds = new double[] { 10, 20 } })
-
-            // For the instrument "MyCounterCustomTags", aggregate with only the keys "tag1", "tag2".
-            .AddView(instrumentName: "MyCounterCustomTags", new MetricStreamConfiguration() { TagKeys = new string[] { "tag1", "tag2" } })
-
-            // Drop the instrument "MyCounterDrop".
-            .AddView(instrumentName: "MyCounterDrop", MetricStreamConfiguration.Drop)
-
-            // Advanced selection criteria and config via Func<Instrument, MetricStreamConfiguration>
-            .AddView((instrument) =>
-             {
-                 if (instrument.Meter.Name.Equals("CompanyA.ProductB.Library2") &&
-                     instrument.GetType().Name.Contains("Histogram"))
-                 {
-                     return new HistogramConfiguration() { BucketBounds = new double[] { 10, 20 } };
-                 }
-
-                 return null;
-             })
-
-            // An instrument which does not match any views
-            // gets processed with default behavior. (SDK default)
-            // Uncommenting the following line will
-            // turn off the above default. i.e any
-            // instrument which does not match any views
-            // gets dropped.
-            // .AddView(instrumentName: "*", new MetricStreamConfiguration() { Aggregation = Aggregation.Drop })
-            .AddConsoleExporter()
-            .Build();
-
-        var random = new Random();
-
-        var counter = Meter1.CreateCounter<long>("MyCounter");
-        for (int i = 0; i < 20000; i++)
+        public static void Main(string[] args)
         {
-            counter.Add(1, new("tag1", "value1"), new("tag2", "value2"));
-        }
+            using var meterProvider = Sdk.CreateMeterProviderBuilder()
+                .AddMeter(Meter1.Name)
+                .AddMeter(Meter2.Name)
 
-        var histogram = Meter1.CreateHistogram<long>("MyHistogram");
-        for (int i = 0; i < 20000; i++)
-        {
-            histogram.Record(random.Next(1, 1000), new("tag1", "value1"), new("tag2", "value2"));
-        }
+                // Rename an instrument to new name.
+                .AddView(instrumentName: "MyCounter", name: "MyCounterRenamed")
 
-        var counterCustomTags = Meter1.CreateCounter<long>("MyCounterCustomTags");
-        for (int i = 0; i < 20000; i++)
-        {
-            counterCustomTags.Add(1, new("tag1", "value1"), new("tag2", "value2"), new("tag3", "value4"));
-        }
+                // Change Histogram bounds
+                .AddView(instrumentName: "MyHistogram", new HistogramConfiguration() { BucketBounds = new double[] { 10, 20 } })
 
-        var counterDrop = Meter1.CreateCounter<long>("MyCounterDrop");
-        for (int i = 0; i < 20000; i++)
-        {
-            counterDrop.Add(1, new("tag1", "value1"), new("tag2", "value2"));
-        }
+                // For the instrument "MyCounterCustomTags", aggregate with only the keys "tag1", "tag2".
+                .AddView(instrumentName: "MyCounterCustomTags", new MetricStreamConfiguration() { TagKeys = new string[] { "tag1", "tag2" } })
 
-        var histogram2 = Meter2.CreateHistogram<long>("MyHistogram2");
-        for (int i = 0; i < 20000; i++)
-        {
-            histogram2.Record(random.Next(1, 1000), new("tag1", "value1"), new("tag2", "value2"));
+                // Drop the instrument "MyCounterDrop".
+                .AddView(instrumentName: "MyCounterDrop", MetricStreamConfiguration.Drop)
+
+                // Advanced selection criteria and config via Func<Instrument, MetricStreamConfiguration>
+                .AddView((instrument) =>
+                {
+                    if (instrument.Meter.Name.Equals("CompanyA.ProductB.Library2") &&
+                    instrument.GetType().Name.Contains("Histogram"))
+                    {
+                        return new HistogramConfiguration() { BucketBounds = new double[] { 10, 20 } };
+                    }
+
+                    return null;
+                })
+
+                // An instrument which does not match any views
+                // gets processed with default behavior. (SDK default)
+                // Uncommenting the following line will
+                // turn off the above default. i.e any
+                // instrument which does not match any views
+                // gets dropped.
+                // .AddView(instrumentName: "*", new MetricStreamConfiguration() { Aggregation = Aggregation.Drop })
+                .AddConsoleExporter()
+                .Build();
+
+            var random = new Random();
+
+            var counter = Meter1.CreateCounter<long>("MyCounter");
+            for (int i = 0; i < 20000; i++)
+            {
+                counter.Add(1, new("tag1", "value1"), new("tag2", "value2"));
+            }
+
+            var histogram = Meter1.CreateHistogram<long>("MyHistogram");
+            for (int i = 0; i < 20000; i++)
+            {
+                histogram.Record(random.Next(1, 1000), new("tag1", "value1"), new("tag2", "value2"));
+            }
+
+            var counterCustomTags = Meter1.CreateCounter<long>("MyCounterCustomTags");
+            for (int i = 0; i < 20000; i++)
+            {
+                counterCustomTags.Add(1, new("tag1", "value1"), new("tag2", "value2"), new("tag3", "value4"));
+            }
+
+            var counterDrop = Meter1.CreateCounter<long>("MyCounterDrop");
+            for (int i = 0; i < 20000; i++)
+            {
+                counterDrop.Add(1, new("tag1", "value1"), new("tag2", "value2"));
+            }
+
+            var histogram2 = Meter2.CreateHistogram<long>("MyHistogram2");
+            for (int i = 0; i < 20000; i++)
+            {
+                histogram2.Record(random.Next(1, 1000), new("tag1", "value1"), new("tag2", "value2"));
+            }
         }
     }
 }

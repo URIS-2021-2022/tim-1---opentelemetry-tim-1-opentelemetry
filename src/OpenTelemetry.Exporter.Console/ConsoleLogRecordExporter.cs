@@ -40,60 +40,67 @@ namespace OpenTelemetry.Exporter
                 this.WriteLine($"{"LogRecord.CategoryName:".PadRight(RightPaddingLength)}{logRecord.CategoryName}");
                 this.WriteLine($"{"LogRecord.LogLevel:".PadRight(RightPaddingLength)}{logRecord.LogLevel}");
                 this.WriteLine($"{"LogRecord.TraceFlags:".PadRight(RightPaddingLength)}{logRecord.TraceFlags}");
-                if (logRecord.FormattedMessage != null)
-                {
-                    this.WriteLine($"{"LogRecord.FormattedMessage:".PadRight(RightPaddingLength)}{logRecord.FormattedMessage}");
-                }
 
-                if (logRecord.State != null)
-                {
-                    this.WriteLine($"{"LogRecord.State:".PadRight(RightPaddingLength)}{logRecord.State}");
-                }
-                else if (logRecord.StateValues != null)
-                {
-                    this.WriteLine("LogRecord.StateValues (Key:Value):");
-                    for (int i = 0; i < logRecord.StateValues.Count; i++)
-                    {
-                        this.WriteLine($"{logRecord.StateValues[i].Key.PadRight(RightPaddingLength)}{logRecord.StateValues[i].Value}");
-                    }
-                }
-
-                if (logRecord.Exception is { })
-                {
-                    this.WriteLine($"{"LogRecord.Exception:".PadRight(RightPaddingLength)}{logRecord.Exception?.Message}");
-                }
-
-                int scopeDepth = -1;
-
-                logRecord.ForEachScope(ProcessScope, this);
-
-                void ProcessScope(LogRecordScope scope, ConsoleLogRecordExporter exporter)
-                {
-                    if (++scopeDepth == 0)
-                    {
-                        exporter.WriteLine("LogRecord.ScopeValues (Key:Value):");
-                    }
-
-                    foreach (KeyValuePair<string, object> scopeItem in scope)
-                    {
-                        exporter.WriteLine($"[Scope.{scopeDepth}]:{scopeItem.Key.PadRight(RightPaddingLength)}{scopeItem.Value}");
-                    }
-                }
-
-                var resource = this.ParentProvider.GetResource();
-                if (resource != Resource.Empty)
-                {
-                    this.WriteLine("Resource associated with LogRecord:");
-                    foreach (var resourceAttribute in resource.Attributes)
-                    {
-                        this.WriteLine($"    {resourceAttribute.Key}: {resourceAttribute.Value}");
-                    }
-                }
-
-                this.WriteLine(string.Empty);
+                this.ExportMini(logRecord);
             }
 
             return ExportResult.Success;
         }
+
+        public void ExportMini(LogRecord logRecord)
+        {
+            if (logRecord.FormattedMessage != null)
+            {
+                this.WriteLine($"{"LogRecord.FormattedMessage:".PadRight(RightPaddingLength)}{logRecord.FormattedMessage}");
+            }
+
+            if (logRecord.State != null)
+            {
+                this.WriteLine($"{"LogRecord.State:".PadRight(RightPaddingLength)}{logRecord.State}");
+            }
+            else if (logRecord.StateValues != null)
+            {
+                this.WriteLine("LogRecord.StateValues (Key:Value):");
+                for (int i = 0; i < logRecord.StateValues.Count; i++)
+                {
+                    this.WriteLine($"{logRecord.StateValues[i].Key.PadRight(RightPaddingLength)}{logRecord.StateValues[i].Value}");
+                }
+            }
+
+            if (logRecord.Exception is { })
+            {
+                this.WriteLine($"{"LogRecord.Exception:".PadRight(RightPaddingLength)}{logRecord.Exception?.Message}");
+            }
+
+            int scopeDepth = -1;
+
+            logRecord.ForEachScope(ProcessScope, this);
+
+            void ProcessScope(LogRecordScope scope, ConsoleLogRecordExporter exporter)
+            {
+                if (++scopeDepth == 0)
+                {
+                    exporter.WriteLine("LogRecord.ScopeValues (Key:Value):");
+                }
+
+                foreach (KeyValuePair<string, object> scopeItem in scope)
+                {
+                    exporter.WriteLine($"[Scope.{scopeDepth}]:{scopeItem.Key.PadRight(RightPaddingLength)}{scopeItem.Value}");
+                }
+            }
+
+            var resource = this.ParentProvider.GetResource();
+            if (resource != Resource.Empty)
+            {
+                this.WriteLine("Resource associated with LogRecord:");
+                foreach (var resourceAttribute in resource.Attributes)
+                {
+                    this.WriteLine($"    {resourceAttribute.Key}: {resourceAttribute.Value}");
+                }
+            }
+
+            this.WriteLine(string.Empty);
+        }
+
     }
 }

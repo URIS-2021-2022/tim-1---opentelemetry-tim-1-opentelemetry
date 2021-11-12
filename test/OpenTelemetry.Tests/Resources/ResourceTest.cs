@@ -96,7 +96,7 @@ namespace OpenTelemetry.Resources.Tests
 
             // Assert
             Assert.Single(resource.Attributes);
-            Assert.Equal(new string[0], resource.Attributes.Where(x => x.Key == "EmptyArray").FirstOrDefault().Value);
+            Assert.Equal(Array.Empty<string>(), resource.Attributes.Where(x => x.Key == "EmptyArray").FirstOrDefault().Value);
         }
 
         [Fact]

@@ -17,17 +17,20 @@
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 
-public class Program
+namespace ProgramExtending
 {
-    public static void Main()
+    public class Program
     {
-        using var loggerFactory = LoggerFactory.Create(builder =>
+        public static void Main()
         {
-            builder.AddOpenTelemetry(options => options
-                .AddConsoleExporter());
-        });
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddOpenTelemetry(options => options
+                    .AddConsoleExporter());
+            });
 
-        var logger = loggerFactory.CreateLogger<Program>();
-        logger.LogInformation("Hello from {name} {price}.", "tomato", 2.99);
+            var logger = loggerFactory.CreateLogger<Program>();
+            logger.LogInformation("Hello from {name} {price}.", "tomato", 2.99);
+        }
     }
 }
